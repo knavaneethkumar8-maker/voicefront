@@ -1,6 +1,3 @@
-const audio = document.querySelector('.js-audio-file');
-
-
 export function playAudioSegment(audioEl, startTime, endTime) {
   if(!audioEl) return;
 
@@ -9,7 +6,7 @@ export function playAudioSegment(audioEl, startTime, endTime) {
   audioEl.currentTime = startTime;
   audioEl.play();
 
-    let rafId;
+  let rafId;
 
   function monitor() {
     if (audioEl.currentTime >= endTime) {
@@ -23,6 +20,3 @@ export function playAudioSegment(audioEl, startTime, endTime) {
   monitor();
 
 }
-
-
-//playAudioSegment(audio,4.004, 4.410 );

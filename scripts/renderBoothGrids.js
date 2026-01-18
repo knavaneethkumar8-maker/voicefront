@@ -39,9 +39,6 @@ function collectChars(start9, end9) {
 
 const gridTimeLine = document.querySelector('.js-grid-timeline');
 
-
-
-
 function renderGrid(gridNum) {
   const startTime = gridNum*24*bioesTime;
   const gridEndTime = startTime + (24*bioesTime);
@@ -138,15 +135,11 @@ export function renderAllGrids() {
   }
 }
 
-renderAllGrids();
-
-
 function getAkashCellLabel(gridNum) {
   const start9 = gridNum*24*bioesTime;
   const end9 = start9 + 24*bioesTime;
   return collectChars(start9, end9);
 }
-
 
 function getAgniCellLabel(gridNum, cellNo) {
   const start9 = gridNum*24*bioesTime + cellNo*12*bioesTime;

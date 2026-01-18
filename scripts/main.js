@@ -1,20 +1,13 @@
 import { renderAkshars } from "./renderAkshars.js";
-import { getAksharWidth } from "./renderBoothGrids.js";
+import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
+renderAllGrids();
 renderAkshars(width, setAudioForAllCells);
-
-const ele = document.getElementById("voice1_1_1");
-console.log(ele);
-
-ele.addEventListener("click", ()=> {
-  console.log('clicked');
-  const times = getStartEndTimes(ele.id);
-  console.log(times);
-  playAudioSegment(audio, times.start, times.end);
-})
+setAudioForAllCells();
+lockGrids();
 
 
 function setAudioForAllCells() {
@@ -27,10 +20,6 @@ function setAudioForAllCells() {
     })
   })
 }
-
-
-setAudioForAllCells();
-
 
 export function lockGrids() {
   const allLocks = document.querySelectorAll('.js-lock');
@@ -53,9 +42,6 @@ export function lockGrids() {
     })
   })
 }
-
-lockGrids();
-
 
 function getStartEndTimes(id) {
   const idArray = id.split("_");

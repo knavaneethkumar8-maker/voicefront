@@ -2,9 +2,7 @@ import { lockGrids } from "./main.js";
 import { akshars } from "./renderBoothGrids.js";
 import { renderAllGrids } from "./renderBoothGrids.js";
 
-
 const aksharTimeline = document.querySelector('.js-akshar-timeline');
-
 
 export function renderAkshars(width, setAudio) {
   akshars.forEach((akshar, index )=> {
@@ -18,16 +16,10 @@ export function renderAkshars(width, setAudio) {
   });
 }
 
-//renderAkshars();
-
-
 const STEP = 20;
-
 function snap(value) {
   return Math.round(value / STEP) * STEP;
 }
-
-
 
 export function makeAksharResizable(clip, akshar, setAudio) {
 
