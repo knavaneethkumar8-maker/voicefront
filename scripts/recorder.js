@@ -1,3 +1,5 @@
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+
 let recordedAudioBlob = null;
 let recordedVideoBlob = null;
 
@@ -5,6 +7,9 @@ let audioRecorder, videoRecorder;
 let audioChunks = [];
 let videoChunks = [];
 let audioInterval, videoInterval;
+
+const audioContainer = document.querySelector('.js-audio-container');
+console.log(audioContainer);
 
 const MAX_TIME = 60000; // 1 minute
 
@@ -110,12 +115,44 @@ function stopVideoRecording() {
 }
 
 
-submitVideoBtn?.addEventListener("click", () => {
+
+function blobToFile(blob, fileName) {
+  return new File([blob], fileName, {type : blob.type});
+}
+
+
+submitVideoBtn?.addEventListener("click", async () => {
   videoPreview.innerHTML = '';
   submitVideoBtn.classList.remove("active-button");
+
+  const videoFile = await blobToFile(recordedVideoBlob, "video2.mp4");
+  const formData = new FormData();
+  formData.append("video", videoFile);
+  const fileName = `video_${dayjs().format('YYYY_mm_ss_ms')}.mp4`
+  const response = await fetch(`http://localhost:3500/upload/video/${fileName}`, {
+    method : "POST",
+    body : formData
+  });
+  const resultBlob = await response.blob();
+  const audioUrl = URL.createObjectURL(resultBlob);
+  const audio = new Audio(audioUrl);
+  audio.controls = true;
+  audioContainer.classList.add('show');
+  audioContainer.appendChild(audio);
 })
 
-submitAudioBtn?.addEventListener("click", () => {
+submitAudioBtn?.addEventListener("click", async () => {
   audioPreview.innerHTML = '';
   submitAudioBtn.classList.remove("active-button");
+
+  const audioFile = await blobToFile(recordedAudioBlob, "audio.wav");
+  const formData = new FormData();
+  formData.append("audio", audioFile);
+  console.log(formData);
+  const fileName = `audio_${dayjs().format('YYYY_mm_ss_ms')}`
+  const response = await fetch(`http://localhost:3500/upload/audio/${fileName}`, {
+    method : "POST",
+    body : formData
+  });
+
 })

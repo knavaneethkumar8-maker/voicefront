@@ -90,3 +90,22 @@ video {
   background-color: rgb(51, 71, 220);
   cursor: pointer;
 }
+
+
+.audio-container {
+  display: flex;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+
+  background-color: #333131;
+  border-radius: 4px;
+  padding: 10px;
+
+  margin-bottom: 10px;
+}
+
+.show {
+  display: flex;
+}
