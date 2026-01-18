@@ -48,6 +48,7 @@ function renderGrid(gridNum) {
   const label = getAkashCellLabel(gridNum);
   const gridHTML = `
   <div class="booth-grid" id= ${fileName + "_" + gridNum}>
+          <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
           <div class="akash-tier">
             <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} >
               ${getAkashCellLabel(gridNum)}

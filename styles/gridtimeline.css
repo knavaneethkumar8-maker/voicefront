@@ -60,6 +60,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  border: 2px solid rgb(31, 95, 31);
+  border-radius: 2px;
+  position: relative;
+}
+
+.lock {
+  position: absolute;
+  right: 10px;
+  top : 5px
 }
 
 .akash-tier {
