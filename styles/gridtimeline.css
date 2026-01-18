@@ -1,0 +1,159 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  padding: 20px;
+}
+
+* {
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.akshar-editor {
+  display: flex;
+  gap: 10px;
+}
+
+.tier-label-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 150px;
+}
+
+.tier-label-container p {
+  background-color: rgb(220, 220, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  height: 44px;
+  font-weight: bold;
+}
+
+
+.timeline {
+  background-color: rgb(224, 239, 244);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.flex-display {
+  display: flex;
+  justify-content: space-between;
+}
+
+.word-tier {
+  height: 44px;
+  background-color: lightgreen;
+}
+
+.booth-grid {
+  background-color: rgb(51, 39, 218);
+  width: 400px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.akash-tier {
+  background-color: rgb(49, 95, 189);
+  width: auto;
+  height: 44px;
+  display: flex;
+}
+
+.akash-cell {
+  background-color: rgb(245, 114, 96);
+  border: 1px solid rgb(101, 68, 68);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agni-tier {
+  background-color: orange;
+  height: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.agni-cell {
+  background-color: rgb(183, 224, 172);
+  border: 0.5px solid rgb(101, 68, 68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vayu-tier {
+  background-color: rgb(118, 107, 234);
+  height: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.vayu-cell {
+  background-color: rgb(172, 224, 218);
+  border: 0.5px solid rgb(101, 68, 68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.jal-tier {
+  background-color: rgb(76, 70, 251);
+  height: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.jal-cell {
+  background-color: rgb(172, 203, 224);
+  border: 0.5px solid rgb(101, 68, 68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prithvi-tier {
+  background-color: rgb(172, 124, 76);
+  height: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+  1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+  1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.prithvi-cell {
+  background-color: rgb(216, 216, 216);
+  border: 0.5px solid rgb(101, 68, 68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adjust-akshar-timeline {
+  background-color: rgb(196, 196, 196);
+  height: 44px;
+  display: flex;
+  position: relative;
+}
+
+
+.akshar {
+  height: 100%;
+  width: 100px;
+  background-color: rgb(53, 134, 241);
+  border-radius: 4px;
+  border: 2px solid rgb(25, 91, 233);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
