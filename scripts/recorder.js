@@ -154,5 +154,12 @@ submitAudioBtn?.addEventListener("click", async () => {
     method : "POST",
     body : formData
   });
+  const audioUrl = URL.createObjectURL(recordedAudioBlob);
+  const audio = new Audio(audioUrl);
+  audio.controls = true;
+  audioContainer.classList.add('show');
+  audioContainer.appendChild(audio);
 
+  const result = await response.json();
+  console.log(result);
 })
