@@ -56,7 +56,7 @@ body {
 
 .booth-grid {
   background-color: rgb(51, 39, 218);
-  width: 400px;
+  width: 480px;
   display: flex;
   flex-direction: column;
   gap: 5px;

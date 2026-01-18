@@ -1,4 +1,13 @@
 import { akshars } from "./renderBoothGrids.js";
+import { renderAllGrids } from "./renderBoothGrids.js";
+
+const STEP = 20;
+
+function snap(value) {
+  return Math.round(value / STEP) * STEP;
+}
+
+
 
 export function makeAksharResizable(clip, akshar) {
 
@@ -46,18 +55,33 @@ clip.addEventListener("mousemove", (e) => {
 
 
     if (mode === "right") {
-      clip.style.width = Math.max(MIN_WIDTH, startWidth + dx) + "px";
+      const rawWidth = startWidth + dx;
+      const snappeWidth = snap(snap(Math.max(MIN_WIDTH, rawWidth)))
+      clip.style.width = snappeWidth + "px";
+      const rect = clip.getBoundingClientRect();
+      console.log(akshar.end);
+      akshar.end = ((216*(rect.left + rect.width))/480);
+      console.log(akshar.end);
     }
 
     if (mode === "left") {
-      const newWidth = Math.max(MIN_WIDTH, startWidth - dx);
-      const newLeft = Math.max(0, startLeft + (startWidth - newWidth));
-      if(newLeft) {
-        clip.style.width = newWidth + "px";
-        clip.style.left = Math.max(0, startLeft + (startWidth - newWidth)) + "px";
-      }
+      const rawWidth = startWidth - dx;
+    const snappedWidth = snap(Math.max(MIN_WIDTH, rawWidth));
+
+    const delta = startWidth - snappedWidth;
+    const snappedLeft = snap(Math.max(0, startLeft + delta));
+
+    clip.style.width = snappedWidth + "px";
+    clip.style.left = snappedLeft + "px";
+    console.log(akshar.start);
+    const rect = clip.getBoundingClientRect();
+    console.log(akshar.start);
+    akshar.start = ((216*(rect.left))/480);
+    console.log(akshar.start);
       
     }
+
+    renderAllGrids();
   }
 
   function stopResize() {

@@ -18,8 +18,8 @@ const bioesTime = 9;
 const fileName = 'voice1';
 let audioLength = 10*1000 ;
 const total9ms = Math.ceil(audioLength / bioesTime);
-const gridsCount = Math.ceil(300/(24*bioesTime));
-const GRID_WIDTH = 400;
+const gridsCount = Math.ceil(330/(24*bioesTime));
+const GRID_WIDTH = 480;
 const timeLineLength = gridsCount*GRID_WIDTH;
 
 export function getAksharWidth() {
@@ -131,6 +131,7 @@ function renderGrid(gridNum) {
 
 export function renderAllGrids() {
   console.log(gridsCount);
+  gridTimeLine.innerHTML = '';
   for(let i =0; i < gridsCount ; i++) {
     renderGrid(i);
   }
