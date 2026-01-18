@@ -55,7 +55,7 @@ body {
 }
 
 .booth-grid {
-  background-color: rgb(51, 39, 218);
+  background-color: rgb(91, 81, 220);
   width: 480px;
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@ body {
 }
 
 .akash-cell {
-  background-color: rgb(245, 114, 96);
+  background-color: rgb(247, 158, 147);
   border: 1px solid rgb(101, 68, 68);
   flex: 1;
   display: flex;
