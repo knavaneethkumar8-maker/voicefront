@@ -5,7 +5,6 @@ import { playAudioSegment } from "./playAudioSegment.js";
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
 renderAkshars(width, setAudioForAllCells);
-//playAudioSegment(audio, 10, 11);
 
 const ele = document.getElementById("voice1_1_1");
 console.log(ele);
@@ -33,7 +32,7 @@ function setAudioForAllCells() {
 setAudioForAllCells();
 
 
-function lockGrids() {
+export function lockGrids() {
   const allLocks = document.querySelectorAll('.js-lock');
   allLocks.forEach(lock => {
     lock.addEventListener("click", () => {
@@ -91,6 +90,3 @@ function getStartEndTimes(id) {
   }
   return times;
 }
-
-const times = getStartEndTimes("voice1_2_10");
-console.log(times);
