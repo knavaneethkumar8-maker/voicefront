@@ -6,18 +6,18 @@ const aksharTimeline = document.querySelector('.js-akshar-timeline');
 console.log(aksharTimeline);
 
 
-function renderAkshars() {
+export function renderAkshars(width) {
   akshars.forEach((akshar, index )=> {
     const newAkshar = document.createElement('div');
     newAkshar.classList.add('akshar', 'js-akshar');
     newAkshar.textContent = `${akshar.char}`;
-    console.log(newAkshar);
-    newAkshar.style.left = index*100 + "px";
+    newAkshar.style.width = width + "px";
+    newAkshar.style.left = index*width + "px";
     aksharTimeline.appendChild(newAkshar);
-    makeAksharResizable(newAkshar);
-  })
+    makeAksharResizable(newAkshar, akshar);
+  });
 }
 
-renderAkshars();
+//renderAkshars();
 
 

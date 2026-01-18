@@ -50,10 +50,13 @@ body {
   background-color: lightgreen;
 }
 
+.grid-timeline {
+  display: flex;
+}
+
 .booth-grid {
   background-color: rgb(51, 39, 218);
   width: 400px;
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 5px;

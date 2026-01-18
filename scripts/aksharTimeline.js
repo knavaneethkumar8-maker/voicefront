@@ -1,17 +1,15 @@
-//const clip = document.querySelector('.js-akshar');
+import { akshars } from "./renderBoothGrids.js";
 
+export function makeAksharResizable(clip, akshar) {
 
-//const clip = document.querySelector('.js-resize-element');
-
-export function makeAksharResizable(clip) {
-  let startX = 0;
+let startX = 0;
 let startWidth = 0;
 let startLeft = 0;
 let mode = null;
 
 
 const EDGE_SIZE = 8;
-const MIN_WIDTH = 40;
+const MIN_WIDTH = 10;
 
 clip.addEventListener("mousemove", (e) => {
     e.preventDefault();
@@ -46,9 +44,9 @@ clip.addEventListener("mousemove", (e) => {
     e.preventDefault();
     const dx = e.clientX - startX;
 
+
     if (mode === "right") {
-      clip.style.width =
-        Math.max(MIN_WIDTH, startWidth + dx) + "px";
+      clip.style.width = Math.max(MIN_WIDTH, startWidth + dx) + "px";
     }
 
     if (mode === "left") {
