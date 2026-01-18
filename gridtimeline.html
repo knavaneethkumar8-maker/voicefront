@@ -5,12 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="/styles/gridtimeline.css">
-  <link rel="stylesheet" href="/styles/recordAudio.css">
+  <link rel="stylesheet" href="/styles/recorder.css">
 </head>
 <body>
-  <div class="record-audio-container">
-    UPload section
-    <audio src="/audioFiles/anjalichunk3.wav" class="js-audio-file" controls></audio>
+  <div class="recorder-container">
+
+  <!-- AUDIO -->
+  <div class="panel">
+      <h4>Audio Recording</h4>
+
+      <button id="audioRecordBtn" class="record-btn"></button><br />
+      <button id="audioStopBtn" class="stop-btn" disabled>Stop</button>
+
+      <div id="audioTimer" class="timer">00:00</div>
+      <div id="audioPreview"></div>
+      <button class="submit-audio-button js-submit-audio-button">Submit</button>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="panel">
+      <h4>Video Recording</h4>
+
+      <button id="videoRecordBtn" class="record-btn"></button><br />
+      <button id="videoStopBtn" class="stop-btn" disabled>Stop</button>
+
+      <div id="videoTimer" class="timer">00:00</div>
+      <div id="videoPreview"></div>
+      <button class="submit-video-button js-submit-video-button">Submit</button>
+    </div>
+
   </div>
   <div class="js-askhar-editor akshar-editor">
     <div class="tier-label-container">
