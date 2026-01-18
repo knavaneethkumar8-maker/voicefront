@@ -33,6 +33,30 @@ function setAudioForAllCells() {
 setAudioForAllCells();
 
 
+function lockGrids() {
+  const allLocks = document.querySelectorAll('.js-lock');
+  allLocks.forEach(lock => {
+    lock.addEventListener("click", () => {
+      const gridId = lock.dataset.id;
+      const selectedGrid = document.getElementById(gridId);
+
+      if(!selectedGrid.classList.contains('locked')) {
+        lock.innerText = "🔒";
+        lock.style.backgroundColor = "green";
+        selectedGrid.classList.add('locked');
+      } else {
+        lock.innerText = "🔓";
+        lock.style.backgroundColor = "rgb(37, 37, 37)";
+        selectedGrid.classList.remove('locked');
+      }
+
+      
+    })
+  })
+}
+
+lockGrids();
+
 
 function getStartEndTimes(id) {
   const idArray = id.split("_");

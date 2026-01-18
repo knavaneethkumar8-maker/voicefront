@@ -55,20 +55,33 @@ body {
 }
 
 .booth-grid {
-  background-color: rgb(91, 81, 220);
+  background-color: rgb(186, 182, 245);
   width: 480px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  border: 2px solid rgb(31, 95, 31);
-  border-radius: 2px;
   position: relative;
+}
+
+.locked {
+  border: 2px solid rgb(12, 116, 14);
+  border-radius: 2px;
 }
 
 .lock {
   position: absolute;
   right: 10px;
-  top : 5px
+  top : 5px;
+
+  cursor: pointer;
+
+  background-color: rgb(37, 37, 37);
+  padding: 4px 6px;
+  border-radius: 20px;
+}
+
+.lock-green {
+  background-color: "green";
 }
 
 .akash-tier {
