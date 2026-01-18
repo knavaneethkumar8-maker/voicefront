@@ -7,7 +7,7 @@ const aksharTimeline = document.querySelector('.js-akshar-timeline');
 console.log(aksharTimeline);
 
 
-export function renderAkshars(width) {
+export function renderAkshars(width, setAudio) {
   akshars.forEach((akshar, index )=> {
     const newAkshar = document.createElement('div');
     newAkshar.classList.add('akshar', 'js-akshar');
@@ -15,7 +15,7 @@ export function renderAkshars(width) {
     newAkshar.style.width = width + "px";
     newAkshar.style.left = index*width + "px";
     aksharTimeline.appendChild(newAkshar);
-    makeAksharResizable(newAkshar, akshar);
+    makeAksharResizable(newAkshar, akshar, setAudio);
   });
 }
 
@@ -30,7 +30,7 @@ function snap(value) {
 
 
 
-export function makeAksharResizable(clip, akshar) {
+export function makeAksharResizable(clip, akshar, setAudio) {
 
 let startX = 0;
 let startWidth = 0;
@@ -103,6 +103,8 @@ clip.addEventListener("mousemove", (e) => {
     }
 
     renderAllGrids();
+    setAudio();
+  
   }
 
   function stopResize() {

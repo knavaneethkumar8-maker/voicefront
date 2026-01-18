@@ -4,7 +4,7 @@ import { playAudioSegment } from "./playAudioSegment.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
-renderAkshars(width);
+renderAkshars(width, setAudioForAllCells);
 //playAudioSegment(audio, 10, 11);
 
 const ele = document.getElementById("voice1_1_1");
