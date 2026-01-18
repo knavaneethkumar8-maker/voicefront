@@ -1,6 +1,5 @@
-import { lockGrids } from "./main.js";
 import { akshars } from "./renderBoothGrids.js";
-import { renderAllGrids } from "./renderBoothGrids.js";
+import { updateAllGridLabels} from "./renderBoothGrids.js";
 
 const aksharTimeline = document.querySelector('.js-akshar-timeline');
 
@@ -93,9 +92,10 @@ clip.addEventListener("mousemove", (e) => {
       
     }
 
-    renderAllGrids();
-    setAudio();
-    lockGrids();
+    //renderAllGrids();
+    //setAudio();
+    //lockGrids();
+    updateAllGridLabels();
   
   }
 

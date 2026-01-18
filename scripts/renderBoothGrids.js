@@ -42,7 +42,6 @@ const gridTimeLine = document.querySelector('.js-grid-timeline');
 function renderGrid(gridNum) {
   const startTime = gridNum*24*bioesTime;
   const gridEndTime = startTime + (24*bioesTime);
-  const label = getAkashCellLabel(gridNum);
   const gridHTML = `
   <div class="booth-grid" id= ${fileName + "_" + gridNum}>
           <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
@@ -158,6 +157,51 @@ function getJalCellLabel(gridNum, cellNo) {
   const end9 = start9 + 3*bioesTime;
   return collectChars(start9, end9);
 }
+
+
+export function updateAllGridLabels() {
+  for (let gridNum = 0; gridNum < gridsCount; gridNum++) {
+
+    // -------- AKASH (1 cell) --------
+    const akashCell = document.getElementById(
+      `${fileName}_${gridNum}_1`
+    );
+    if (akashCell) {
+      akashCell.textContent = getAkashCellLabel(gridNum);
+    }
+
+    // -------- AGNI (2 cells) --------
+    for (let i = 0; i < 2; i++) {
+      const agniCell = document.getElementById(
+        `${fileName}_${gridNum}_${2 + i}`
+      );
+      if (agniCell) {
+        agniCell.textContent = getAgniCellLabel(gridNum, i);
+      }
+    }
+
+    // -------- VAYU (4 cells) --------
+    for (let i = 0; i < 4; i++) {
+      const vayuCell = document.getElementById(
+        `${fileName}_${gridNum}_${4 + i}`
+      );
+      if (vayuCell) {
+        vayuCell.textContent = getAyuvCellLabel(gridNum, i);
+      }
+    }
+
+    // -------- JAL (8 cells) --------
+    for (let i = 0; i < 8; i++) {
+      const jalCell = document.getElementById(
+        `${fileName}_${gridNum}_${8 + i}`
+      );
+      if (jalCell) {
+        jalCell.textContent = getJalCellLabel(gridNum, i);
+      }
+    }
+  }
+}
+
 
 
 
