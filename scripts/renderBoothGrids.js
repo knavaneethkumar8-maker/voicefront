@@ -162,6 +162,12 @@ function getJalCellLabel(gridNum, cellNo) {
 export function updateAllGridLabels() {
   for (let gridNum = 0; gridNum < gridsCount; gridNum++) {
 
+    // 🔒 skip if this grid is locked
+    const gridEl = document.getElementById(`${fileName}_${gridNum}`);
+    if (gridEl && gridEl.classList.contains('locked')) {
+      continue;
+    }
+
     // -------- AKASH (1 cell) --------
     const akashCell = document.getElementById(
       `${fileName}_${gridNum}_1`
@@ -201,6 +207,7 @@ export function updateAllGridLabels() {
     }
   }
 }
+
 
 
 

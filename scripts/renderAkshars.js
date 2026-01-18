@@ -107,4 +107,3 @@ clip.addEventListener("mousemove", (e) => {
 
 }
 
-
