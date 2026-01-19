@@ -15,7 +15,6 @@ export function setAudioForAllCells(audio) {
   const allCells = document.querySelectorAll('.cell');
   allCells?.forEach(cell => {
     cell.addEventListener("click", () => {
-      console.log(cell.id);
       const times = getStartEndTimes(cell.id);
       playAudioSegment(audio, times.start, times.end);
     })
@@ -46,19 +45,14 @@ export function lockGrids() {
 
 function getStartEndTimes(id) {
   const idArray = id.split("_");
-  console.log(idArray);
   const gridNum = parseInt(idArray[1]);
   const cellId = parseInt(idArray[2]);
-  console.log(gridNum, typeof cellId);
-  //if(!gridNum || !cellId) return;
 
   let start;
   let end;
   if(cellId === 1) {
-    console.log('hello');
     start = ((gridNum)*216)/1000;
     end = start + (216/1000);
-    console.log(start , end);
   }else if( cellId >=2 && cellId < 4) {
     start = ((gridNum)*216 + (cellId-2)*108)/1000;
     end = start + (108/1000);
