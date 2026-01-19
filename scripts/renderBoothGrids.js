@@ -46,51 +46,51 @@ function renderGrid(gridNum) {
   <div class="booth-grid" id= ${fileName + "_" + gridNum}>
           <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
           <div class="akash-tier">
-            <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} >
+            <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} contenteditable="true">
               ${getAkashCellLabel(gridNum)}
             </div>
           </div>
           <div class="agni-tier flex-display">
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+2}>${getAgniCellLabel(gridNum,0)}</div>
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+3}>${getAgniCellLabel(gridNum,1)}</div>
+            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+2} contenteditable="true">${getAgniCellLabel(gridNum,0)}</div>
+            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+3} contenteditable="true">${getAgniCellLabel(gridNum,1)}</div>
           </div>
           <div class="vayu-tier flex-display">
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+ 4}>
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+ 4} contenteditable="true">
             ${getAyuvCellLabel(gridNum,0)}
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+5}>
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+5} contenteditable="true">
             ${getAyuvCellLabel(gridNum,1)}
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+6}>
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+6} contenteditable="true">
             ${getAyuvCellLabel(gridNum,2)}
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+7}>
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+7} contenteditable="true">
             ${getAyuvCellLabel(gridNum,3)}
             </div>
           </div>
           <div class="jal-tier flex-display">
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+8}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+8} contenteditable="true">
             ${getJalCellLabel(gridNum,0)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+9}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+9} contenteditable="true">
             ${getJalCellLabel(gridNum,1)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+10}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+10} contenteditable="true">
             ${getJalCellLabel(gridNum,2)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+11}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+11} contenteditable="true">
             ${getJalCellLabel(gridNum,3)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+12}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+12} contenteditable="true">
             ${getJalCellLabel(gridNum,4)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+13}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+13} contenteditable="true">
             ${getJalCellLabel(gridNum,5)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+14}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+14} contenteditable="true">
             ${getJalCellLabel(gridNum,6)}
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+15}>
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+15} contenteditable="true">
             ${getJalCellLabel(gridNum,7)}
             </div>
           </div>

@@ -97,6 +97,18 @@ gridTimeLine.addEventListener("click", (e) => {
   const gridEl = lock.closest(".booth-grid");
   if (!gridEl) return;
 
+  if(gridEl.classList.contains('locked')) {
+    const allGridCells = gridEl.querySelectorAll("*");
+    allGridCells?.forEach(cell => {
+      cell.contentEditable = "false";
+    });
+  }else {
+    const allGridCells = gridEl.querySelectorAll("*");
+    allGridCells?.forEach(cell => {
+    cell.contentEditable = "true";
+  });
+  }
+  
   const gridData = collectGridData(gridEl);
   console.log(gridData);
 });
