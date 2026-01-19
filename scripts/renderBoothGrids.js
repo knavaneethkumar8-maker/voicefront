@@ -95,30 +95,30 @@ function renderGrid(gridNum) {
             </div>
           </div>
           <div class="prithvi-tier flex-display">
-            <div class="prithvi-cell">10</div>
-            <div class="prithvi-cell">16</div>
-            <div class="prithvi-cell">17</div>
-            <div class="prithvi-cell">10</div>
-            <div class="prithvi-cell">11</div>
-            <div class="prithvi-cell">12</div>
-            <div class="prithvi-cell">13</div>
-            <div class="prithvi-cell">14</div>
-            <div class="prithvi-cell">7</div>
-            <div class="prithvi-cell">8</div>
-            <div class="prithvi-cell">9</div>
-            <div class="prithvi-cell">10</div>
-            <div class="prithvi-cell">11</div>
-            <div class="prithvi-cell">12</div>
-            <div class="prithvi-cell">13</div>
-            <div class="prithvi-cell">14</div>
-            <div class="prithvi-cell">7</div>
-            <div class="prithvi-cell">8</div>
-            <div class="prithvi-cell">9</div>
-            <div class="prithvi-cell">10</div>
-            <div class="prithvi-cell">11</div>
-            <div class="prithvi-cell">12</div>
-            <div class="prithvi-cell">13</div>
-            <div class="prithvi-cell">14</div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell"></div>
           </div>
         </div>
   `;
