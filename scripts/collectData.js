@@ -7,7 +7,8 @@ gridTimeLine.addEventListener("click", (e) => {
   if (!cell) return;
 
   const cellData = collectCellData(cell);
-  console.log(cellData);
+  const allData = collectAllGridsData();
+  console.log(cellData, allData);
 });
 
 
@@ -101,7 +102,7 @@ gridTimeLine.addEventListener("click", (e) => {
 });
 
 
-function collectGridData(gridEl) {
+export function collectGridData(gridEl) {
   const gridId = gridEl.id; // e.g. file_0
   const gridIndex = Number(gridId.split("_").pop()) || 0;
 
@@ -173,6 +174,18 @@ function collectTierData(gridEl, gridIndex, tierKey, tierInfo, gridStart, gridEn
     cells
   };
 }
+
+
+export function collectAllGridsData() {
+  const gridEls = document.querySelectorAll(".booth-grid");
+
+  const grids = Array.from(gridEls).map((gridEl) =>
+    collectGridData(gridEl)
+  );
+
+  return { grids };
+}
+
 
 
 
