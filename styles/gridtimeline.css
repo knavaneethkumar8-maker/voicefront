@@ -189,3 +189,11 @@ body {
   justify-content: center;
   position: absolute;
 }
+
+
+.note {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgb(107, 106, 106);
+  margin-bottom: 10px;
+}

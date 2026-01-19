@@ -2,6 +2,7 @@ import { renderAkshars } from "./renderAkshars.js";
 import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
 import "./recorder.js";
+import "./collectData.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
