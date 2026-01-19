@@ -11,7 +11,7 @@ setAudioForAllCells();
 lockGrids();
 
 
-function setAudioForAllCells() {
+export function setAudioForAllCells(audio) {
   const allCells = document.querySelectorAll('.cell');
   allCells?.forEach(cell => {
     cell.addEventListener("click", () => {
