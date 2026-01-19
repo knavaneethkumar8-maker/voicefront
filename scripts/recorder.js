@@ -156,7 +156,7 @@ submitVideoBtn?.addEventListener("click", async () => {
   });
   const resultBlob = await response.blob();
   const audioUrl = URL.createObjectURL(resultBlob);
-  
+
   const previewHTML = `
     <div class="js-audio-container audio-container" class=${fileName}>
       <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
@@ -193,7 +193,7 @@ submitAudioBtn?.addEventListener("click", async () => {
   });
   const audioUrl = URL.createObjectURL(recordedAudioBlob);
   const previewHTML = `
-    <div class="js-audio-container audio-container" class=${fileName}>
+    <div class="js-audio-container audio-container ${fileName}">
       <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
       <button class="predict-button">Predict</button>
       <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
@@ -219,10 +219,31 @@ submitAudioBtn?.addEventListener("click", async () => {
   console.log(result);
 });
 
-
 function calcGridCount(duration) {
   const bioesTime = 9;
   let audioLength = duration*1000 ;
   const gridsCount = Math.ceil(audioLength/(24*bioesTime));
   return gridsCount;
 }
+
+
+function generateGrids() {
+  document.addEventListener("click", (e)=> {
+    e.preventDefault();
+    if(!e.target.classList.contains('generate-button')) return;
+
+    const audioContainer = e.target.closest(".audio-container");
+    const audioEl = audioContainer.querySelector("audio");
+    console.log(audioEl.duration);
+    const fileName = audioEl.id;
+
+    const gridsCount = calcGridCount(audioEl.duration);
+    updateCurrentFileName(fileName);
+    updateCurrentAudioDuration(audioEl);
+    renderAllGrids(gridsCount);
+    setAudioForAllCells(audioEl);
+    lockGrids();
+  })
+}
+
+generateGrids();
