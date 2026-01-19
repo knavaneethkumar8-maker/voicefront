@@ -30,8 +30,7 @@ export function getCurrentFileName() {
   return currentFileName;
 }
 
-const audioContainer = document.querySelector('.js-audio-container');
-console.log(audioContainer);
+const audiosPreviewContainer = document.querySelector('.js-audio-files-container');
 
 const MAX_TIME = 60000; // 1 minute
 
@@ -157,10 +156,19 @@ submitVideoBtn?.addEventListener("click", async () => {
   });
   const resultBlob = await response.blob();
   const audioUrl = URL.createObjectURL(resultBlob);
-  const audio = new Audio(audioUrl);
-  audio.controls = true;
-  audioContainer.classList.add('show');
-  audioContainer.appendChild(audio);
+  
+  const previewHTML = `
+    <div class="js-audio-container audio-container" class=${fileName}>
+      <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+      <button class="predict-button">Predict</button>
+      <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+      <button class="lock-text-button">Lock</button>
+      <button class="generate-button">Generate</button>
+    </div>
+  `;
+  audiosPreviewContainer.innerHTML += previewHTML;
+  const audio = document.getElementById(fileName);
+
   audio.addEventListener("loadedmetadata", ()=> {
     console.log(audio.duration);
     const gridsCount = calcGridCount(audio.duration);
@@ -184,10 +192,18 @@ submitAudioBtn?.addEventListener("click", async () => {
     body : formData
   });
   const audioUrl = URL.createObjectURL(recordedAudioBlob);
-  const audio = new Audio(audioUrl);
-  audio.controls = true;
-  audioContainer.classList.add('show');
-  audioContainer.appendChild(audio);
+  const previewHTML = `
+    <div class="js-audio-container audio-container" class=${fileName}>
+      <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+      <button class="predict-button">Predict</button>
+      <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+      <button class="lock-text-button">Lock</button>
+      <button class="generate-button">Generate</button>
+    </div>
+  `;
+  audiosPreviewContainer.innerHTML += previewHTML;
+  const audio = document.getElementById(fileName);
+
   audio.addEventListener("loadedmetadata", ()=> {
     console.log(audio.duration);
     console.log(audio);

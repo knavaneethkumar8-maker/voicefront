@@ -94,6 +94,7 @@ video {
 
 .audio-files-container {
   margin-bottom: 10px;
+  max-width: 1200px;
 }
 
 
@@ -102,7 +103,7 @@ video {
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #ebebeb;
+  background-color: #e6e5e5;
   border-radius: 4px;
   padding: 6px;
   margin-bottom: 5px;
