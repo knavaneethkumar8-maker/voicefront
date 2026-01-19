@@ -92,18 +92,64 @@ video {
 }
 
 
+.audio-files-container {
+  margin-bottom: 10px;
+}
+
+
 .audio-container {
   display: flex;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 600px;
-
-  background-color: #333131;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ebebeb;
   border-radius: 4px;
-  padding: 10px;
+  padding: 6px;
+  margin-bottom: 5px;
+}
 
-  margin-bottom: 10px;
+.predict-button ,
+.lock-text-button,
+.generate-button {
+  background-color: rgb(86, 139, 245);
+  border: none;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.predict-button:hover ,
+.lock-text-button:hover{
+  background-color: rgb(100, 147, 242);
+}
+
+.text-locked {
+  background-color: rgb(86, 165, 86);
+}
+
+.predicted-text-box {
+  background-color: white;
+  color: rgb(91, 91, 91);
+  height: 50px;
+  flex: 1;
+  border-radius: 4px;
+  padding: 6px 10px;
+  overflow: auto;
+}
+
+.generate-button {
+  background-color: rgb(234, 149, 30);
+  color: black;
+}
+
+.generate-button:hover {
+  background-color: rgb(232, 120, 22);
+}
+.audio-file {
+  max-width: 300px;
+  margin-top: 0px;
 }
 
 .show {
