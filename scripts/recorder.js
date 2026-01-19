@@ -1,6 +1,7 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { setAudioForAllCells } from "./main.js";
 import { renderAllGrids } from "./renderBoothGrids.js";
+import { lockGrids } from "./main.js";
 
 let recordedAudioBlob = null;
 let recordedVideoBlob = null;
@@ -141,9 +142,12 @@ submitVideoBtn?.addEventListener("click", async () => {
   audio.controls = true;
   audioContainer.classList.add('show');
   audioContainer.appendChild(audio);
-  setAudioForAllCells(audio);
   audio.addEventListener("loadedmetadata", ()=> {
     console.log(audio.duration);
+    const gridsCount = calcGridCount(audio.duration);
+    renderAllGrids(gridsCount);
+    setAudioForAllCells(audio);
+    lockGrids();
   });
 })
 
@@ -170,6 +174,7 @@ submitAudioBtn?.addEventListener("click", async () => {
     const gridsCount = calcGridCount(audio.duration);
     renderAllGrids(gridsCount);
     setAudioForAllCells(audio);
+    lockGrids();
   });
 
   const result = await response.json();
