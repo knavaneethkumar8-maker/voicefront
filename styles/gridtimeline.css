@@ -197,3 +197,21 @@ body {
   color: rgb(107, 106, 106);
   margin-bottom: 10px;
 }
+
+
+.submit-data {
+  background-color: rgb(52, 69, 219);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-size: 16px;
+  width: 150px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 200px;
+}
+
+.submit-data:hover {
+  opacity: 0.9;
+}

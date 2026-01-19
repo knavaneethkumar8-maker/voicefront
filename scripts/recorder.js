@@ -11,6 +11,25 @@ let audioChunks = [];
 let videoChunks = [];
 let audioInterval, videoInterval;
 
+let currentFileName;
+let currentAudioDuration;
+
+function updateCurrentAudioDuration(audio) {
+  currentAudioDuration = audio.duration;
+}
+
+export function getCurrentAudioDuration() {
+  return currentAudioDuration;
+}
+
+export function updateCurrentFileName(fileName) {
+  currentFileName = fileName;
+}
+
+export function getCurrentFileName() {
+  return currentFileName;
+}
+
 const audioContainer = document.querySelector('.js-audio-container');
 console.log(audioContainer);
 
@@ -171,7 +190,10 @@ submitAudioBtn?.addEventListener("click", async () => {
   audioContainer.appendChild(audio);
   audio.addEventListener("loadedmetadata", ()=> {
     console.log(audio.duration);
+    console.log(audio);
     const gridsCount = calcGridCount(audio.duration);
+    updateCurrentFileName(fileName);
+    updateCurrentAudioDuration(audio);
     renderAllGrids(gridsCount);
     setAudioForAllCells(audio);
     lockGrids();
