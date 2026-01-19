@@ -2,12 +2,14 @@ const gridTimeLine = document.querySelector('.js-grid-timeline');
 const bioesTime = 9;
 
 gridTimeLine.addEventListener("click", (e) => {
+  e.preventDefault();
   const cell = e.target.closest(".cell");
   if (!cell) return;
 
   const cellData = collectCellData(cell);
   console.log(cellData);
 });
+
 
 function collectCellData(cellEl) {
   const id = cellEl.id; // fileName_gridNo_cellNo
@@ -30,7 +32,6 @@ function collectCellData(cellEl) {
     metadata: {}
   };
 }
-
 
 function getCellTimeRange(gridNum, cellNo) {
   const gridStart = gridNum * 24 * bioesTime;
@@ -85,6 +86,97 @@ function getCellTimeRange(gridNum, cellNo) {
     end_ms: 0
   };
 }
+
+
+gridTimeLine.addEventListener("click", (e) => {
+  e.preventDefault();
+  const lock = e.target.closest(".js-lock");
+  if (!lock) return;
+
+  const gridEl = lock.closest(".booth-grid");
+  if (!gridEl) return;
+
+  const gridData = collectGridData(gridEl);
+  console.log(gridData);
+});
+
+
+function collectGridData(gridEl) {
+  const gridId = gridEl.id; // e.g. file_0
+  const gridIndex = Number(gridId.split("_").pop()) || 0;
+
+  const gridStart = gridIndex * 24 * bioesTime;
+  const gridEnd = gridStart + 24 * bioesTime;
+
+  const tierConfig = {
+    akash:   { name: "आकाश", index: 0 },
+    agni:   { name: "अग्नि", index: 1 },
+    vayu:   { name: "वायु", index: 2 },
+    jal:    { name: "जल",   index: 3 },
+    prithvi:{ name: "पृथ्वी",index: 4 }
+    //bioes:  { name: "BIOES", index: 5 }
+  };
+
+  const tiers = {};
+
+  for (const tierKey in tierConfig) {
+    tiers[tierKey] = collectTierData(
+      gridEl,
+      gridIndex,
+      tierKey,
+      tierConfig[tierKey],
+      gridStart,
+      gridEnd
+    );
+  }
+
+  return {
+    id: gridId,
+    index: gridIndex,
+    start_ms: gridStart,
+    end_ms: gridEnd,
+    status: "NEW",
+    is_locked: false,
+    metadata: {},
+    tiers
+  };
+}
+
+
+
+function collectTierData(gridEl, gridIndex, tierKey, tierInfo, gridStart, gridEnd) {
+  const cells = [];
+
+  const cellEls = gridEl.querySelectorAll(`.${tierKey}-cell`);
+
+  cellEls.forEach((cellEl) => {
+    const cellData = collectCellData(cellEl);
+
+    cells.push({
+      id: cellData.id,
+      index: cellData.index ?? 0,
+      start_ms: cellData.start_ms ?? 0,
+      end_ms: cellData.end_ms ?? 0,
+      text: cellData.text ?? "",
+      conf: cellData.conf ?? 0,
+      status: cellData.status ?? "NEW",
+      is_locked: cellData.is_locked ?? false,
+      metadata: cellData.metadata ?? {}
+    });
+  });
+
+  return {
+    name: tierInfo.name,
+    index: tierInfo.index,
+    start_ms: gridStart,
+    end_ms: gridEnd,
+    cells
+  };
+}
+
+
+
+
 
 
 

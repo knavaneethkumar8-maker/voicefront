@@ -95,30 +95,30 @@ function renderGrid(gridNum) {
             </div>
           </div>
           <div class="prithvi-tier flex-display">
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
-            <div class="prithvi-cell"></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+16}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+17}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+18}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+19}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+20}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+21}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+22}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+23}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+24}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+25}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+26}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+27}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+28}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+29}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+30}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+31}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+32}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+33}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+34}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+35}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+36}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+37}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+38}></div>
+            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+39}></div>
           </div>
         </div>
   `;
