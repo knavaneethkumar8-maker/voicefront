@@ -5,7 +5,7 @@ import "./recorder.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
-renderAllGrids();
+renderAllGrids(2);
 renderAkshars(width, setAudioForAllCells);
 setAudioForAllCells();
 lockGrids();

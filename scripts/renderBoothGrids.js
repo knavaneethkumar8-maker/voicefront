@@ -126,7 +126,7 @@ function renderGrid(gridNum) {
   gridTimeLine.innerHTML += gridHTML;
 }
 
-export function renderAllGrids() {
+export function renderAllGrids(gridsCount) {
   console.log(gridsCount);
   gridTimeLine.innerHTML = '';
   for(let i =0; i < gridsCount ; i++) {
