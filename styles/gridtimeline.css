@@ -21,6 +21,7 @@ body {
   width: 150px;
 }
 
+
 .tier-label-container p {
   background-color: rgb(220, 220, 255);
   display: flex;
@@ -214,4 +215,14 @@ body {
 
 .submit-data:hover {
   opacity: 0.9;
+}
+
+@media (max-width: 640px ) {
+  .tier-label-container {
+    display: none;
+  }
+
+  .submit-data {
+    margin-left: 110px;
+  }
 }

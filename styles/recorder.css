@@ -156,3 +156,18 @@ video {
 .show {
   display: flex;
 }
+
+
+@media (max-width: 640px) {
+  .predict-button {
+    display: none;
+  }
+
+  .predicted-text-box {
+    display: none;
+  }
+
+  .lock-text-button {
+    display: none;
+  }
+}
