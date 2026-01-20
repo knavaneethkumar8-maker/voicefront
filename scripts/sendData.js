@@ -3,18 +3,32 @@ import { getCurrentFileName, getCurrentAudioDuration } from "./recorder.js";
 
 const sendDataButton = document.querySelector('.js-submit-data');
 
-sendDataButton?.addEventListener("click", ()=> {
-  console.log('data sent');
+sendDataButton?.addEventListener("click", async ()=> {
   const allData = collectAllGridsData();
-  console.log(allData.grids);
+  //console.log(allData.grids);
   const fileName = getCurrentFileName();
+  console.log(fileName);
+  if(!fileName) return;
   const duration_ms = Number((getCurrentAudioDuration()*1000).toFixed(0));
   const payload = createPayloadJSON(fileName, allData.grids, duration_ms);
-  console.log(payload);
+  //console.log(payload);
 
+  const response = await fetch(`http://localhost:3500/upload/textgrids/${fileName}`, {
+    method : "PUT",
+    body : JSON.stringify(payload),
+    credentials : "include",
+    headers : {
+      "Content-Type" : "application/json"
+    }
+  });
+  console.log('data sent');
+
+  const result = await response.json();
+  console.log(result);
 });
 
 function getFileRoot(fileName) {
+  if(!fileName) return;
   return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
 }
 

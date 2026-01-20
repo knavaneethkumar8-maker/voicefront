@@ -158,7 +158,6 @@ function getJalCellLabel(gridNum, cellNo) {
   return collectChars(start9, end9);
 }
 
-
 export function updateAllGridLabels(fileName) {
   for (let gridNum = 0; gridNum < gridsCount; gridNum++) {
 

@@ -175,6 +175,8 @@ submitVideoBtn?.addEventListener("click", async () => {
     console.log(audio.duration);
     const gridsCount = calcGridCount(audio.duration);
     renderAllGrids(gridsCount, extractedFileName);
+    updateCurrentFileName(fileName);
+    updateCurrentAudioDuration(audio);
     setAudioForAllCells(audio);
     lockGrids();
   });
