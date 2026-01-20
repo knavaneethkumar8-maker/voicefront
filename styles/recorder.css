@@ -170,4 +170,8 @@ video {
   .lock-text-button {
     display: none;
   }
+
+  .recorder-container {
+    grid-template-columns: 1fr;
+  }
 }
