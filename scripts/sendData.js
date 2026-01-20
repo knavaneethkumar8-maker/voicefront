@@ -12,19 +12,22 @@ sendDataButton?.addEventListener("click", async ()=> {
   const duration_ms = Number((getCurrentAudioDuration()*1000).toFixed(0));
   const payload = createPayloadJSON(fileName, allData.grids, duration_ms);
   //console.log(payload);
+  try {
+    const response = await fetch(`http://localhost:3500/upload/textgrids/${fileName}`, {
+      method : "PUT",
+      body : JSON.stringify(payload),
+      credentials : "include",
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    });
+    console.log('data sent');
 
-  const response = await fetch(`http://localhost:3500/upload/textgrids/${fileName}`, {
-    method : "PUT",
-    body : JSON.stringify(payload),
-    credentials : "include",
-    headers : {
-      "Content-Type" : "application/json"
-    }
-  });
-  console.log('data sent');
-
-  const result = await response.json();
-  console.log(result);
+    const result = await response.json();
+    console.log(result);
+  } catch(err) {
+    console.error(err);
+  }
 });
 
 function getFileRoot(fileName) {

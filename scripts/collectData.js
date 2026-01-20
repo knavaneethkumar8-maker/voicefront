@@ -89,7 +89,7 @@ function getCellTimeRange(gridNum, cellNo) {
 }
 
 
-gridTimeLine.addEventListener("click", (e) => {
+gridTimeLine.addEventListener("click", async (e) => {
   e.preventDefault();
   const lock = e.target.closest(".js-lock");
   if (!lock) return;
@@ -111,6 +111,25 @@ gridTimeLine.addEventListener("click", (e) => {
   
   const gridData = collectGridData(gridEl);
   console.log(gridData);
+  const gridId = gridEl.id;
+
+  try {
+    const response = await fetch(`http://localhost:3500/upload/grids/${gridId}`, {
+      method : "PUT",
+      body : JSON.stringify(gridData),
+      credentials : "include",
+      headers : {
+        "Content-Type" : "application/json"
+      }
+    });
+    console.log('grid data sent');
+
+    const result = await response.json();
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  }
+
 });
 
 

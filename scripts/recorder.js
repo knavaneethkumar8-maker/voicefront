@@ -145,82 +145,88 @@ function blobToFile(blob, fileName) {
 submitVideoBtn?.addEventListener("click", async () => {
   videoPreview.innerHTML = '';
   submitVideoBtn.classList.remove("active-button");
+  try {
+    const videoFile = await blobToFile(recordedVideoBlob, "video2.mp4");
+    const formData = new FormData();
+    formData.append("video", videoFile);
+    const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`
+    const response = await fetch(`http://localhost:3500/upload/video/${fileName}`, {
+      method : "POST",
+      body : formData
+    });
+    const resultBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(resultBlob);
+    const extractedFileName = fileName.split('.')[0] + '.wav';
+    console.log(extractedFileName);
 
-  const videoFile = await blobToFile(recordedVideoBlob, "video2.mp4");
-  const formData = new FormData();
-  formData.append("video", videoFile);
-  const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`
-  const response = await fetch(`http://localhost:3500/upload/video/${fileName}`, {
-    method : "POST",
-    body : formData
-  });
-  const resultBlob = await response.blob();
-  const audioUrl = URL.createObjectURL(resultBlob);
-  const extractedFileName = fileName.split('.')[0] + '.wav';
-  console.log(extractedFileName);
+    const previewHTML = `
+      <div class="js-audio-container audio-container ${extractedFileName}">
+        <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
+        <button class="predict-button">Predict</button>
+        <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+        <button class="lock-text-button">Lock</button>
+        <button class="generate-button">Generate</button>
+      </div>
+    `;
+    audiosPreviewContainer.innerHTML += previewHTML;
+    const audio = document.getElementById(extractedFileName);
 
-  const previewHTML = `
-    <div class="js-audio-container audio-container ${extractedFileName}">
-      <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
-      <button class="predict-button">Predict</button>
-      <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-      <button class="lock-text-button">Lock</button>
-      <button class="generate-button">Generate</button>
-    </div>
-  `;
-  audiosPreviewContainer.innerHTML += previewHTML;
-  const audio = document.getElementById(extractedFileName);
-
-  audio.addEventListener("loadedmetadata", ()=> {
-    console.log(audio.duration);
-    const gridsCount = calcGridCount(audio.duration);
-    renderAllGrids(gridsCount, extractedFileName);
-    updateCurrentFileName(fileName);
-    updateCurrentAudioDuration(audio);
-    setAudioForAllCells(audio);
-    lockGrids();
-  });
+    audio.addEventListener("loadedmetadata", ()=> {
+      console.log(audio.duration);
+      const gridsCount = calcGridCount(audio.duration);
+      renderAllGrids(gridsCount, extractedFileName);
+      updateCurrentFileName(fileName);
+      updateCurrentAudioDuration(audio);
+      setAudioForAllCells(audio);
+      lockGrids();
+    });
+  } catch(err) {
+    console.error(err);
+  }
 })
 
 submitAudioBtn?.addEventListener("click", async () => {
   audioPreview.innerHTML = '';
   submitAudioBtn.classList.remove("active-button");
+  try {
+    const audioFile = await blobToFile(recordedAudioBlob, "audio.wav");
+    const formData = new FormData();
+    formData.append("audio", audioFile);
+    console.log(formData);
+    const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
+    const response = await fetch(`http://localhost:3500/upload/audio/${fileName}`, {
+      method : "POST",
+      body : formData
+    });
+    const audioUrl = URL.createObjectURL(recordedAudioBlob);
+    const previewHTML = `
+      <div class="js-audio-container audio-container ${fileName}">
+        <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+        <button class="predict-button">Predict</button>
+        <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+        <button class="lock-text-button">Lock</button>
+        <button class="generate-button">Generate</button>
+      </div>
+    `;
+    audiosPreviewContainer.innerHTML += previewHTML;
+    const audio = document.getElementById(fileName);
 
-  const audioFile = await blobToFile(recordedAudioBlob, "audio.wav");
-  const formData = new FormData();
-  formData.append("audio", audioFile);
-  console.log(formData);
-  const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
-  const response = await fetch(`http://localhost:3500/upload/audio/${fileName}`, {
-    method : "POST",
-    body : formData
-  });
-  const audioUrl = URL.createObjectURL(recordedAudioBlob);
-  const previewHTML = `
-    <div class="js-audio-container audio-container ${fileName}">
-      <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
-      <button class="predict-button">Predict</button>
-      <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-      <button class="lock-text-button">Lock</button>
-      <button class="generate-button">Generate</button>
-    </div>
-  `;
-  audiosPreviewContainer.innerHTML += previewHTML;
-  const audio = document.getElementById(fileName);
+    audio.addEventListener("loadedmetadata", ()=> {
+      console.log(audio.duration);
+      console.log(audio);
+      const gridsCount = calcGridCount(audio.duration);
+      updateCurrentFileName(fileName);
+      updateCurrentAudioDuration(audio);
+      renderAllGrids(gridsCount, fileName);
+      setAudioForAllCells(audio);
+      lockGrids();
+    });
 
-  audio.addEventListener("loadedmetadata", ()=> {
-    console.log(audio.duration);
-    console.log(audio);
-    const gridsCount = calcGridCount(audio.duration);
-    updateCurrentFileName(fileName);
-    updateCurrentAudioDuration(audio);
-    renderAllGrids(gridsCount, fileName);
-    setAudioForAllCells(audio);
-    lockGrids();
-  });
-
-  const result = await response.json();
-  console.log(result);
+    const result = await response.json();
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 function calcGridCount(duration) {
