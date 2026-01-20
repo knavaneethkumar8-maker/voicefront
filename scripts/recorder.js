@@ -150,7 +150,7 @@ submitVideoBtn?.addEventListener("click", async () => {
     const formData = new FormData();
     formData.append("video", videoFile);
     const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`
-    const response = await fetch(`http://localhost:3500/upload/video/${fileName}`, {
+    const response = await fetch(`http://91.203.135.61/upload/video/${fileName}`, {
       method : "POST",
       body : formData
     });
@@ -194,7 +194,7 @@ submitAudioBtn?.addEventListener("click", async () => {
     formData.append("audio", audioFile);
     console.log(formData);
     const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
-    const response = await fetch(`http://localhost:3500/upload/audio/${fileName}`, {
+    const response = await fetch(`http://91.203.135.61/upload/audio/${fileName}`, {
       method : "POST",
       body : formData
     });
