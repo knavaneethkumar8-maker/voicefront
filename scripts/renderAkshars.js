@@ -1,5 +1,6 @@
 import { akshars } from "./renderBoothGrids.js";
 import { updateAllGridLabels} from "./renderBoothGrids.js";
+import { getCurrentFileName } from "./recorder.js";
 
 const aksharTimeline = document.querySelector('.js-akshar-timeline');
 
@@ -70,9 +71,7 @@ clip.addEventListener("mousemove", (e) => {
       const snappeWidth = snap(snap(Math.max(MIN_WIDTH, rawWidth)))
       clip.style.width = snappeWidth + "px";
       const rect = clip.getBoundingClientRect();
-      console.log(akshar.end);
       akshar.end = ((216*(rect.left + rect.width))/480);
-      console.log(akshar.end);
     }
 
     if (mode === "left") {
@@ -95,7 +94,8 @@ clip.addEventListener("mousemove", (e) => {
     //renderAllGrids();
     //setAudio();
     //lockGrids();
-    updateAllGridLabels();
+    const fileName = getCurrentFileName();
+    updateAllGridLabels(fileName);
   
   }
 

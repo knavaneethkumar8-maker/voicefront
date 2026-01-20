@@ -1,16 +1,16 @@
 export const akshars = [
-{ char:"म", start:0,  end:20 },
-  { char:"ै", start:21, end:35 },
-  { char:"ं", start:36, end:55 },
-  { char:"व", start:60, end:90 },
-  { char:"ि", start:91, end:110 },
-  { char:"द", start:111, end:140 },
-  { char:"य", start:141, end:170 },
-  { char:"ा", start:171, end:200 },
-  { char:"ज", start:210, end:240 },
-  { char:"ा", start:241, end:270 },
-  { char:"त", start:271, end:300 },
-  { char:"ा", start:301, end:330 }
+{ char:"", start:0,  end:20 },
+  { char:"", start:21, end:35 },
+  { char:"", start:36, end:55 },
+  { char:"", start:60, end:90 },
+  { char:"", start:91, end:110 },
+  { char:"", start:111, end:140 },
+  { char:"", start:141, end:170 },
+  { char:"", start:171, end:200 },
+  { char:"", start:210, end:240 },
+  { char:"", start:241, end:270 },
+  { char:"", start:271, end:300 },
+  { char:"", start:301, end:330 }
 ];
 
 
@@ -39,7 +39,7 @@ function collectChars(start9, end9) {
 
 const gridTimeLine = document.querySelector('.js-grid-timeline');
 
-function renderGrid(gridNum) {
+function renderGrid(gridNum, fileName) {
   const startTime = gridNum*24*bioesTime;
   const gridEndTime = startTime + (24*bioesTime);
   const gridHTML = `
@@ -126,11 +126,11 @@ function renderGrid(gridNum) {
   gridTimeLine.innerHTML += gridHTML;
 }
 
-export function renderAllGrids(gridsCount) {
+export function renderAllGrids(gridsCount, fileName) {
   console.log(gridsCount);
   gridTimeLine.innerHTML = '';
   for(let i =0; i < gridsCount ; i++) {
-    renderGrid(i);
+    renderGrid(i, fileName);
   }
 }
 
@@ -159,7 +159,7 @@ function getJalCellLabel(gridNum, cellNo) {
 }
 
 
-export function updateAllGridLabels() {
+export function updateAllGridLabels(fileName) {
   for (let gridNum = 0; gridNum < gridsCount; gridNum++) {
 
     // 🔒 skip if this grid is locked

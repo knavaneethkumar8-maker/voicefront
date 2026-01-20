@@ -7,7 +7,7 @@ import "./sendData.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
-renderAllGrids(2);
+renderAllGrids(2, 'new-file-name');
 renderAkshars(width, setAudioForAllCells);
 setAudioForAllCells();
 lockGrids();
@@ -47,8 +47,10 @@ export function lockGrids() {
 
 function getStartEndTimes(id) {
   const idArray = id.split("_");
-  const gridNum = parseInt(idArray[1]);
-  const cellId = parseInt(idArray[2]);
+  console.log(idArray);
+  const gridNum = parseInt(idArray.at(-2));
+  const cellId = parseInt(idArray.at(-1));
+  console.log(gridNum, cellId);
 
   let start;
   let end;

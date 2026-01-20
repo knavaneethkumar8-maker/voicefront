@@ -149,17 +149,19 @@ submitVideoBtn?.addEventListener("click", async () => {
   const videoFile = await blobToFile(recordedVideoBlob, "video2.mp4");
   const formData = new FormData();
   formData.append("video", videoFile);
-  const fileName = `video_${dayjs().format('YYYY_mm_ss_ms')}.mp4`
+  const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`
   const response = await fetch(`http://localhost:3500/upload/video/${fileName}`, {
     method : "POST",
     body : formData
   });
   const resultBlob = await response.blob();
   const audioUrl = URL.createObjectURL(resultBlob);
+  const extractedFileName = fileName.split('.')[0] + '.wav';
+  console.log(extractedFileName);
 
   const previewHTML = `
-    <div class="js-audio-container audio-container" class=${fileName}>
-      <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+    <div class="js-audio-container audio-container ${extractedFileName}">
+      <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
       <button class="predict-button">Predict</button>
       <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
       <button class="lock-text-button">Lock</button>
@@ -167,12 +169,12 @@ submitVideoBtn?.addEventListener("click", async () => {
     </div>
   `;
   audiosPreviewContainer.innerHTML += previewHTML;
-  const audio = document.getElementById(fileName);
+  const audio = document.getElementById(extractedFileName);
 
   audio.addEventListener("loadedmetadata", ()=> {
     console.log(audio.duration);
     const gridsCount = calcGridCount(audio.duration);
-    renderAllGrids(gridsCount);
+    renderAllGrids(gridsCount, extractedFileName);
     setAudioForAllCells(audio);
     lockGrids();
   });
@@ -186,7 +188,7 @@ submitAudioBtn?.addEventListener("click", async () => {
   const formData = new FormData();
   formData.append("audio", audioFile);
   console.log(formData);
-  const fileName = `audio_${dayjs().format('YYYY_mm_ss_ms')}`
+  const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
   const response = await fetch(`http://localhost:3500/upload/audio/${fileName}`, {
     method : "POST",
     body : formData
@@ -210,7 +212,7 @@ submitAudioBtn?.addEventListener("click", async () => {
     const gridsCount = calcGridCount(audio.duration);
     updateCurrentFileName(fileName);
     updateCurrentAudioDuration(audio);
-    renderAllGrids(gridsCount);
+    renderAllGrids(gridsCount, fileName);
     setAudioForAllCells(audio);
     lockGrids();
   });
@@ -240,7 +242,7 @@ function generateGrids() {
     const gridsCount = calcGridCount(audioEl.duration);
     updateCurrentFileName(fileName);
     updateCurrentAudioDuration(audioEl);
-    renderAllGrids(gridsCount);
+    renderAllGrids(gridsCount, fileName);
     setAudioForAllCells(audioEl);
     lockGrids();
   })
