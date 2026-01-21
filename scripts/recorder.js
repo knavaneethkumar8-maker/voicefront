@@ -178,6 +178,8 @@ submitVideoBtn?.addEventListener("click", async () => {
       updateCurrentFileName(fileName);
       updateCurrentAudioDuration(audio);
       setAudioForAllCells(audio);
+      clearSelectedSpeedButtons();
+      setupAudioSpeedControls(audio);
       lockGrids();
     });
   } catch(err) {
@@ -219,6 +221,8 @@ submitAudioBtn?.addEventListener("click", async () => {
       updateCurrentAudioDuration(audio);
       renderAllGrids(gridsCount, fileName);
       setAudioForAllCells(audio);
+      clearSelectedSpeedButtons();
+      setupAudioSpeedControls(audio);
       lockGrids();
     });
 
@@ -252,8 +256,33 @@ function generateGrids() {
     updateCurrentAudioDuration(audioEl);
     renderAllGrids(gridsCount, fileName);
     setAudioForAllCells(audioEl);
+    clearSelectedSpeedButtons();
+    setupAudioSpeedControls(audioEl);
     lockGrids();
   })
 }
 
 generateGrids();
+
+function setupAudioSpeedControls(audioElement) {
+  const buttons = document.querySelectorAll('.js-audio-speed-button');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove "selected-button" from all buttons
+      buttons.forEach(btn => btn.classList.remove('selected-button'));
+
+      // Add "selected-button" to the clicked button
+      button.classList.add('selected-button');
+
+      // Get the speed from data-speed and set it on audio
+      const speed = parseFloat(button.dataset.speed);
+      audioElement.playbackRate = speed;
+    });
+  });
+}
+
+function clearSelectedSpeedButtons() {
+  const buttons = document.querySelectorAll('.js-audio-speed-button');
+  buttons.forEach(button => button.classList.remove('selected-button'));
+}

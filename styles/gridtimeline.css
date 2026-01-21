@@ -20,7 +20,7 @@ body {
 }
 
 .tier-label-container {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 5px;
   width: 150px;
@@ -46,7 +46,7 @@ body {
   width: 100%;
   overflow-x: auto;
   border-radius: 12px;
-  padding: 0px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .timeline::-webkit-scrollbar{
@@ -244,4 +244,29 @@ body {
     background-color: white;
   }
 
+}
+
+.speed-buttons-container {
+  margin-bottom: 10px;
+}
+
+
+.audio-speed-button {
+  border: 1px solid rgb(168, 168, 168);
+  background-color: rgb(234, 234, 234);
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-right: 4px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.audio-speed-button:hover {
+  box-shadow: 0px 0px 5px rgba(132, 132, 132, 0.594);
+}
+
+.selected-button {
+  background-color: black;
+  color: rgb(231, 230, 230);
+  border: none;
 }
