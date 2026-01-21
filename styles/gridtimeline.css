@@ -12,6 +12,11 @@ body {
 .akshar-editor {
   display: flex;
   gap: 10px;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 
 .tier-label-container {
@@ -34,13 +39,13 @@ body {
 
 
 .timeline {
-  background-color: rgb(1, 1, 1);
+  background-color: #e5e7eb;
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
   overflow-x: auto;
-  border-radius: 6px;
+  border-radius: 12px;
 }
 
 .timeline::-webkit-scrollbar{
@@ -54,7 +59,9 @@ body {
 
 .word-tier {
   height: 44px;
-  background-color: rgb(163, 196, 163);
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
 }
 
 .grid-timeline {
@@ -172,7 +179,7 @@ body {
 }
 
 .adjust-akshar-timeline {
-  background-color: rgb(196, 196, 196);
+  background-color: #e5e7eb;
   height: 44px;
   display: flex;
   position: relative;
