@@ -114,7 +114,7 @@ gridTimeLine.addEventListener("click", async (e) => {
   const gridId = gridEl.id;
 
   try {
-    const response = await fetch(`http://91.203.135.61/upload/grids/${gridId}`, {
+    const response = await fetch(`https://api.xn--l2bot2c0c.com/upload/grids/${gridId}`, {
       method : "PUT",
       body : JSON.stringify(gridData),
       credentials : "include",
