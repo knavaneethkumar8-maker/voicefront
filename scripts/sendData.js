@@ -13,7 +13,7 @@ sendDataButton?.addEventListener("click", async ()=> {
   const payload = createPayloadJSON(fileName, allData.grids, duration_ms);
   //console.log(payload);
   try {
-    const response = await fetch(`http://91.203.135.61/upload/textgrids/${fileName}`, {
+    const response = await fetch(`https://api.xn--l2bot2c0c.com/upload/textgrids/${fileName}`, {
       method : "PUT",
       body : JSON.stringify(payload),
       credentials : "include",
