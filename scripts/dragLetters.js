@@ -14,10 +14,12 @@ let draggedBlock = null;
 let draggedFromCell = false;
 
 
-let touchDragBlock = null;
+let touchGhost = null;
+let touchSourceBlock = null;
 let touchOffsetX = 0;
 let touchOffsetY = 0;
 let longPressTimer = null;
+
 
 
 const lettersContainer = document.getElementById("lettersContainer");
@@ -47,39 +49,54 @@ function createLetterBlock(char) {
     draggedFromCell = false;
   });
 
-  div.addEventListener("touchstart", e => {
+div.addEventListener("touchstart", e => {
   if (e.touches.length !== 1) return;
 
   longPressTimer = setTimeout(() => {
-    touchDragBlock = div;
+    touchSourceBlock = div;
+
+    // 👻 create ghost
+    touchGhost = div.cloneNode(true);
+    touchGhost.classList.add("touch-dragging");
+    document.body.appendChild(touchGhost);
 
     const rect = div.getBoundingClientRect();
-    touchOffsetX = e.touches[0].clientX - rect.left;
-    touchOffsetY = e.touches[0].clientY - rect.top;
+    const touch = e.touches[0];
 
-    div.classList.add("touch-dragging");
-    div.style.position = "fixed";
-    div.style.zIndex = "1000";
+    touchOffsetX = touch.clientX - rect.left;
+    touchOffsetY = touch.clientY - rect.top;
+
+    touchGhost.style.position = "fixed";
+    touchGhost.style.left = `${touch.clientX - touchOffsetX}px`;
+    touchGhost.style.top = `${touch.clientY - touchOffsetY}px`;
+    touchGhost.style.zIndex = "1000";
+    touchGhost.style.pointerEvents = "none";
   }, 300);
 });
 
+
 div.addEventListener("touchmove", e => {
-  if (!touchDragBlock) return;
+  if (!touchGhost) return;
   e.preventDefault();
 
   const touch = e.touches[0];
-  div.style.left = `${touch.clientX - touchOffsetX}px`;
-  div.style.top = `${touch.clientY - touchOffsetY}px`;
+  touchGhost.style.left = `${touch.clientX - touchOffsetX}px`;
+  touchGhost.style.top = `${touch.clientY - touchOffsetY}px`;
 });
+
 
 div.addEventListener("touchend", e => {
   clearTimeout(longPressTimer);
+  if (!touchGhost || !touchSourceBlock) return;
 
-  if (!touchDragBlock) return;
+  const touch = e.changedTouches[0];
+  handleTouchDrop(touch, touchSourceBlock);
 
-  handleTouchDrop(e.changedTouches[0], div);
-  cleanupTouchDrag(div);
+  touchGhost.remove();
+  touchGhost = null;
+  touchSourceBlock = null;
 });
+
 
   return div;
 }
@@ -159,27 +176,32 @@ function updateCellLabel(cell) {
 
 
 
-function handleTouchDrop(touch, block) {
-  const dropTarget = document.elementFromPoint(
+function handleTouchDrop(touch, sourceBlock) {
+  const target = document.elementFromPoint(
     touch.clientX,
     touch.clientY
   );
 
-  const cell = dropTarget?.closest(".cell");
-  const deleteZone = dropTarget?.closest(".js-delete-region");
+  const cell = target?.closest(".cell");
+  const deleteZone = target?.closest(".js-delete-region");
+
+  const fromCell = sourceBlock.closest(".cell");
 
   if (cell) {
-    const char = block.textContent;
-    const copy = createLetterBlock(char);
+    const copy = createLetterBlock(sourceBlock.textContent);
     cell.appendChild(copy);
     updateCellLabel(cell);
 
-    if (block.closest(".cell")) block.remove();
+    // remove only if dragged FROM cell
+    if (fromCell) {
+      sourceBlock.remove();
+      updateCellLabel(fromCell);
+    }
   }
 
-  if (deleteZone && block.closest(".cell")) {
-    const parentCell = block.closest(".cell");
-    block.remove();
+  if (deleteZone && fromCell) {
+    const parentCell = sourceBlock.closest(".cell");
+    sourceBlock.remove();
     updateCellLabel(parentCell);
   }
 }
