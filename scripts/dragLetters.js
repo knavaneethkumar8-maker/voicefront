@@ -170,12 +170,6 @@ function updateCellLabel(cell) {
 
 
 // 📱 MOBILE LONG-PRESS DRAG
-
-
-
-
-
-
 function handleTouchDrop(touch, sourceBlock) {
   const target = document.elementFromPoint(
     touch.clientX,
@@ -187,37 +181,20 @@ function handleTouchDrop(touch, sourceBlock) {
 
   const fromCell = sourceBlock.closest(".cell");
 
+  // ✅ DROP ON CELL → ALWAYS COPY
   if (cell) {
     const copy = createLetterBlock(sourceBlock.textContent);
     cell.appendChild(copy);
     updateCellLabel(cell);
-
-    // remove only if dragged FROM cell
-    if (fromCell) {
-      sourceBlock.remove();
-      updateCellLabel(fromCell);
-    }
   }
 
+  // ✅ DROP ON DELETE → REMOVE ONLY IF FROM CELL
   if (deleteZone && fromCell) {
-    const parentCell = sourceBlock.closest(".cell");
-    sourceBlock.remove();
-    updateCellLabel(parentCell);
+    fromCell.removeChild(sourceBlock);
+    updateCellLabel(fromCell);
   }
 }
 
-
-
-
-function cleanupTouchDrag(block) {
-  block.classList.remove("touch-dragging");
-  block.style.position = "";
-  block.style.left = "";
-  block.style.top = "";
-  block.style.zIndex = "";
-
-  touchDragBlock = null;
-}
 
 
 

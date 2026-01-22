@@ -250,6 +250,10 @@ body {
     background-color: white;
   }
 
+  body {
+    padding: 6px;
+  }
+
 }
 
 .speed-buttons-container {
