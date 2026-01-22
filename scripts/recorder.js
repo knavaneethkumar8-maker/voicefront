@@ -216,6 +216,31 @@ function blobToFile(blob, fileName) {
   return new File([blob], fileName, {type : blob.type});
 }
 
+const submitFileMessage = document.querySelector('.js-submit-file-message');
+
+function showUploadSuccessMessage() {
+  submitFileMessage.innerText = 'Successfully submitted';
+  submitFileMessage.classList.add('success-color');
+  submitFileMessage.classList.remove('failed-color');
+
+  setTimeout(() => {
+    submitFileMessage.innerText = '(Note: After submitting please wait for the response. Do not refresh)';
+    submitFileMessage.classList.remove('success-color');
+  }, 5000); // 1 second
+}
+
+function showUploadFailedMessage(errMessage) {
+  submitFileMessage.innerText = `Unexpected error occured, check internet connection and try again. `;
+  submitFileMessage.innerText += errMessage;
+  submitFileMessage.classList.remove('success-color');
+  submitFileMessage.classList.add('failed-color');
+
+  // //setTimeout(() => {
+  //   submitFileMessage.innerText = '(Note: After submitting please wait for the response. Do not refresh)';
+  //   submitFileMessage.classList.remove('failed-color');
+  // }, 5000); // 1 second
+}
+
 
 submitVideoBtn?.addEventListener("click", async () => {
   videoPreview.innerHTML = '';
@@ -229,6 +254,14 @@ submitVideoBtn?.addEventListener("click", async () => {
       method : "POST",
       body : formData
     });
+    console.log(response);
+
+    if(!response.ok) {
+      showUploadFailedMessage('err');
+      return;
+    }
+    showUploadSuccessMessage();
+
     const resultBlob = await response.blob();
     const audioUrl = URL.createObjectURL(resultBlob);
     const extractedFileName = fileName.split('.')[0] + '.wav';
@@ -280,6 +313,13 @@ submitAudioBtn?.addEventListener("click", async () => {
       method : "POST",
       body : formData
     });
+
+    if(!response.ok) {
+      showUploadFailedMessage('err');
+      return;
+    }
+    showUploadSuccessMessage();
+
     const audioUrl = URL.createObjectURL(recordedAudioBlob);
     const previewHTML = `
       <div class="js-audio-container audio-container ${fileName}">

@@ -196,3 +196,18 @@ video {
     grid-template-columns: 1fr;
   }
 }
+
+
+.submit-file-message {
+  font-size: 12px;
+  margin-bottom: 16px;
+  margin-top: 4px;
+}
+
+.success-color {
+  color: green;
+}
+
+.failed-color {
+  color: rgb(242, 73, 73);
+}

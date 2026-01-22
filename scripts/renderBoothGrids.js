@@ -128,6 +128,8 @@ function renderGrid(gridNum, fileName) {
 
 export function renderAllGrids(gridsCount, fileName) {
   console.log(gridsCount);
+  const fileLabel = document.querySelector('.js-rendered-filename');
+  fileLabel.innerText = fileName;
   gridTimeLine.innerHTML = '';
   for(let i =0; i < gridsCount ; i++) {
     renderGrid(i, fileName);

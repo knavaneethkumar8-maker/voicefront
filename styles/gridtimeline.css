@@ -11,7 +11,8 @@ body {
 
 .akshar-editor {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 5px;
   background: white;
   border-radius: 16px;
   padding: 20px;
@@ -204,7 +205,6 @@ body {
   font-size: 12px;
   font-weight: 300;
   color: rgb(107, 106, 106);
-  margin-bottom: 10px;
 }
 
 .submit-button-container {
@@ -269,4 +269,9 @@ body {
   background-color: black;
   color: rgb(231, 230, 230);
   border: none;
+}
+
+
+.rendered-filename {
+  color: rgb(96, 95, 95);
 }
