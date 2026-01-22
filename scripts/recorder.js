@@ -283,13 +283,15 @@ submitAudioBtn?.addEventListener("click", async () => {
     const audioUrl = URL.createObjectURL(recordedAudioBlob);
     const previewHTML = `
       <div class="js-audio-container audio-container ${fileName}">
-        ${fileName}
-        <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
-        <button class="predict-button">Predict</button>
-        <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-        <button class="lock-text-button">Lock</button>
-        <button class="generate-button">Generate</button>
-        <button class="remove-button">Delete</button>
+        <p class="audio-filename">${fileName}</p>
+        <div class="audio-preview">
+          <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+          <button class="predict-button">Predict</button>
+          <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+          <button class="lock-text-button">Lock</button>
+          <button class="generate-button">Generate</button>
+          <button class="remove-button">Delete</button>
+        </div>
       </div>
     `;
     audiosPreviewContainer.innerHTML += previewHTML;
