@@ -25,7 +25,14 @@ sendDataButton?.addEventListener("click", async ()=> {
         "Content-Type" : "application/json"
       }
     });
+
+    if(!response.ok) {
+      showSubmitDataFailedMessage();
+      return;
+    }
+
     console.log('data sent');
+    showSubmitDataSuccessMessage();
 
     const result = await response.json();
     console.log(result);
@@ -38,6 +45,32 @@ function getFileRoot(fileName) {
   if(!fileName) return;
   return fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
 }
+
+const submitDataMessage = document.querySelector('.js-submit-data-response')
+
+export function showSubmitDataSuccessMessage() {
+  submitDataMessage.innerText = 'Successfully submitted';
+  submitDataMessage.classList.add('success-color');
+  submitDataMessage.classList.remove('failed-color');
+
+  setTimeout(() => {
+    submitDataMessage.innerText = '';
+    submitDataMessage.classList.remove('success-color');
+  }, 5000); // 1 second
+}
+
+export function showSubmitDataFailedMessage() {
+  submitDataMessage.innerText = `Unexpected error occured, check internet connection and try again. `;
+  submitDataMessage.classList.remove('success-color');
+  submitDataMessage.classList.add('failed-color');
+
+  // //setTimeout(() => {
+  //   submitDataMessage.innerText = '(Note: After submitting please wait for the response. Do not refresh)';
+  //   submitDataMessage.classList.remove('failed-color');
+  // }, 5000); // 1 second
+}
+
+
 
 function createPayloadJSON(fileName, gridsArray, duration) {
   const root = getFileRoot(fileName);

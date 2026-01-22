@@ -1,4 +1,5 @@
 import { getUrls } from "../config/urls.js";
+import { showSubmitDataFailedMessage, showSubmitDataSuccessMessage } from "./sendData.js";
 
 const urls = getUrls();
 const {backendOrigin} = urls;
@@ -118,8 +119,12 @@ gridTimeLine.addEventListener("click", async (e) => {
   }else {
     const allGridCells = gridEl.querySelectorAll("*");
     allGridCells?.forEach(cell => {
-    cell.contentEditable = "true";
-  });
+      //cell.contentEditable = "true";
+    });
+  }
+
+  if(!gridEl.classList.contains('locked')) {
+    return;
   }
   
   const gridData = collectGridData(gridEl);
@@ -135,7 +140,11 @@ gridTimeLine.addEventListener("click", async (e) => {
         "Content-Type" : "application/json"
       }
     });
+    if(!response.ok) {
+      showSubmitDataFailedMessage();
+    }
     console.log('grid data sent');
+    showSubmitDataSuccessMessage();
 
     const result = await response.json();
     console.log(result);

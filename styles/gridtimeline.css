@@ -229,7 +229,8 @@ body {
   width: 150px;
   border-radius: 30px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 40px;
 }
 
 .submit-data:hover {
@@ -237,6 +238,10 @@ body {
 }
 
 .letters-container {
+  order: 1;
+}
+
+.delete-region {
   order: 2;
 }
 
@@ -269,6 +274,10 @@ body {
 
   .js-timeline {
     order: 2;
+  }
+
+  .adjust-akshar-timeline {
+    display: none;
   }
 
 }
@@ -312,4 +321,13 @@ body {
   left: 4px;
   top: 2px;
   color: black;
+}
+
+
+.submit-data-response {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  height: 16px;
 }
