@@ -4,6 +4,7 @@ import { playAudioSegment } from "./playAudioSegment.js";
 import "./recorder.js";
 import "./collectData.js";
 import "./sendData.js";
+import "./dragLetters.js";
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
@@ -11,6 +12,7 @@ renderAllGrids(2, 'new-file-name');
 renderAkshars(width, setAudioForAllCells);
 setAudioForAllCells();
 lockGrids();
+//enableDropForCells('.cell');
 
 
 export function setAudioForAllCells(audio) {

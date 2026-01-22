@@ -16,6 +16,14 @@ gridTimeLine.addEventListener("click", (e) => {
   console.log(cellData, allData);
 });
 
+function getCellLetters(cell) {
+  // Select all letter blocks inside the cell
+  const blocks = cell.querySelectorAll(".letter-block");
+  
+  // Map each block to its textContent and join
+  return Array.from(blocks).map(b => b.textContent).join("");
+}
+
 
 function collectCellData(cellEl) {
   const id = cellEl.id; // fileName_gridNo_cellNo
@@ -31,7 +39,7 @@ function collectCellData(cellEl) {
     index: cellNo ?? 0,
     start_ms: start_ms ?? 0,
     end_ms: end_ms ?? 0,
-    text: cellEl.textContent?.trim() || "",
+    text: getCellLetters(cellEl) || cellEl.textContent?.trim() || "",
     conf: 0,
     status: "NEW",
     is_locked: false,

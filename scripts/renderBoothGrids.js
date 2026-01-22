@@ -1,3 +1,6 @@
+import { enableDropForCells } from "./dragLetters.js";
+
+
 export const akshars = [
 { char:"", start:0,  end:20 },
   { char:"", start:21, end:35 },
@@ -46,52 +49,57 @@ function renderGrid(gridNum, fileName) {
   <div class="booth-grid" id= ${fileName + "_" + gridNum}>
           <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
           <div class="akash-tier">
-            <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} contenteditable="true">
-              ${getAkashCellLabel(gridNum)}
+            <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} >
+            <span>${getAkashCellLabel(gridNum)}</span>
+              
             </div>
           </div>
           <div class="agni-tier flex-display">
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+2} contenteditable="true">${getAgniCellLabel(gridNum,0)}</div>
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+3} contenteditable="true">${getAgniCellLabel(gridNum,1)}</div>
+            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+2} >
+              <span>${getAgniCellLabel(gridNum,0)}</span>
+            </div>
+            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+3} >
+              <span>${getAgniCellLabel(gridNum,1)}</span>
+            </div>
           </div>
           <div class="vayu-tier flex-display">
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+ 4} contenteditable="true">
-            ${getAyuvCellLabel(gridNum,0)}
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+ 4} >
+            <span>${getAyuvCellLabel(gridNum,0)}</span>
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+5} contenteditable="true">
-            ${getAyuvCellLabel(gridNum,1)}
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+5} >
+            <span>${getAyuvCellLabel(gridNum,1)}</span>
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+6} contenteditable="true">
-            ${getAyuvCellLabel(gridNum,2)}
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+6} >
+            <span>${getAyuvCellLabel(gridNum,2)}</span>
             </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+7} contenteditable="true">
-            ${getAyuvCellLabel(gridNum,3)}
+            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+7} >
+            <span>${getAyuvCellLabel(gridNum,3)}</span>
             </div>
           </div>
           <div class="jal-tier flex-display">
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+8} contenteditable="true">
-            ${getJalCellLabel(gridNum,0)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+8} >
+            <span>${getJalCellLabel(gridNum,0)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+9} contenteditable="true">
-            ${getJalCellLabel(gridNum,1)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+9} >
+            <span>${getJalCellLabel(gridNum,1)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+10} contenteditable="true">
-            ${getJalCellLabel(gridNum,2)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+10} >
+            <span>${getJalCellLabel(gridNum,2)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+11} contenteditable="true">
-            ${getJalCellLabel(gridNum,3)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+11} >
+            <span>${getJalCellLabel(gridNum,3)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+12} contenteditable="true">
-            ${getJalCellLabel(gridNum,4)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+12} >
+            <span>${getJalCellLabel(gridNum,4)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+13} contenteditable="true">
-            ${getJalCellLabel(gridNum,5)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+13} >
+            <span>${getJalCellLabel(gridNum,5)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+14} contenteditable="true">
-            ${getJalCellLabel(gridNum,6)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+14} >
+            <span>${getJalCellLabel(gridNum,6)}</span>
             </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+15} contenteditable="true">
-            ${getJalCellLabel(gridNum,7)}
+            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+15} >
+            <span>${getJalCellLabel(gridNum,7)}</span>
             </div>
           </div>
           <div class="prithvi-tier flex-display">
@@ -124,6 +132,7 @@ function renderGrid(gridNum, fileName) {
   `;
 
   gridTimeLine.innerHTML += gridHTML;
+  enableDropForCells(".cell");
 }
 
 export function renderAllGrids(gridsCount, fileName) {

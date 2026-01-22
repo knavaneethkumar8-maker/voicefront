@@ -15,8 +15,8 @@ body {
   gap: 5px;
   background: white;
   border-radius: 16px;
-  padding: 20px;
-  margin-top: 32px;
+  padding: 10px 20px 20px 20px;
+  margin-top: 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 
@@ -274,4 +274,7 @@ body {
 
 .rendered-filename {
   color: rgb(96, 95, 95);
+  margin-left: 10px;
+  margin-top: 4px;
+  margin-bottom: 6px;
 }

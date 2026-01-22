@@ -1,0 +1,56 @@
+/* Vowels */
+.अ { background-color: #F44336; }
+.आ { background-color: #E53935; }
+.इ { background-color: #FB8C00; }
+.उ { background-color: #FBC02D; }
+.ए { background-color: #FFD600; color: rgb(73, 73, 73);}
+.ओ { background-color: #FFEE58; color: rgb(73, 73, 73); }
+
+/* Consonants - क to घ */
+.क { background-color: #1E88E5; }
+.ख { background-color: #42A5F5; }
+.ग { background-color: #1565C0; }
+.घ { background-color: #0D47A1; }
+
+/* Consonants - च to झ */
+.च { background-color: #43A047; }
+.छ { background-color: #66BB6A; }
+.ज { background-color: #2E7D32; }
+.झ { background-color: #1B5E20; }
+
+/* Consonants - ट to ढ */
+.ट { background-color: #8E24AA; }
+.ठ { background-color: #AB47BC; }
+.ड { background-color: #6A1B9A; }
+.ढ { background-color: #4A148C; }
+
+/* Consonants - त to ध */
+.त { background-color: #F4511E; }
+.थ { background-color: #FF7043; }
+.द { background-color: #E64A19; }
+.ध { background-color: #BF360C; }
+
+/* Consonants - प to भ */
+.प { background-color: #00ACC1; }
+.फ { background-color: #26C6DA; }
+.ब { background-color: #00838F; }
+.भ { background-color: #006064; }
+
+/* Consonants - न, म */
+.न { background-color: #6D4C41; }
+.म { background-color: #4E342E; }
+
+/* Consonants - य, र, ल, व */
+.य { background-color: #7CB342; }
+.र { background-color: #558B2F; }
+.ल { background-color: #33691E; }
+.व { background-color: #1B5E20; }
+
+/* Consonants - स, ह */
+.स { background-color: #90A4AE; }
+.ह { background-color: #607D8B; }
+
+/* Special characters */
+._ { background-color: #ECEFF1; }
+.SIL { background-color: #CFD8DC; }
+
