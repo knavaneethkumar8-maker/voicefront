@@ -48,6 +48,7 @@ body {
   overflow-x: auto;
   border-radius: 12px;
   padding: 10px 10px 10px 10px;
+  border: 1px solid rgb(201, 201, 201);
 }
 
 .timeline::-webkit-scrollbar{
@@ -109,8 +110,8 @@ body {
 }
 
 .akash-cell {
-  background-color: rgb(247, 158, 147);
-  border: 1px solid rgb(101, 68, 68);
+  background-color: rgb(250, 219, 215);
+  border: 0.9px solid rgb(87, 87, 87);
   flex: 1;
   display: flex;
   align-items: center;
@@ -125,7 +126,7 @@ body {
 }
 
 .agni-cell {
-  background-color: rgb(183, 224, 172);
+  background-color: rgb(217, 247, 209);
   border: 0.5px solid rgb(101, 68, 68);
   display: flex;
   align-items: center;
@@ -140,7 +141,7 @@ body {
 }
 
 .vayu-cell {
-  background-color: rgb(172, 224, 218);
+  background-color: rgb(207, 252, 247);
   border: 0.5px solid rgb(101, 68, 68);
   display: flex;
   align-items: center;
@@ -156,7 +157,7 @@ body {
 }
 
 .jal-cell {
-  background-color: rgb(172, 203, 224);
+  background-color: rgb(216, 239, 255);
   border: 0.5px solid rgb(101, 68, 68);
   display: flex;
   align-items: center;
@@ -173,7 +174,7 @@ body {
 }
 
 .prithvi-cell {
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(233, 231, 231);
   border: 0.5px solid rgb(101, 68, 68);
   display: flex;
   align-items: center;

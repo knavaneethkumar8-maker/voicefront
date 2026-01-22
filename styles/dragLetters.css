@@ -29,11 +29,11 @@
   }
 
 .letter-block {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   color: rgb(255, 255, 255);
   font-weight: 400;
-  border-radius: 28px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

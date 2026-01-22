@@ -5,6 +5,7 @@ import "./recorder.js";
 import "./collectData.js";
 import "./sendData.js";
 import "./dragLetters.js";
+import "./navigation.js"
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
