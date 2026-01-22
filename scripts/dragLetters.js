@@ -1,4 +1,4 @@
-/* Characters */
+
 const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const AKSHAR_SET = [
     "अ", "आ", "इ", "उ", "ए", "ओ",
@@ -60,6 +60,7 @@ export function enableDropForCells(selector) {
       const copy = createLetterBlock(char);
 
       cell.appendChild(copy);
+      updateCellLabel(cell);
     });
   });
 }
@@ -83,9 +84,31 @@ deleteRegion.addEventListener("drop", e => {
 
   // 🔥 DELETE ONLY if dragged from a cell
   if (draggedFromCell && draggedBlock) {
+    const parentCell = draggedBlock.closest(".cell");
     draggedBlock.remove();
+     if (parentCell) {
+      updateCellLabel(parentCell);
+    }
   }
 });
+
+
+function getCellLetters(cell) {
+  // Select all letter blocks inside the cell
+  const blocks = cell.querySelectorAll(".letter-block");
+  
+  // Map each block to its textContent and join
+  return Array.from(blocks).map(b => b.textContent).join("");
+}
+
+
+function updateCellLabel(cell) {
+  const labelEl = cell.querySelector(".cell-label");
+  if (!labelEl) return;
+
+  labelEl.textContent = getCellLetters(cell);
+}
+
 
 
 
