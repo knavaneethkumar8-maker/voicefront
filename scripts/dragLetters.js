@@ -14,6 +14,12 @@ let draggedBlock = null;
 let draggedFromCell = false;
 
 
+let touchDragBlock = null;
+let touchOffsetX = 0;
+let touchOffsetY = 0;
+let longPressTimer = null;
+
+
 const lettersContainer = document.getElementById("lettersContainer");
 
 AKSHAR_SET.forEach(char => {
@@ -40,6 +46,40 @@ function createLetterBlock(char) {
     draggedBlock = null;
     draggedFromCell = false;
   });
+
+  div.addEventListener("touchstart", e => {
+  if (e.touches.length !== 1) return;
+
+  longPressTimer = setTimeout(() => {
+    touchDragBlock = div;
+
+    const rect = div.getBoundingClientRect();
+    touchOffsetX = e.touches[0].clientX - rect.left;
+    touchOffsetY = e.touches[0].clientY - rect.top;
+
+    div.classList.add("touch-dragging");
+    div.style.position = "fixed";
+    div.style.zIndex = "1000";
+  }, 300);
+});
+
+div.addEventListener("touchmove", e => {
+  if (!touchDragBlock) return;
+  e.preventDefault();
+
+  const touch = e.touches[0];
+  div.style.left = `${touch.clientX - touchOffsetX}px`;
+  div.style.top = `${touch.clientY - touchOffsetY}px`;
+});
+
+div.addEventListener("touchend", e => {
+  clearTimeout(longPressTimer);
+
+  if (!touchDragBlock) return;
+
+  handleTouchDrop(e.changedTouches[0], div);
+  cleanupTouchDrag(div);
+});
 
   return div;
 }
@@ -108,6 +148,61 @@ function updateCellLabel(cell) {
 
   labelEl.textContent = getCellLetters(cell);
 }
+
+
+
+
+// 📱 MOBILE LONG-PRESS DRAG
+
+
+
+
+
+
+function handleTouchDrop(touch, block) {
+  const dropTarget = document.elementFromPoint(
+    touch.clientX,
+    touch.clientY
+  );
+
+  const cell = dropTarget?.closest(".cell");
+  const deleteZone = dropTarget?.closest(".js-delete-region");
+
+  if (cell) {
+    const char = block.textContent;
+    const copy = createLetterBlock(char);
+    cell.appendChild(copy);
+    updateCellLabel(cell);
+
+    if (block.closest(".cell")) block.remove();
+  }
+
+  if (deleteZone && block.closest(".cell")) {
+    const parentCell = block.closest(".cell");
+    block.remove();
+    updateCellLabel(parentCell);
+  }
+}
+
+
+
+
+function cleanupTouchDrag(block) {
+  block.classList.remove("touch-dragging");
+  block.style.position = "";
+  block.style.left = "";
+  block.style.top = "";
+  block.style.zIndex = "";
+
+  touchDragBlock = null;
+}
+
+
+
+
+
+
+
 
 
 

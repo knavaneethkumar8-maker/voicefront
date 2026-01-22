@@ -272,9 +272,6 @@ submitVideoBtn?.addEventListener("click", async () => {
         <p class="audio-filename">${extractedFileName}</p>
         <div class="audio-preview">
           <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
-          <button class="predict-button">Predict</button>
-          <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-          <button class="lock-text-button">Lock</button>
           <button class="generate-button">Generate</button>
           <button class="remove-button">Delete</button>
         </div>
@@ -326,9 +323,6 @@ submitAudioBtn?.addEventListener("click", async () => {
         <p class="audio-filename">${fileName}</p>
         <div class="audio-preview">
           <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
-          <button class="predict-button">Predict</button>
-          <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-          <button class="lock-text-button">Lock</button>
           <button class="generate-button">Generate</button>
           <button class="remove-button">Delete</button>
         </div>

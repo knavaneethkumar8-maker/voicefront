@@ -78,3 +78,13 @@
   align-items: center;
   justify-content: center;
 }
+
+
+
+
+.letter-block.touch-dragging {
+  opacity: 0.85;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
