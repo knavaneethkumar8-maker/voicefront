@@ -1,6 +1,7 @@
 import { renderAkshars } from "./renderAkshars.js";
 import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
+import { initPageNavigation } from "./navigation.js";
 import "./recorder.js";
 import "./collectData.js";
 import "./sendData.js";
@@ -13,6 +14,8 @@ renderAllGrids(2, 'new-file-name');
 renderAkshars(width, setAudioForAllCells);
 setAudioForAllCells();
 lockGrids();
+document.addEventListener("DOMContentLoaded", initPageNavigation);
+
 //enableDropForCells('.cell');
 
 
