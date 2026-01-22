@@ -1,4 +1,4 @@
-import { enableDropForCells } from "./dragLetters.js";
+import { enableDropForCells} from "./dragLetters.js";
 
 
 export const akshars = [

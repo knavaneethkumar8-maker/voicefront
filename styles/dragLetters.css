@@ -68,3 +68,13 @@
   opacity: 0.6;
   font-size: 12px;
 }
+
+.delete-region {
+  display: flex;
+  height: 60px;
+  border: 1px solid rgb(254, 188, 188);
+  background-color: rgb(254, 242, 242);
+  border-radius: 14px;
+  align-items: center;
+  justify-content: center;
+}
