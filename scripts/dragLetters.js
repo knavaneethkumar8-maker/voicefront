@@ -166,9 +166,6 @@ function updateCellLabel(cell) {
   labelEl.textContent = getCellLetters(cell);
 }
 
-
-
-
 // 📱 MOBILE LONG-PRESS DRAG
 function handleTouchDrop(touch, sourceBlock) {
   const target = document.elementFromPoint(

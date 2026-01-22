@@ -236,6 +236,15 @@ body {
   opacity: 0.9;
 }
 
+.letters-container {
+  order: 2;
+}
+
+.js-timeline {
+  order: 3;
+}
+
+
 @media (max-width: 640px ) {
   .tier-label-container {
     display: none;
@@ -252,6 +261,14 @@ body {
 
   body {
     padding: 6px;
+  }
+
+  .letters-container {
+    order: 4; /* move below timeline */
+  }
+
+  .js-timeline {
+    order: 2;
   }
 
 }
