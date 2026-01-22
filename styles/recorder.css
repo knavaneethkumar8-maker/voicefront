@@ -97,9 +97,7 @@ video {
   max-width: 1200px;
 }
 
-
 .audio-container {
-  display: flex;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -109,9 +107,12 @@ video {
   margin-bottom: 5px;
 }
 
+
+
 .predict-button ,
 .lock-text-button,
-.generate-button {
+.generate-button,
+.remove-button {
   background-color: rgb(86, 139, 245);
   border: none;
   font-size: 14px;
@@ -148,6 +149,15 @@ video {
 .generate-button:hover {
   background-color: rgb(232, 120, 22);
 }
+
+.remove-button {
+  background-color: rgb(219, 67, 67);
+}
+
+.remove-button:hover {
+  background-color: rgb(235, 38, 38);
+}
+
 .audio-file {
   max-width: 300px;
   margin-top: 0px;

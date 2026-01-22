@@ -2,6 +2,7 @@ import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { setAudioForAllCells } from "./main.js";
 import { renderAllGrids } from "./renderBoothGrids.js";
 import { lockGrids } from "./main.js";
+import { getUrls } from "../config/urls.js";
 
 let recordedAudioBlob = null;
 let recordedVideoBlob = null;
@@ -13,6 +14,9 @@ let audioInterval, videoInterval;
 
 let currentFileName;
 let currentAudioDuration;
+
+const urls = getUrls();
+const {backendOrigin} = urls;
 
 function updateCurrentAudioDuration(audio) {
   currentAudioDuration = audio.duration;
@@ -56,14 +60,50 @@ const submitVideoBtn = document.querySelector(".js-submit-video-button");
 audioRecordBtn.onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  audioRecorder = new MediaRecorder(stream);
+  // ✅ Pick a browser-supported mime type
+  let mimeType = "";
+  if (window.MediaRecorder) {
+    if (MediaRecorder.isTypeSupported("audio/mp4")) {
+      mimeType = "audio/mp4";        // Safari
+    } else if (MediaRecorder.isTypeSupported("audio/webm")) {
+      mimeType = "audio/webm";       // Chrome / Firefox
+    } else if (MediaRecorder.isTypeSupported("audio/wav")) {
+      mimeType = "audio/wav";
+    }
+  }
+
+  audioRecorder = mimeType
+    ? new MediaRecorder(stream, { mimeType })
+    : new MediaRecorder(stream);
+
   audioChunks = [];
 
-  audioRecorder.ondataavailable = e => audioChunks.push(e.data);
+  audioRecorder.ondataavailable = e => {
+    if (e.data && e.data.size > 0) {
+      audioChunks.push(e.data);
+    }
+  };
+
   audioRecorder.onstop = () => {
-    recordedAudioBlob = new Blob(audioChunks, { type: "audio/webm" });
+    // ✅ Use the SAME mimeType the recorder used
+    recordedAudioBlob = new Blob(audioChunks, {
+      type: audioRecorder.mimeType || mimeType
+    });
+
+    // Safety check (prevents Safari silent failure)
+    if (recordedAudioBlob.size === 0) {
+      console.error("Recorded audio is empty");
+      audioPreview.innerHTML = "<p>Recording failed. Please try again.</p>";
+      return;
+    }
+
     const url = URL.createObjectURL(recordedAudioBlob);
-    audioPreview.innerHTML = `<audio controls src="${url}"></audio>`;
+
+    audioPreview.innerHTML = `
+      <audio controls>
+        <source src="${url}" type="${recordedAudioBlob.type}">
+      </audio>
+    `;
   };
 
   audioRecorder.start();
@@ -75,6 +115,7 @@ audioRecordBtn.onclick = async () => {
 
   setTimeout(stopAudioRecording, MAX_TIME);
 };
+
 
 audioStopBtn.onclick = stopAudioRecording;
 
@@ -102,14 +143,47 @@ videoRecordBtn.onclick = async () => {
     audio: true
   });
 
-  videoRecorder = new MediaRecorder(stream);
+  // ✅ Choose supported mime type
+  let mimeType = "";
+  if (window.MediaRecorder) {
+    if (MediaRecorder.isTypeSupported("video/mp4")) {
+      mimeType = "video/mp4";               // Safari
+    } else if (MediaRecorder.isTypeSupported("video/webm")) {
+      mimeType = "video/webm";              // Chrome / Firefox
+    }
+  }
+
+  videoRecorder = mimeType
+    ? new MediaRecorder(stream, { mimeType })
+    : new MediaRecorder(stream);
+
   videoChunks = [];
 
-  videoRecorder.ondataavailable = e => videoChunks.push(e.data);
+  videoRecorder.ondataavailable = e => {
+    if (e.data && e.data.size > 0) {
+      videoChunks.push(e.data);
+    }
+  };
+
   videoRecorder.onstop = () => {
-    recordedVideoBlob = new Blob(videoChunks, { type: "video/webm" });
+    recordedVideoBlob = new Blob(videoChunks, {
+      type: videoRecorder.mimeType || mimeType
+    });
+
+    // 🛑 Prevent Safari silent error
+    if (recordedVideoBlob.size === 0) {
+      console.error("Recorded video is empty");
+      videoPreview.innerHTML = "<p>Video recording failed. Please try again.</p>";
+      return;
+    }
+
     const url = URL.createObjectURL(recordedVideoBlob);
-    videoPreview.innerHTML = `<video controls src="${url}"></video>`;
+
+    videoPreview.innerHTML = `
+      <video controls playsinline>
+        <source src="${url}" type="${recordedVideoBlob.type}">
+      </video>
+    `;
   };
 
   videoRecorder.start();
@@ -121,6 +195,7 @@ videoRecordBtn.onclick = async () => {
 
   setTimeout(stopVideoRecording, MAX_TIME);
 };
+
 
 videoStopBtn.onclick = stopVideoRecording;
 
@@ -150,7 +225,7 @@ submitVideoBtn?.addEventListener("click", async () => {
     const formData = new FormData();
     formData.append("video", videoFile);
     const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`
-    const response = await fetch(`https://api.xn--l2bot2c0c.com/upload/video/${fileName}`, {
+    const response = await fetch(`${backendOrigin}/upload/video/${fileName}`, {
       method : "POST",
       body : formData
     });
@@ -161,11 +236,16 @@ submitVideoBtn?.addEventListener("click", async () => {
 
     const previewHTML = `
       <div class="js-audio-container audio-container ${extractedFileName}">
-        <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
-        <button class="predict-button">Predict</button>
-        <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
-        <button class="lock-text-button">Lock</button>
-        <button class="generate-button">Generate</button>
+        <p class="audio-filename">${extractedFileName}</p>
+        <div class="audio-preview">
+          <audio src=${audioUrl} controls class="audio-file" id=${extractedFileName}></audio>
+          <button class="predict-button">Predict</button>
+          <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
+          <button class="lock-text-button">Lock</button>
+          <button class="generate-button">Generate</button>
+          <button class="remove-button">Delete</button>
+        </div>
+        
       </div>
     `;
     audiosPreviewContainer.innerHTML += previewHTML;
@@ -196,18 +276,20 @@ submitAudioBtn?.addEventListener("click", async () => {
     formData.append("audio", audioFile);
     console.log(formData);
     const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
-    const response = await fetch(`https://api.xn--l2bot2c0c.com/upload/audio/${fileName}`, {
+    const response = await fetch(`${backendOrigin}/upload/audio/${fileName}`, {
       method : "POST",
       body : formData
     });
     const audioUrl = URL.createObjectURL(recordedAudioBlob);
     const previewHTML = `
       <div class="js-audio-container audio-container ${fileName}">
+        ${fileName}
         <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
         <button class="predict-button">Predict</button>
         <div class="predicted-text-box" contenteditable="true">Predicted Text</div>
         <button class="lock-text-button">Lock</button>
         <button class="generate-button">Generate</button>
+        <button class="remove-button">Delete</button>
       </div>
     `;
     audiosPreviewContainer.innerHTML += previewHTML;
@@ -239,6 +321,17 @@ function calcGridCount(duration) {
   const gridsCount = Math.ceil(audioLength/(24*bioesTime));
   return gridsCount;
 }
+
+//set delete audio from list
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('remove-button')) {
+    const parentContainer = e.target.closest('.audio-container');
+    if (parentContainer) {
+      parentContainer.remove();
+    }
+  }
+});
+
 
 
 function generateGrids() {
@@ -286,3 +379,5 @@ function clearSelectedSpeedButtons() {
   const buttons = document.querySelectorAll('.js-audio-speed-button');
   buttons.forEach(button => button.classList.remove('selected-button'));
 }
+
+

@@ -1,3 +1,8 @@
+import { getUrls } from "../config/urls.js";
+
+const urls = getUrls();
+const {backendOrigin} = urls;
+
 const gridTimeLine = document.querySelector('.js-grid-timeline');
 const bioesTime = 9;
 
@@ -114,7 +119,7 @@ gridTimeLine.addEventListener("click", async (e) => {
   const gridId = gridEl.id;
 
   try {
-    const response = await fetch(`https://api.xn--l2bot2c0c.com/upload/grids/${gridId}`, {
+    const response = await fetch(`${backendOrigin}/upload/grids/${gridId}`, {
       method : "PUT",
       body : JSON.stringify(gridData),
       credentials : "include",
