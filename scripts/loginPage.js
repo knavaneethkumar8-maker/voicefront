@@ -12,6 +12,9 @@ const signupBtn = document.getElementById("signupBtn");
 const signinMessage = document.getElementById("signinMessage");
 const signupMessage = document.getElementById("signupMessage");
 
+const profileUsername = document.querySelector(".profile-details .username");
+
+
 /* SWITCH FORMS */
 goToSignup.onclick = () => {
   signinForm.classList.remove("active");
@@ -56,6 +59,7 @@ signupBtn.onclick = () => {
 };
 
 /* SIGN IN */
+/* SIGN IN */
 signinBtn.onclick = () => {
   const username = document.getElementById("signinUsername").value.trim();
   const password = document.getElementById("signinPassword").value.trim();
@@ -64,11 +68,13 @@ signinBtn.onclick = () => {
 
   if (!users[username]) {
     signinMessage.textContent = "No user found";
+    signinMessage.classList.remove("success");
     return;
   }
 
   if (users[username] !== password) {
     signinMessage.textContent = "Incorrect password";
+    signinMessage.classList.remove("success");
     return;
   }
 
@@ -76,7 +82,24 @@ signinBtn.onclick = () => {
   signinMessage.textContent = "Login successful";
   signinMessage.classList.add("success");
 
+  // 🔹 Update profile section
+  profileUsername.textContent = username;
+
+  // 🔹 Store logged-in user
+  localStorage.setItem("loggedInUser", username);
+
   setTimeout(() => {
     authOverlay.style.display = "none";
   }, 600);
 };
+
+
+
+const loggedInUser = localStorage.getItem("loggedInUser");
+
+if (loggedInUser) {
+  profileUsername.textContent = loggedInUser;
+  authOverlay.style.display = "none";
+}
+
+
