@@ -1,3 +1,7 @@
+function getCurrentUsername() {
+  return localStorage.getItem("loggedInUser") || "Unknown";
+}
+
 const MAX_TIME = 60000;
 
 function startTimer(el) {
@@ -224,7 +228,7 @@ function addFileRow(blob, type = "audio") {
     <span class="duration">--:--</span>
     <span>${now.toLocaleString()}</span>
     <span class="status-badge">NEW</span>
-    <span>John Smith</span>
+    <span class="recorder-name">${getCurrentUsername()}</span>
     <span class="saved-badge not-saved">Not Saved</span>
   `;
 
