@@ -10,8 +10,66 @@
   <link rel="stylesheet" href="/styles/aksharcolors.css">
   <link rel="stylesheet" href="/styles/navigationBar.css">
   <link rel="stylesheet" href="/styles/recorderPage.css">
+  <link rel="stylesheet" href="/styles/loginPage.css">
 </head>
 <body>
+  <section class="login-page">
+    <div class="auth-overlay" id="authOverlay">
+      <div class="auth-card">
+
+        <!-- SIGN IN -->
+        <div class="auth-form active" id="signinForm">
+          <h2>Sign in</h2>
+
+          <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="signinUsername" placeholder="Enter username">
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="signinPassword" placeholder="Enter password">
+          </div>
+
+          <p class="auth-message" id="signinMessage"></p>
+
+          <button class="auth-btn" id="signinBtn">Sign in</button>
+
+          <p class="switch-text">
+            Don’t have an account?
+            <span id="goToSignup">Sign up</span>
+          </p>
+        </div>
+
+        <!-- SIGN UP -->
+        <div class="auth-form" id="signupForm">
+          <h2>Create account</h2>
+
+          <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="signupUsername" placeholder="Choose username">
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="signupPassword" placeholder="Create password">
+          </div>
+
+          <p class="auth-message" id="signupMessage"></p>
+
+          <button class="auth-btn" id="signupBtn">Sign up</button>
+
+          <p class="switch-text">
+            Already have an account?
+            <span id="goToSignin">Sign in</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
   <div class="navigation-bar">
     <div class="record-page-button active-page-button">
       Record
@@ -88,8 +146,6 @@
     </div>
   </section>
 </section>
-
-
 
   <section class="annotate-section">
     <div class="recorder-container">
