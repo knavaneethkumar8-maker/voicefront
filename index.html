@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/styles/recorderPage.css">
   <link rel="stylesheet" href="/styles/loginPage.css">
   <link rel="stylesheet" href="/styles/account.css">
+  <link rel="stylesheet" href="/styles/loadFiles.css">
 </head>
 <body>
   <section class="login-page">
@@ -184,6 +185,30 @@
     </div>
 
     <div class="load-files-container">
+      <div class="load-files-header">
+        <div class="load-filters">
+          <!-- Account dropdown -->
+          <select class="load-select">
+            <option value="user1">Aarav Sharma</option>
+            <option value="user2">Neha Verma</option>
+            <option value="user3">Rohit Patel</option>
+            <option value="user4">Kavya Iyer</option>
+          </select>
+
+          <!-- Time filter dropdown -->
+          <select class="load-select">
+            <option value="today" selected>Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="last-week">Last week</option>
+          </select>
+        </div>
+
+        <div class="load-actions">
+          <button class="load-btn">Load files</button>
+          <button class="generate-btn" disabled>Generate</button>
+        </div>
+      </div>
+
 
     </div>
 
