@@ -19,12 +19,16 @@ let audioRecorder;
 let audioChunks = [];
 let recordedAudioBlob = null;
 let audioInterval;
+let videoInterval;
+
 
 const audioRecordBtn = document.getElementById("audioRecordBtn-1");
 const audioStopBtn   = document.getElementById("audioStopBtn-1");
 const audioPreview   = document.getElementById("audioPreview-1");
 const audioTimer     = document.getElementById("audioTimer-1");
 const audioSubmitBtn = document.getElementById("audioSubmitBtn-1");
+const videoTimerEl = document.getElementById("videoTimer-1");
+
 
 audioRecordBtn.onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -85,6 +89,8 @@ function stopAudioRecording() {
 let videoRecorder;
 let videoChunks = [];
 let recordedVideoBlob = null;
+let videoStopTimeout;
+
 
 const videoRecordBtn = document.querySelector(".panel-1:nth-child(2) .record-btn-1");
 const videoStopBtn   = document.querySelector(".panel-1:nth-child(2) .stop-btn-1");
@@ -92,7 +98,10 @@ const videoPreview   = document.querySelector(".panel-1:nth-child(2) div:nth-of-
 const videoSubmitBtn = document.querySelector(".js-submit-video-button-1");
 
 videoRecordBtn.onclick = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true
+  });
 
   let mimeType = "";
   if (MediaRecorder.isTypeSupported("video/mp4")) mimeType = "video/mp4";
@@ -110,28 +119,46 @@ videoRecordBtn.onclick = async () => {
       type: videoRecorder.mimeType || mimeType
     });
 
-    if (!recordedVideoBlob.size) {
-      videoPreview.innerHTML = "<p>Recording failed</p>";
-      return;
-    }
-
-    videoSubmitBtn.disabled = false;
-    videoSubmitBtn.classList.add("active-button");
+    if (!recordedVideoBlob.size) return;
 
     const url = URL.createObjectURL(recordedVideoBlob);
     videoPreview.innerHTML = `<video controls playsinline src="${url}"></video>`;
+
+    videoSubmitBtn.disabled = false;
+    videoSubmitBtn.classList.add("active-button");
   };
 
   videoRecorder.start();
   videoStopBtn.disabled = false;
+
+  // ✅ START TIMER
+  videoTimerEl.textContent = "00:00";
+  videoInterval = startTimer(videoTimerEl);
+
+  // ✅ STORE TIMEOUT
+  videoStopTimeout = setTimeout(stopVideoRecording, MAX_TIME);
 };
 
-videoStopBtn.onclick = () => {
+
+function stopVideoRecording() {
   if (!videoRecorder || videoRecorder.state === "inactive") return;
+
   videoRecorder.stop();
   videoRecorder.stream.getTracks().forEach(t => t.stop());
+
+  // ✅ STOP TIMER
+  clearInterval(videoInterval);
+
+  // ✅ STOP AUTO TIMEOUT
+  clearTimeout(videoStopTimeout);
+
   videoStopBtn.disabled = true;
-};
+}
+
+
+
+videoStopBtn.onclick = stopVideoRecording;
+
 
 
 
@@ -140,7 +167,7 @@ audioSubmitBtn.onclick = () => {
 
   const file = blobToFile(
     recordedAudioBlob,
-    `audio_${Date.now()}.${recordedAudioBlob.type.split("/")[1]}`
+    `audio_${Date.now()}.${recordedAudioBlob.type.split("/")[1]}.wav`
   );
 
   addFileRow(recordedAudioBlob);
@@ -158,7 +185,7 @@ videoSubmitBtn.onclick = () => {
 
   const file = blobToFile(
     recordedVideoBlob,
-    `video_${Date.now()}.${recordedVideoBlob.type.split("/")[1]}`
+    `video_${Date.now()}.${recordedVideoBlob.type.split("/")[1]}.mp4`
   );
 
   addFileRow(recordedVideoBlob);
