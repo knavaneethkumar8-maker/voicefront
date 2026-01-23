@@ -103,6 +103,9 @@ videoRecordBtn.onclick = async () => {
     video: true
   });
 
+  // 🔴 SHOW LIVE CAMERA
+  showLiveVideo(stream, videoPreview);
+
   let mimeType = "";
   if (MediaRecorder.isTypeSupported("video/mp4")) mimeType = "video/mp4";
   else if (MediaRecorder.isTypeSupported("video/webm")) mimeType = "video/webm";
@@ -122,7 +125,11 @@ videoRecordBtn.onclick = async () => {
     if (!recordedVideoBlob.size) return;
 
     const url = URL.createObjectURL(recordedVideoBlob);
-    videoPreview.innerHTML = `<video controls playsinline src="${url}"></video>`;
+
+    // 🔁 SWITCH TO PLAYBACK
+    videoPreview.innerHTML = `
+      <video controls playsinline src="${url}"></video>
+    `;
 
     videoSubmitBtn.disabled = false;
     videoSubmitBtn.classList.add("active-button");
@@ -131,13 +138,12 @@ videoRecordBtn.onclick = async () => {
   videoRecorder.start();
   videoStopBtn.disabled = false;
 
-  // ✅ START TIMER
+  // TIMER
   videoTimerEl.textContent = "00:00";
   videoInterval = startTimer(videoTimerEl);
-
-  // ✅ STORE TIMEOUT
   videoStopTimeout = setTimeout(stopVideoRecording, MAX_TIME);
 };
+
 
 
 function stopVideoRecording() {
@@ -232,6 +238,21 @@ function addFileRow(blob, type = "audio") {
 
   filesBody.prepend(row);
 }
+
+
+function showLiveVideo(stream, container) {
+  container.innerHTML = "";
+
+  const video = document.createElement("video");
+  video.autoplay = true;
+  video.muted = true;          // REQUIRED
+  video.playsInline = true;    // REQUIRED for mobile
+  video.srcObject = stream;
+  video.className = "live-video";
+
+  container.appendChild(video);
+}
+
 
 
 
