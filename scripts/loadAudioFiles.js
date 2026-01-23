@@ -31,8 +31,6 @@ async function loadRecordings() {
   renderRecordings(data, user);
 }
 
-
-
 function renderRecordings(records, user) {
   const container = document.querySelector(".loaded-files-container");
   container.innerHTML = "";
@@ -56,7 +54,7 @@ function renderRecordings(records, user) {
 
       <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
-      <button class="generate-btn" disabled>Generate</button>
+      <button class="generate-btn">Generate</button>
       <button class="delete-btn" data-file="${r.filename}">Delete</button>
     `;
 
@@ -64,12 +62,23 @@ function renderRecordings(records, user) {
   });
 }
 
-
 const loadRecordingsButton = document.querySelector('.js-load-btn');
 
 loadRecordingsButton?.addEventListener("click", () => {
   loadRecordings();
 });
+
+
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("delete-btn")) return;
+
+  const row = e.target.closest(".load-row");
+  if (row) {
+    row.remove();
+  }
+});
+
+
 
 
 

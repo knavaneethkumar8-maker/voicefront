@@ -415,3 +415,33 @@ function clearSelectedSpeedButtons() {
 }
 
 
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("generate-btn")) return;
+
+  const row = e.target.closest(".load-row");
+  const audioEl = row.querySelector("audio");
+  if (!audioEl) return;
+
+  audioEl.addEventListener(
+    "loadedmetadata",
+    () => {
+      const duration = audioEl.duration;
+      const fileName = row.querySelector(".file-name").textContent;
+
+      const gridsCount = calcGridCount(duration);
+
+      updateCurrentFileName(fileName);
+      updateCurrentAudioDuration(audioEl);
+
+      renderAllGrids(gridsCount, fileName);
+      setAudioForAllCells(audioEl);
+
+      clearSelectedSpeedButtons();
+      setupAudioSpeedControls(audioEl);
+      lockGrids();
+    },
+    { once: true }
+  );
+
+  audioEl.load(); // ensure metadata is available
+});

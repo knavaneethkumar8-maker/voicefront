@@ -73,6 +73,10 @@
   max-height: 500px;
 }
 
+.files-body::-webkit-scrollbar {
+ display: none;
+}
+
 .filters button,
 .actions button {
   border: 1px solid var(--border);
@@ -99,6 +103,10 @@
   color: var(--muted);
   padding: 8px;
   overflow-x: auto;
+}
+
+.files-head::-webkit-scrollbar {
+ display: none;
 }
 
 .recorded-filename {
