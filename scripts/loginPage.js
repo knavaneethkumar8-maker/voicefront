@@ -18,6 +18,9 @@ const profileUsername = document.querySelector(".profile-details .username");
 
 const urls = getUrls();
 const {backendOrigin} = urls;
+// 🔐 Current logged-in user (frontend state)
+let currentUser = null;
+
 
 
 /* SWITCH FORMS */
@@ -103,8 +106,13 @@ signinBtn.onclick = async () => {
       return;
     }
 
-    // ✅ SUCCESS
-    profileUsername.textContent = result.username;
+    // ✅ SET CURRENT USER (single source of truth)
+    currentUser = {
+      username: result.username
+    };
+
+    // ✅ Update UI
+    profileUsername.textContent = currentUser.username;
     signinMessage.textContent = "Login successful";
     signinMessage.classList.add("success");
 
@@ -116,6 +124,13 @@ signinBtn.onclick = async () => {
     signinMessage.textContent = "Server error";
   }
 };
+
+
+
+export function getCurrentUsername() {
+  return currentUser?.username || "Unknown";
+}
+
 
 
 

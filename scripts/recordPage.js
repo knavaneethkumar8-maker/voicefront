@@ -1,6 +1,5 @@
-function getCurrentUsername() {
-  return localStorage.getItem("loggedInUser") || "Unknown";
-}
+import { getCurrentUsername } from "./loginPage.js";
+
 
 const MAX_TIME = 60000;
 
