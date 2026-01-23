@@ -336,12 +336,33 @@ deleteBtn.onclick = () => {
 
 
 exportBtn.onclick = () => {
-  const selectedRows = filesBody.querySelectorAll(
+  const selectedCheckboxes = filesBody.querySelectorAll(
     '.file-row input[type="checkbox"]:checked'
   );
 
-  console.log("Saving", selectedRows.length, "files");
+  selectedCheckboxes.forEach(cb => {
+    const row = cb.closest(".file-row");
+    const badge = row.querySelector(".saved-badge");
+
+    if (badge.classList.contains("saved")) {
+      cb.checked = false;
+      row.classList.remove("selected");
+      return;
+    } 
+
+    // 🔁 Update badge state
+    badge.textContent = "Saved";
+    badge.classList.remove("not-saved");
+    badge.classList.add("saved");
+
+    // Optional UX: deselect after saving
+    cb.checked = false;
+    row.classList.remove("selected");
+  });
+
+  updateActionButtons();
 };
+
 
 
 
