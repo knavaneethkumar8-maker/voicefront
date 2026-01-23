@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/styles/dragLetters.css">
   <link rel="stylesheet" href="/styles/aksharcolors.css">
   <link rel="stylesheet" href="/styles/navigationBar.css">
+  <link rel="stylesheet" href="/styles/recorderPage.css">
 </head>
 <body>
   <div class="navigation-bar">
@@ -19,7 +20,75 @@
       Annotate
     </div>
   </div>
+
+<section class="record-section">
   <div class="recorder-container">
+
+    <!-- AUDIO -->
+    <div class="panel-1">
+      <h4>Audio Recording</h4>
+
+      <button id="audioRecordBtn-1" class="record-btn-1">Record</button><br />
+      <button id="audioStopBtn-1" class="stop-btn-1" disabled>Stop</button>
+
+      <div id="audioTimer-1" class="timer-1">00:00</div>
+      <div id="audioPreview-1"></div>
+      <button id="audioSubmitBtn-1" class="submit-audio-button-1 js-submit-audio-button-1">Submit</button>
+    </div>
+
+    <!-- VIDEO (placeholder only) -->
+    <div class="panel-1">
+      <h4>Video Recording</h4>
+
+      <button class="record-btn-1">Record</button><br />
+      <button class="stop-btn-1" disabled>Stop</button>
+
+      <div class="timer-1">00:00</div>
+      <div></div>
+      <button class="submit-video-button-1 js-submit-video-button-1">Submit</button>
+    </div>
+
+  </div>
+
+  <p class="record-submit-note"></p>
+
+  <!-- FILES TABLE -->
+  <section id="filesSection">
+    <div class="files-header">
+      <div class="filters">
+        <button>Last 10 min</button>
+        <button>Day</button>
+        <button>Week</button>
+        <button>Month</button>
+      </div>
+
+      <div class="actions">
+        <button id="deleteBtn" disabled>Delete</button>
+        <button id="exportBtn" disabled>Export</button>
+      </div>
+    </div>
+
+    <div class="files-table">
+      <div class="files-head">
+        <div></div>
+        <div>Preview</div>
+        <div>Filename</div>
+        <div>Duration</div>
+        <div>Date</div>
+        <div>Status</div>
+        <div>Recorder</div>
+        <div>more</div>
+      </div>
+
+      <div id="filesBody"></div>
+    </div>
+  </section>
+</section>
+
+
+
+  <section class="annotate-section">
+    <div class="recorder-container">
 
   <!-- AUDIO -->
   <div class="panel">
@@ -46,10 +115,6 @@
     </div>
 
   </div>
-  <section class="record-section">
-    
-  </section>
-  <section class="annotate-section">
       <p class="note submit-file-message js-submit-file-message">
       (Note: After submitting please wait for the response. Do not refresh)
     </p>

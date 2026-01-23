@@ -116,7 +116,6 @@ audioRecordBtn.onclick = async () => {
   setTimeout(stopAudioRecording, MAX_TIME);
 };
 
-
 audioStopBtn.onclick = stopAudioRecording;
 
 function stopAudioRecording() {
@@ -195,7 +194,6 @@ videoRecordBtn.onclick = async () => {
 
   setTimeout(stopVideoRecording, MAX_TIME);
 };
-
 
 videoStopBtn.onclick = stopVideoRecording;
 

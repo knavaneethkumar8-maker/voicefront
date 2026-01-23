@@ -1,0 +1,120 @@
+:root {
+  --border: #e6e8ec;
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #4f46e5;
+  --badge-bg: #eef2ff;
+  --badge-text: #4338ca;
+}
+
+.record-section {
+  padding: 16px;
+  background: var(--bg);
+}
+
+.recorder-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.panel-1 {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.record-btn-1,
+.stop-btn-1,
+.submit-audio-button-1,
+.submit-video-button-1 {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+}
+
+.submit-audio-button-1,
+.submit-video-button-1 {
+  background: var(--primary);
+  color: white;
+  border: none;
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+#filesSection {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  overflow-x: hidden;
+}
+
+.files-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.filters button,
+.actions button {
+  border: 1px solid var(--border);
+  background: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-right: 6px;
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+}
+
+.files-head,
+.file-row {
+  display: grid;
+  grid-template-columns: 32px 250px 1.5fr 80px 160px 90px 120px 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+.files-head {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px;
+}
+
+.file-row {
+  border-top: 1px solid var(--border);
+  padding: 8px;
+}
+
+.file-row:hover {
+  background: #fafafa;
+}
+
+.status-badge {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.more-button {
+  border: none;
+  background-color: none;
+  padding: 10px;
+  border-radius: 20px;
+}
