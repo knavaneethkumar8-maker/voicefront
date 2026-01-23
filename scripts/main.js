@@ -1,3 +1,4 @@
+import "./getUsersInfo.js";
 import { renderAkshars } from "./renderAkshars.js";
 import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
@@ -9,6 +10,8 @@ import "./dragLetters.js";
 import "./navigation.js";
 import "./recordPage.js";
 import "./loginPage.js";
+import "./loadAudioFiles.js";
+
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
