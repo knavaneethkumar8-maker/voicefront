@@ -1,4 +1,5 @@
 import { getCurrentUsername } from "./loginPage.js";
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 
 
 const MAX_TIME = 60000;
@@ -23,6 +24,8 @@ let audioChunks = [];
 let recordedAudioBlob = null;
 let audioInterval;
 let videoInterval;
+let currentAudioFileName;
+let currentVideoFileName;
 
 
 const audioRecordBtn = document.getElementById("audioRecordBtn-1");
@@ -167,16 +170,17 @@ function stopVideoRecording() {
 
 videoStopBtn.onclick = stopVideoRecording;
 
-
 audioSubmitBtn.onclick = () => {
   if (!recordedAudioBlob) return;
 
+  const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`;
+
   const file = blobToFile(
     recordedAudioBlob,
-    `audio_${Date.now()}.${recordedAudioBlob.type.split("/")[1]}.wav`
+    fileName
   );
-
-  addFileRow(recordedAudioBlob);
+  
+  addFileRow(recordedAudioBlob, fileName);
   recordedAudioBlob = null;
 
   audioSubmitBtn.disabled = true;
@@ -188,13 +192,13 @@ audioSubmitBtn.onclick = () => {
 
 videoSubmitBtn.onclick = () => {
   if (!recordedVideoBlob) return;
-
+  const fileName = `video_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.mp4`;
   const file = blobToFile(
     recordedVideoBlob,
-    `video_${Date.now()}.${recordedVideoBlob.type.split("/")[1]}.mp4`
+    fileName
   );
 
-  addFileRow(recordedVideoBlob);
+  addFileRow(recordedVideoBlob, fileName.split('.')[0] + '.wav');
   recordedVideoBlob = null;
 
   videoSubmitBtn.disabled = true;
@@ -206,7 +210,7 @@ videoSubmitBtn.onclick = () => {
 
 const filesBody = document.getElementById("filesBody");
 
-function addFileRow(blob, type = "audio") {
+function addFileRow(blob,fileName ,type = "audio") {
   const url = URL.createObjectURL(blob);
   const now = new Date();
 
@@ -219,9 +223,9 @@ function addFileRow(blob, type = "audio") {
     <input type="checkbox" />
     ${type === "audio"
       ? `<audio controls src="${url}"></audio>`
-      : `<video controls src="${url}" width="120"></video>`
+      : `<video controls src="${url}"></video>`
     }
-    <span>${type}-${now.getTime()}</span>
+    <span>${fileName}</span>
     <span class="duration">--:--</span>
     <span>${now.toLocaleString()}</span>
     <span class="status-badge">NEW</span>
