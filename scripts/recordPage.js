@@ -211,6 +211,8 @@ function addFileRow(blob, type = "audio") {
 
   const row = document.createElement("div");
   row.className = "file-row";
+  row.dataset.saved = "false";
+
 
   row.innerHTML = `
     <input type="checkbox" />
@@ -267,8 +269,9 @@ const exportBtn      = document.getElementById("exportBtn");
 function updateActionButtons() {
   const rows = filesBody.querySelectorAll(".file-row");
   const selected = filesBody.querySelectorAll(
-    '.file-row input[type="checkbox"]:checked'
+    '.file-row:not([style*="display: none"]) input[type="checkbox"]:checked'
   );
+
 
   // Clear all → at least one file exists
   clearAllBtn.disabled = rows.length === 0;
@@ -354,6 +357,7 @@ exportBtn.onclick = () => {
     badge.textContent = "Saved";
     badge.classList.remove("not-saved");
     badge.classList.add("saved");
+        row.dataset.saved = "true";
 
     // Optional UX: deselect after saving
     cb.checked = false;
@@ -362,6 +366,48 @@ exportBtn.onclick = () => {
 
   updateActionButtons();
 };
+
+
+function applyFilter(type) {
+  const rows = filesBody.querySelectorAll(".file-row");
+
+  rows.forEach(row => {
+    const isSaved = row.dataset.saved === "true";
+
+    let visible = true;
+
+    if (type === "saved") visible = isSaved;
+    if (type === "not-saved") visible = !isSaved;
+
+    row.style.display = visible ? "" : "none";
+  });
+
+  updateActionButtons();
+}
+
+
+const filterButtons = document.querySelectorAll(".filters button");
+
+filterButtons.forEach(btn => {
+  btn.onclick = () => {
+    const label = btn.textContent.toLowerCase();
+
+    if (label.includes("all")) {
+      applyFilter("all");
+    } 
+    else if (label.includes("saved") && !label.includes("not")) {
+      applyFilter("saved");
+    } 
+    else if (label.includes("not")) {
+      applyFilter("not-saved");
+    }
+
+    // Optional UI feedback
+    filterButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  };
+});
+
 
 
 
