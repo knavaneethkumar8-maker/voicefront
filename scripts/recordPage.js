@@ -1,8 +1,11 @@
 import { getCurrentUsername } from "./loginPage.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+import { getUrls } from "../config/urls.js";
 
 
 const MAX_TIME = 60000;
+const urls = getUrls();
+const {backendOrigin} = urls;
 
 function startTimer(el) {
   const start = Date.now();
@@ -225,13 +228,14 @@ function addFileRow(blob,fileName ,type = "audio") {
       ? `<audio controls src="${url}"></audio>`
       : `<video controls src="${url}"></video>`
     }
-    <span>${fileName}</span>
+    <span class="filename">${fileName}</span>
     <span class="duration">--:--</span>
-    <span>${now.toLocaleString()}</span>
+    <span class="recorded-at">${now.toLocaleString()}</span>
     <span class="status-badge">NEW</span>
     <span class="recorder-name">${getCurrentUsername()}</span>
     <span class="saved-badge not-saved">Not Saved</span>
   `;
+
 
   const mediaEl = row.querySelector("audio, video");
   const durationEl = row.querySelector(".duration");
@@ -343,34 +347,61 @@ deleteBtn.onclick = () => {
 };
 
 
-exportBtn.onclick = () => {
-  const selectedCheckboxes = filesBody.querySelectorAll(
+exportBtn.onclick = async () => {
+  const selectedRows = filesBody.querySelectorAll(
     '.file-row input[type="checkbox"]:checked'
   );
 
-  selectedCheckboxes.forEach(cb => {
+  for (const cb of selectedRows) {
     const row = cb.closest(".file-row");
     const badge = row.querySelector(".saved-badge");
 
-    if (badge.classList.contains("saved")) {
+    // ⛔ Skip already saved
+    if (row.dataset.saved === "true") {
       cb.checked = false;
       row.classList.remove("selected");
-      return;
-    } 
+      continue;
+    }
 
-    // 🔁 Update badge state
-    badge.textContent = "Saved";
-    badge.classList.remove("not-saved");
-    badge.classList.add("saved");
-        row.dataset.saved = "true";
+    const mediaEl = row.querySelector("audio, video");
+    const blobUrl = mediaEl.src;
+    const blob = await fetch(blobUrl).then(r => r.blob());
 
-    // Optional UX: deselect after saving
+    const meta = getRowMetadata(row);
+    const user = getCurrentUsername();
+
+    const formData = new FormData();
+    formData.append("file", blob, meta.filename);
+    formData.append("metadata", JSON.stringify(meta));
+
+    try {
+      const res = await fetch(
+        `${backendOrigin}/${user}/recordings/${meta.filename}`,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      // ✅ Update UI
+      badge.textContent = "Saved";
+      badge.classList.remove("not-saved");
+      badge.classList.add("saved");
+      row.dataset.saved = "true";
+
+    } catch (err) {
+      console.error("Upload failed:", meta.filename);
+    }
+
     cb.checked = false;
     row.classList.remove("selected");
-  });
+  }
 
   updateActionButtons();
 };
+
 
 
 function applyFilter(type) {
@@ -414,6 +445,19 @@ filterButtons.forEach(btn => {
     }
   };
 });
+
+
+function getRowMetadata(row) {
+  return {
+    filename: row.querySelector(".filename").textContent,
+    duration: row.querySelector(".duration").textContent,
+    recordedAt: row.querySelector(".recorded-at").textContent,
+    recorder: row.querySelector(".recorder-name").textContent,
+    status: "NEW"
+  };
+}
+
+
 
 
 
