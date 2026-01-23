@@ -390,6 +390,12 @@ const filterButtons = document.querySelectorAll(".filters button");
 
 filterButtons.forEach(btn => {
   btn.onclick = () => {
+    // 🔄 remove from all
+    filterButtons.forEach(b => b.classList.remove("filter-selected"));
+
+    // ✅ add to selected
+    btn.classList.add("filter-selected");
+
     const label = btn.textContent.toLowerCase();
 
     if (label.includes("all")) {
@@ -401,12 +407,9 @@ filterButtons.forEach(btn => {
     else if (label.includes("not")) {
       applyFilter("not-saved");
     }
-
-    // Optional UI feedback
-    filterButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
   };
 });
+
 
 
 
