@@ -134,6 +134,44 @@ export function getCurrentUsername() {
 
 
 
+const recordSection   = document.querySelector(".record-section");
+const annotateSection = document.querySelector(".annotate-section");
+
+const recordBtn   = document.querySelector(".record-page-button");
+const annotateBtn = document.querySelector(".annotate-page-button");
+
+export function showPage(page) {
+  const isAnnotate = (page === "annotate");
+
+  // 🔁 toggle sections
+  recordSection.style.display   = isAnnotate ? "none"  : "block";
+  annotateSection.style.display = isAnnotate ? "block" : "none";
+
+  // 🔁 toggle nav buttons (EXPLICIT)
+  if(isAnnotate) {
+    annotateBtn.classList.add('active-page-button');
+    recordBtn.classList.remove('active-page-button');
+  } else {
+    annotateBtn.classList.remove('active-page-button');
+    recordBtn.classList.add('active-page-button');
+  }
+
+  // 🔐 persist choice
+  localStorage.setItem("activePage", isAnnotate ? "annotate" : "record");
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedPage = localStorage.getItem("activePage") || "record";
+  showPage(savedPage);
+});
+
+
+showPage('annotate');
+
+
 
 
 

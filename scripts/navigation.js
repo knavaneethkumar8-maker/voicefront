@@ -1,21 +1,14 @@
- const navButtons = document.querySelectorAll(
+import { showPage } from "./loginPage.js";
+
+const navButtons = document.querySelectorAll(
     ".record-page-button, .annotate-page-button"
-  );
+);
 
-navButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    // remove active from all
-    navButtons.forEach(btn =>
-      btn.classList.remove("active-page-button")
-    );
+const recordPageButton = document.querySelector('.record-page-button');
+const annotatePageButton = document.querySelector('.annotate-page-button')
 
-    // add active to clicked one
-    button.classList.add("active-page-button");
-  });
-});
-
-
-
+recordPageButton.onclick = () => showPage("record");
+annotatePageButton.onclick = () => showPage("annotate");
 
 
 export function initPageNavigation() {
@@ -39,5 +32,6 @@ export function initPageNavigation() {
   annotateBtn.addEventListener("click", () => activatePage("annotate"));
 
   // default page
-  activatePage("record");
+  //activatePage("record");
+  showPage('annotate');
 }
