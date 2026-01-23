@@ -228,7 +228,7 @@ function addFileRow(blob,fileName ,type = "audio") {
       ? `<audio controls src="${url}"></audio>`
       : `<video controls src="${url}"></video>`
     }
-    <span class="filename">${fileName}</span>
+    <span class="filename recorded-filename">${fileName}</span>
     <span class="duration">--:--</span>
     <span class="recorded-at">${now.toLocaleString()}</span>
     <span class="status-badge">NEW</span>

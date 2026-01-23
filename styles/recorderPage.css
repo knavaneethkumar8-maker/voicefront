@@ -101,6 +101,11 @@
   overflow-x: auto;
 }
 
+.recorded-filename {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 
 .file-row {

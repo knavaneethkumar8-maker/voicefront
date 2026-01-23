@@ -1,3 +1,9 @@
+.load-files-container {
+  max-width: 1000px;
+}
+
+
+
 .load-files-header {
   display: flex;
   justify-content: space-between;
@@ -66,9 +72,14 @@
 }
 
 
+.speed-buttons-container {
+  margin-top: 10px;
+}
+
+
 @media (max-width: 640px) {
   .load-files-header {
-    padding: 8px 10px;
+    padding: 4px 4px;
     gap: 8px;
   }
 
@@ -90,8 +101,8 @@
   .load-btn,
   .generate-btn {
     flex-shrink: 0;
-    font-size: 12px;
-    padding: 6px 8px;
+    font-size: 14px;
+    padding: 8px;
     border-radius: 5px;
   }
 
@@ -103,6 +114,74 @@
   /* Buttons tighter */
   .load-btn,
   .generate-btn {
-    padding: 6px 10px;
+    padding: 8px;
   }
 }
+
+
+.loaded-files-container {
+  margin-top: -10px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid rgb(210, 210, 210);
+  border-radius: 10px;
+}
+
+.loaded-files-container::-webkit-scrollbar{
+  display: none;
+}
+
+.load-row {
+  display: grid;
+  grid-template-columns: 280px 1fr 80px 100px 80px;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.load-row audio {
+  width: 100%;
+  min-width: 200px;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.status.new {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.generate-btn {
+  background: #e0e0e0;
+  color: #777;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  background: #ffebee;
+  color: #c62828;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
