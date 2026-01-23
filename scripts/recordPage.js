@@ -169,8 +169,6 @@ function stopVideoRecording() {
 videoStopBtn.onclick = stopVideoRecording;
 
 
-
-
 audioSubmitBtn.onclick = () => {
   if (!recordedAudioBlob) return;
 

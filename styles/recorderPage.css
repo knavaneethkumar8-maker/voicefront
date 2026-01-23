@@ -142,10 +142,19 @@
 
 .video-preview video {
   width: 100%;
-  max-height: 240px;
+  max-height: 180px;
+  max-width: 240px;
   border-radius: 10px;
   background: #000;
   object-fit: cover;
+}
+
+.hide-preview {
+  background-color: rgb(239, 116, 82);
+}
+
+.hide {
+  display: none;
 }
 
 .live-video {

@@ -1,3 +1,5 @@
+import { getUrls } from "../config/urls.js";
+
 const authOverlay = document.getElementById("authOverlay");
 
 const signinForm = document.getElementById("signinForm");
@@ -14,6 +16,9 @@ const signupMessage = document.getElementById("signupMessage");
 
 const profileUsername = document.querySelector(".profile-details .username");
 
+const urls = getUrls();
+const {backendOrigin} = urls;
+
 
 /* SWITCH FORMS */
 goToSignup.onclick = () => {
@@ -29,7 +34,7 @@ goToSignin.onclick = () => {
 };
 
 /* SIGN UP */
-signupBtn.onclick = () => {
+signupBtn.onclick = async () => {
   const username = document.getElementById("signupUsername").value.trim();
   const password = document.getElementById("signupPassword").value.trim();
 
@@ -39,67 +44,82 @@ signupBtn.onclick = () => {
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem("users") || "{}");
+  try {
+    const res = await fetch(`${backendOrigin}/auth/signup`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username, password })
+    });
 
-  if (users[username]) {
-    signupMessage.textContent = "User already exists";
-    signupMessage.classList.remove("success");
-    return;
+    const result = await res.json();
+
+    if (!res.ok) {
+      signupMessage.textContent = result.message;
+      signupMessage.classList.remove("success");
+      return;
+    }
+
+    signupMessage.textContent = "Signup successful. Sign in now.";
+    signupMessage.classList.add("success");
+
+    setTimeout(() => goToSignin.click(), 1200);
+
+  } catch (err) {
+    signupMessage.textContent = "Server error";
   }
-
-  users[username] = password;
-  localStorage.setItem("users", JSON.stringify(users));
-
-  signupMessage.textContent = "Signup successful. Sign in now.";
-  signupMessage.classList.add("success");
-
-  setTimeout(() => {
-    goToSignin.click();
-  }, 1200);
 };
 
+
 /* SIGN IN */
 /* SIGN IN */
-signinBtn.onclick = () => {
+signinBtn.onclick = async () => {
   const username = document.getElementById("signinUsername").value.trim();
   const password = document.getElementById("signinPassword").value.trim();
 
-  const users = JSON.parse(localStorage.getItem("users") || "{}");
-
-  if (!users[username]) {
-    signinMessage.textContent = "No user found";
+  if (!username || !password) {
+    signinMessage.textContent = "Please fill all fields";
     signinMessage.classList.remove("success");
     return;
   }
 
-  if (users[username] !== password) {
-    signinMessage.textContent = "Incorrect password";
-    signinMessage.classList.remove("success");
-    return;
+  try {
+    const res = await fetch(`${backendOrigin}/auth/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username, password })
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      signinMessage.textContent = result.message;
+      signinMessage.classList.remove("success");
+      return;
+    }
+
+    // ✅ SUCCESS
+    profileUsername.textContent = result.username;
+    signinMessage.textContent = "Login successful";
+    signinMessage.classList.add("success");
+
+    setTimeout(() => {
+      authOverlay.style.display = "none";
+    }, 600);
+
+  } catch (err) {
+    signinMessage.textContent = "Server error";
   }
-
-  /* SUCCESS */
-  signinMessage.textContent = "Login successful";
-  signinMessage.classList.add("success");
-
-  // 🔹 Update profile section
-  profileUsername.textContent = username;
-
-  // 🔹 Store logged-in user
-  localStorage.setItem("loggedInUser", username);
-
-  setTimeout(() => {
-    authOverlay.style.display = "none";
-  }, 600);
 };
 
 
 
-const loggedInUser = localStorage.getItem("loggedInUser");
 
-if (loggedInUser) {
-  profileUsername.textContent = loggedInUser;
-  authOverlay.style.display = "none";
-}
+
 
 
