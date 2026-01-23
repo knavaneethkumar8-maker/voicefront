@@ -85,7 +85,6 @@ function stopAudioRecording() {
 
 
 
-
 let videoRecorder;
 let videoChunks = [];
 let recordedVideoBlob = null;
@@ -224,7 +223,7 @@ function addFileRow(blob, type = "audio") {
     <span>${now.toLocaleString()}</span>
     <span class="status-badge">NEW</span>
     <span>John Smith</span>
-    <button>⋮</button>
+    <span class="saved-badge not-saved">Not Saved</span>
   `;
 
   const mediaEl = row.querySelector("audio, video");
@@ -237,6 +236,9 @@ function addFileRow(blob, type = "audio") {
   });
 
   filesBody.prepend(row);
+  attachRowSelection(row);
+  updateActionButtons(); // 🔴 enable Clear All
+
 }
 
 
@@ -253,6 +255,93 @@ function showLiveVideo(stream, container) {
   container.appendChild(video);
 }
 
+
+
+const clearAllBtn    = document.getElementById("clearAllBtn");
+const deselectAllBtn = document.getElementById("deselectAllBtn");
+const deleteBtn      = document.getElementById("deleteBtn");
+const exportBtn      = document.getElementById("exportBtn");
+
+
+
+function updateActionButtons() {
+  const rows = filesBody.querySelectorAll(".file-row");
+  const selected = filesBody.querySelectorAll(
+    '.file-row input[type="checkbox"]:checked'
+  );
+
+  // Clear all → at least one file exists
+  clearAllBtn.disabled = rows.length === 0;
+
+  // These need at least one selection
+  const hasSelection = selected.length > 0;
+  deselectAllBtn.disabled = !hasSelection;
+  deleteBtn.disabled = !hasSelection;
+  exportBtn.disabled = !hasSelection;
+}
+
+
+
+function attachRowSelection(row) {
+  const checkbox = row.querySelector('input[type="checkbox"]');
+
+  function syncSelection(isSelected) {
+    checkbox.checked = isSelected;
+    row.classList.toggle("selected", isSelected);
+    updateActionButtons();
+  }
+
+  // Checkbox click (manual)
+  checkbox.addEventListener("change", () => {
+    syncSelection(checkbox.checked);
+  });
+
+  // Row click (toggle)
+  row.addEventListener("click", (e) => {
+    // Ignore clicks on interactive elements
+    if (
+      e.target.tagName === "INPUT" ||
+      e.target.tagName === "AUDIO" ||
+      e.target.tagName === "VIDEO" ||
+      e.target.closest("audio, video")
+    ) return;
+
+    syncSelection(!checkbox.checked); // 🔁 TOGGLE
+  });
+}
+
+
+
+clearAllBtn.onclick = () => {
+  filesBody.innerHTML = "";
+  updateActionButtons();
+};
+
+
+deselectAllBtn.onclick = () => {
+  filesBody.querySelectorAll(".file-row").forEach(row => {
+    row.classList.remove("selected");
+    row.querySelector('input[type="checkbox"]').checked = false;
+  });
+  updateActionButtons();
+};
+
+deleteBtn.onclick = () => {
+  filesBody.querySelectorAll(
+    '.file-row input[type="checkbox"]:checked'
+  ).forEach(cb => cb.closest(".file-row").remove());
+
+  updateActionButtons();
+};
+
+
+exportBtn.onclick = () => {
+  const selectedRows = filesBody.querySelectorAll(
+    '.file-row input[type="checkbox"]:checked'
+  );
+
+  console.log("Saving", selectedRows.length, "files");
+};
 
 
 

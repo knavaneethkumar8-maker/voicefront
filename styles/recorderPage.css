@@ -68,6 +68,11 @@
   margin-bottom: 12px;
 }
 
+.files-body{
+  overflow-x: auto;
+  max-height: 500px;
+}
+
 .filters button,
 .actions button {
   border: 1px solid var(--border);
@@ -84,9 +89,9 @@
 .files-head,
 .file-row {
   display: grid;
-  grid-template-columns: 32px 250px 1.5fr 80px 160px 90px 120px 40px;
+  grid-template-columns: 32px 250px 1.5fr 80px 160px 90px 120px 80px;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .files-head {
@@ -94,6 +99,8 @@
   color: var(--muted);
   padding: 8px;
 }
+
+
 
 .file-row {
   border-top: 1px solid var(--border);
@@ -104,20 +111,33 @@
   background: #fafafa;
 }
 
-.status-badge {
+.status-badge,
+.saved-badge {
   background: var(--badge-bg);
   color: var(--badge-text);
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.more-button {
-  border: none;
-  background-color: none;
-  padding: 10px;
-  border-radius: 20px;
+.saved-badge {
+  min-width: 80px;
 }
+
+
+.saved-badge.not-saved {
+  background: #ffefee;
+  color: #e55646;
+}
+
+.saved-badge.saved {
+  background: #ecfdf5;
+  color: #047857;
+}
+
 
 
 .video-preview video {
@@ -131,3 +151,8 @@
 .live-video {
   outline: 2px solid #ff3b3b;
 }
+
+.file-row.selected {
+  background: #f5f6fb;
+}
+

@@ -56,16 +56,20 @@
   <section id="filesSection">
     <div class="files-header">
       <div class="filters">
-        <button>Last 10 min</button>
-        <button>Day</button>
-        <button>Week</button>
-        <button>Month</button>
+        <button>All files</button>
+        <button>Saved</button>
+        <button>Not saved</button>
+        <button>Audio records</button>
+        <button>Video records</button>
       </div>
 
       <div class="actions">
+        <button id="clearAllBtn" disabled>Clear All Files</button>
+        <button id="deselectAllBtn" disabled>Deselect all</button>
         <button id="deleteBtn" disabled>Delete</button>
-        <button id="exportBtn" disabled>Export</button>
+        <button id="exportBtn" disabled>Save to storage</button>
       </div>
+
     </div>
 
     <div class="files-table">
@@ -77,10 +81,10 @@
         <div>Date</div>
         <div>Status</div>
         <div>Recorder</div>
-        <div>more</div>
+        <div>Saved</div>
       </div>
 
-      <div id="filesBody"></div>
+      <div id="filesBody" class="files-body"></div>
     </div>
   </section>
 </section>
