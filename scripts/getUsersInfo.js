@@ -3,7 +3,7 @@ const urls = getUrls();
 const {bakendOrigin} = urls;
 
 export async function fetchUsers() {
-  const res = await fetch(`http://localhost:3500/api/users`, {
+  const res = await fetch(`${bakendOrigin}/api/users`, {
     method : "GET",
     credentials : "include"
   });

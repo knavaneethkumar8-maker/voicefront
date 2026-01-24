@@ -84,6 +84,7 @@
   padding: 6px 10px;
   border-radius: 8px;
   margin-right: 6px;
+  margin-bottom: 4px;
 }
 
 .actions button:disabled {
