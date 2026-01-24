@@ -29,6 +29,8 @@ let audioInterval;
 let videoInterval;
 let currentAudioFileName;
 let currentVideoFileName;
+let audioStopTimeout = null;
+
 
 
 const audioRecordBtn = document.getElementById("audioRecordBtn-1");
@@ -38,15 +40,25 @@ const audioTimer     = document.getElementById("audioTimer-1");
 const audioSubmitBtn = document.getElementById("audioSubmitBtn-1");
 const videoTimerEl = document.getElementById("videoTimer-1");
 
+function getSupportedAudioMime() {
+  const types = [
+    "audio/mp4",   // Safari
+    "audio/webm",  // Chrome / Firefox
+    "audio/ogg"
+  ];
+  return types.find(t => MediaRecorder.isTypeSupported(t)) || "";
+}
+
 
 audioRecordBtn.onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  let mimeType = "";
-  if (MediaRecorder.isTypeSupported("audio/mp4")) mimeType = "audio/mp4";
-  else if (MediaRecorder.isTypeSupported("audio/webm")) mimeType = "audio/webm";
+  const mimeType = getSupportedAudioMime();
+  audioRecorder = new MediaRecorder(
+    stream,
+    mimeType ? { mimeType } : undefined
+  );
 
-  audioRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
   audioChunks = [];
 
   audioRecorder.ondataavailable = e => {
@@ -70,14 +82,16 @@ audioRecordBtn.onclick = async () => {
     audioPreview.innerHTML = `<audio controls src="${url}"></audio>`;
   };
 
-  audioRecorder.start();
+  audioRecorder.start(1000);
   audioStopBtn.disabled = false;
   audioSubmitBtn.disabled = true;
 
   audioTimer.textContent = "00:00";
   audioInterval = startTimer(audioTimer);
 
-  setTimeout(stopAudioRecording, MAX_TIME);
+  clearTimeout(audioStopTimeout);
+  audioStopTimeout = setTimeout(stopAudioRecording, MAX_TIME);
+
 };
 
 audioStopBtn.onclick = stopAudioRecording;
@@ -87,10 +101,13 @@ function stopAudioRecording() {
 
   audioRecorder.stop();
   audioRecorder.stream.getTracks().forEach(t => t.stop());
+
   clearInterval(audioInterval);
+  clearTimeout(audioStopTimeout); // ✅ IMPORTANT
 
   audioStopBtn.disabled = true;
 }
+
 
 
 
@@ -143,7 +160,7 @@ videoRecordBtn.onclick = async () => {
     videoSubmitBtn.classList.add("active-button");
   };
 
-  videoRecorder.start();
+  videoRecorder.start(1000);
   videoStopBtn.disabled = false;
 
   // TIMER
@@ -176,7 +193,8 @@ videoStopBtn.onclick = stopVideoRecording;
 audioSubmitBtn.onclick = () => {
   if (!recordedAudioBlob) return;
 
-  const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`;
+  const fileName = `audio_${dayjs().format("YYYY_MM_DD_HH_mm_ss_ms")}.wav`;
+
 
   const file = blobToFile(
     recordedAudioBlob,

@@ -44,23 +44,34 @@ function renderRecordings(records, user) {
     const audioUrl =
       `${backendOrigin}/uploads/${user}/recordings/${r.filename}`;
 
+    const mime =
+      r.filename.endsWith(".wav")  ? "audio/wav"  :
+      r.filename.endsWith(".mp4")  ? "audio/mp4"  :
+      r.filename.endsWith(".webm") ? "audio/webm" :
+      "audio/*";
+
     const row = document.createElement("div");
     row.className = "load-row";
 
     row.innerHTML = `
-      <audio controls preload="metadata" src="${audioUrl}"></audio>
+      <audio controls preload="metadata" playsinline>
+        <source src="${audioUrl}" type="${mime}">
+      </audio>
 
       <div class="file-name">${r.filename}</div>
-
       <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
       <button class="generate-btn">Generate</button>
-      <button class="delete-btn" data-file="${r.filename}">Delete</button>
+      <button class="delete-btn">Delete</button>
     `;
 
     container.appendChild(row);
+
+    // Safari fix
+    row.querySelector("audio").load();
   });
 }
+
 
 const loadRecordingsButton = document.querySelector('.js-load-btn');
 

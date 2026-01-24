@@ -2,7 +2,7 @@
 .auth-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(238, 238, 238, 0.952);
+  background: rgb(238, 238, 238);
   backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
