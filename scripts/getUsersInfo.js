@@ -1,9 +1,9 @@
 import { getUrls } from "../config/urls.js";
 const urls = getUrls();
-const {bakendOrigin} = urls;
+const {backendOrigin} = urls;
 
 export async function fetchUsers() {
-  const res = await fetch(`${bakendOrigin}/api/users`, {
+  const res = await fetch(`${backendOrigin}/api/users`, {
     method : "GET",
     credentials : "include"
   });
