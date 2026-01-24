@@ -62,7 +62,7 @@ function renderRecordings(records, user) {
       <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
       <button class="generate-btn">Generate</button>
-      <button class="delete-btn">Delete</button>
+      <button class="delete-btn">Remove</button>
     `;
 
     container.appendChild(row);

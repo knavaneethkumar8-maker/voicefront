@@ -102,7 +102,9 @@ function getCellTimeRange(gridNum, cellNo) {
   };
 }
 
-
+let finished = 0;
+const finishedLabel = document.querySelector('.finished-target');
+//get data when grid locked
 gridTimeLine.addEventListener("click", async (e) => {
   e.preventDefault();
   const lock = e.target.closest(".js-lock");
@@ -112,12 +114,18 @@ gridTimeLine.addEventListener("click", async (e) => {
   if (!gridEl) return;
 
   if(gridEl.classList.contains('locked')) {
+    finished++;
+    console.log(finished);
+    finishedLabel.innerText = finished;
     const allGridCells = gridEl.querySelectorAll("*");
     allGridCells?.forEach(cell => {
       cell.contentEditable = "false";
     });
   }else {
     const allGridCells = gridEl.querySelectorAll("*");
+    finished--;
+    console.log(finished);
+    finishedLabel.innerText = finished;
     allGridCells?.forEach(cell => {
       //cell.contentEditable = "true";
     });

@@ -11,6 +11,7 @@ import "./navigation.js";
 import "./recordPage.js";
 import "./loginPage.js";
 import "./loadAudioFiles.js";
+import "./controlMobileUI.js"
 
 
 const audio = document.querySelector('.js-audio-file');
@@ -50,7 +51,6 @@ export function lockGrids() {
         lock.style.backgroundColor = "rgb(37, 37, 37)";
         selectedGrid.classList.remove('locked');
       }
-
       
     })
   })
@@ -86,3 +86,6 @@ function getStartEndTimes(id) {
   }
   return times;
 }
+
+
+

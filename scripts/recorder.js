@@ -3,6 +3,7 @@ import { setAudioForAllCells } from "./main.js";
 import { renderAllGrids } from "./renderBoothGrids.js";
 import { lockGrids } from "./main.js";
 import { getUrls } from "../config/urls.js";
+import { makeCellsEditableOnMobile } from "./controlMobileUI.js";
 
 let recordedAudioBlob = null;
 let recordedVideoBlob = null;
@@ -288,6 +289,7 @@ submitVideoBtn?.addEventListener("click", async () => {
       setAudioForAllCells(audio);
       clearSelectedSpeedButtons();
       setupAudioSpeedControls(audio);
+      makeCellsEditableOnMobile();
       lockGrids();
     });
   } catch(err) {
@@ -339,6 +341,7 @@ submitAudioBtn?.addEventListener("click", async () => {
       setAudioForAllCells(audio);
       clearSelectedSpeedButtons();
       setupAudioSpeedControls(audio);
+      makeCellsEditableOnMobile();
       lockGrids();
     });
 
@@ -385,6 +388,7 @@ function generateGrids() {
     setAudioForAllCells(audioEl);
     clearSelectedSpeedButtons();
     setupAudioSpeedControls(audioEl);
+    makeCellsEditableOnMobile();
     lockGrids();
   })
 }
@@ -438,10 +442,10 @@ document.addEventListener("click", (e) => {
 
       clearSelectedSpeedButtons();
       setupAudioSpeedControls(audioEl);
+      makeCellsEditableOnMobile();
       lockGrids();
     },
     { once: true }
   );
-
   audioEl.load(); // ensure metadata is available
 });

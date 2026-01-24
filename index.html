@@ -76,6 +76,7 @@
       <img src="" alt="" class="profile-picture">
     </div>
     <p class="username">Username</p>
+    <p class="daily-target"><span class="finished-target">0</span>/500</p>
   </div>
 
   <div class="navigation-bar">
@@ -132,7 +133,7 @@
       <div class="actions">
         <button id="clearAllBtn" disabled>Clear All Files</button>
         <button id="deselectAllBtn" disabled>Deselect all</button>
-        <button id="deleteBtn" disabled>Delete</button>
+        <button id="deleteBtn" disabled>Remove</button>
         <button id="exportBtn" disabled>Save to storage</button>
       </div>
 
@@ -211,13 +212,14 @@
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.25">4x slower</button>
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.125">8x slower</button>
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.0625">16x slower</button>
+      <button class="select-drag-drop-button drag-selected">Drag & Drop</button>
     </div>
     <div class="js-audio-files-container audio-files-container">
     </div>
 
     <div class="js-askhar-editor akshar-editor">
       <p class="rendered-filename js-rendered-filename">filename</p>
-      <div class="letters-container" id="lettersContainer"></div>
+      <div class="letters-container js-letters-container" id="lettersContainer"></div>
       <div class="delete-region js-delete-region">Drop here to delete</div>
       <div class="js-timeline timeline">
         <div class="js-grid-timeline grid-timeline">

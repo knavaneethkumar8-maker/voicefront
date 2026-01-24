@@ -258,6 +258,7 @@ body {
   .akshar-editor {
     padding: 0px;
   }
+
   .timeline ,
   .word-tier,
   .adjust-akshar-timeline{
@@ -265,7 +266,7 @@ body {
   }
 
   body {
-    padding: 6px;
+    padding: 12px;
   }
 
   .letters-container {
@@ -276,8 +277,17 @@ body {
     order: 2;
   }
 
-  .adjust-akshar-timeline {
+
+  .delete-region {
     display: none;
+  }
+
+  .letters-container {
+    display: none;
+  }
+
+  .select-drag-drop-button {
+    display: inline-block;
   }
 
 }
@@ -287,7 +297,8 @@ body {
 }
 
 
-.audio-speed-button {
+.audio-speed-button,
+.select-drag-drop-button {
   border: 1px solid rgb(168, 168, 168);
   background-color: rgb(234, 234, 234);
   padding: 10px 16px;
@@ -297,8 +308,17 @@ body {
   transition: box-shadow 0.15s;
 }
 
-.audio-speed-button:hover {
+
+.audio-speed-button:hover,
+.select-drag-drop-button:hover {
   box-shadow: 0px 0px 5px rgba(132, 132, 132, 0.594);
+}
+
+
+.drag-selected {
+  background-color: rgb(71, 71, 230);
+  color: rgb(230, 229, 229);
+  border-color : rgb(71, 71, 230);
 }
 
 .selected-button {
@@ -330,4 +350,19 @@ body {
   justify-content: center;
   margin-top: 10px;
   height: 16px;
+}
+
+.hide-drag {
+  .letters-container {
+    display: none;
+  }
+
+  .delete-region {
+    display: none;
+  }
+}
+
+
+.show {
+  display: flex;
 }
