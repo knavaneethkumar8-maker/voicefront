@@ -184,4 +184,7 @@
   color: #2563eb;
 }
 
+.speed-buttons-container button {
+  margin-bottom: 4px;
+}
 
