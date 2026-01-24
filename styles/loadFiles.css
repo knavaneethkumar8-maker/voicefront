@@ -151,6 +151,7 @@
   color: #333;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 280px;
 }
 
 .status {
