@@ -106,7 +106,7 @@ body {
 .akash-tier {
   background-color: rgb(49, 95, 189);
   width: auto;
-  height: 44px;
+  height: 54px;
   display: flex;
 }
 
@@ -122,7 +122,7 @@ body {
 
 .agni-tier {
   background-color: orange;
-  height: 44px;
+  height: 54px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -138,7 +138,7 @@ body {
 
 .vayu-tier {
   background-color: rgb(118, 107, 234);
-  height: 44px;
+  height: 54px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
@@ -155,7 +155,7 @@ body {
 
 .jal-tier {
   background-color: rgb(76, 70, 251);
-  height: 44px;
+  height: 54px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
@@ -171,7 +171,7 @@ body {
 
 .prithvi-tier {
   background-color: rgb(172, 124, 76);
-  height: 44px;
+  height: 54px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
   1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
