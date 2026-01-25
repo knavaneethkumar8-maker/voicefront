@@ -43,9 +43,10 @@ function collectChars(start9, end9) {
 const gridTimeLine = document.querySelector('.js-grid-timeline');
 
 function renderGrid(gridNum, fileName) {
-  const startTime = gridNum*24*bioesTime;
-  const gridEndTime = startTime + (24*bioesTime);
-const gridHTML = `
+  const startTime = gridNum * 24 * bioesTime;
+  const gridEndTime = startTime + (24 * bioesTime);
+
+  const gridHTML = `
 <div class="booth-grid" id=${fileName + "_" + gridNum}>
 
   <!-- GRID LOCK (UNCHANGED) -->
@@ -55,7 +56,7 @@ const gridHTML = `
     <div class="akash-cell cell" id=${fileName + "_" + gridNum + "_" + 1}>
       <span>${getAkashCellLabel(gridNum)}</span>
       <span class="cell-label"></span>
-      <button class="cell-lock js-cell-lock"></button>
+      <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
   </div>
 
@@ -63,13 +64,13 @@ const gridHTML = `
     <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 2}>
       <span>${getAgniCellLabel(gridNum,0)}</span>
       <span class="cell-label"></span>
-      <button class="cell-lock js-cell-lock"></button>
+      <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
 
     <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 3}>
       <span>${getAgniCellLabel(gridNum,1)}</span>
       <span class="cell-label"></span>
-      <button class="cell-lock js-cell-lock"></button>
+      <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
   </div>
 
@@ -78,7 +79,7 @@ const gridHTML = `
       <div class="vayu-cell cell" id=${fileName + "_" + gridNum + "_" + (4+i)}>
         <span>${getAyuvCellLabel(gridNum,i)}</span>
         <span class="cell-label"></span>
-        <button class="cell-lock js-cell-lock"></button>
+        <button class="cell-lock js-cell-lock" contenteditable="false"></button>
       </div>
     `).join("")}
   </div>
@@ -88,7 +89,7 @@ const gridHTML = `
       <div class="jal-cell cell" id=${fileName + "_" + gridNum + "_" + (8+i)}>
         <span>${getJalCellLabel(gridNum,i)}</span>
         <span class="cell-label"></span>
-        <button class="cell-lock js-cell-lock"></button>
+        <button class="cell-lock js-cell-lock" contenteditable="false"></button>
       </div>
     `).join("")}
   </div>
@@ -103,10 +104,10 @@ const gridHTML = `
 </div>
 `;
 
-
   gridTimeLine.innerHTML += gridHTML;
   enableDropForCells(".cell");
 }
+
 
 export function renderAllGrids(gridsCount, fileName) {
   console.log(gridsCount);
