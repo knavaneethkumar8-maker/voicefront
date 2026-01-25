@@ -58,6 +58,8 @@ const audioTimerEl = document.getElementById("audioTimer");
 const submitAudioBtn = document.querySelector(".js-submit-audio-button");
 const submitVideoBtn = document.querySelector(".js-submit-video-button");
 
+
+//audio recording
 audioRecordBtn.onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -130,6 +132,62 @@ function stopAudioRecording() {
   audioRecordBtn.classList.remove("recording");
   audioStopBtn.disabled = true;
 }
+
+submitAudioBtn?.addEventListener("click", async () => {
+  audioPreview.innerHTML = '';
+  submitAudioBtn.classList.remove("active-button");
+  try {
+    const audioFile = await blobToFile(recordedAudioBlob, "audio.wav");
+    const formData = new FormData();
+    formData.append("audio", audioFile);
+    console.log(formData);
+    const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
+    const response = await fetch(`${backendOrigin}/upload/audio/${fileName}`, {
+      method : "POST",
+      body : formData
+    });
+
+    if(!response.ok) {
+      showUploadFailedMessage('err');
+      return;
+    }
+    showUploadSuccessMessage();
+
+    const audioUrl = URL.createObjectURL(recordedAudioBlob);
+    const previewHTML = `
+      <div class="js-audio-container audio-container ${fileName}">
+        <p class="audio-filename">${fileName}</p>
+        <div class="audio-preview">
+          <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
+          <button class="generate-button">Generate</button>
+          <button class="remove-button">Delete</button>
+        </div>
+      </div>
+    `;
+    audiosPreviewContainer.innerHTML += previewHTML;
+    const audio = document.getElementById(fileName);
+
+    audio.addEventListener("loadedmetadata", ()=> {
+      console.log(audio.duration);
+      console.log(audio);
+      const gridsCount = calcGridCount(audio.duration);
+      updateCurrentFileName(fileName);
+      updateCurrentAudioDuration(audio);
+      renderAllGrids(gridsCount, fileName);
+      setAudioForAllCells(audio);
+      clearSelectedSpeedButtons();
+      setupAudioSpeedControls(audio);
+      makeCellsEditableOnMobile();
+      lockGrids();
+    });
+
+    const result = await response.json();
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 
 // ---------- VIDEO ----------
 const videoRecordBtn = document.getElementById("videoRecordBtn");
@@ -209,8 +267,6 @@ function stopVideoRecording() {
   videoStopBtn.disabled = true;
 }
 
-
-
 function blobToFile(blob, fileName) {
   return new File([blob], fileName, {type : blob.type});
 }
@@ -233,13 +289,7 @@ function showUploadFailedMessage(errMessage) {
   submitFileMessage.innerText += errMessage;
   submitFileMessage.classList.remove('success-color');
   submitFileMessage.classList.add('failed-color');
-
-  // //setTimeout(() => {
-  //   submitFileMessage.innerText = '(Note: After submitting please wait for the response. Do not refresh)';
-  //   submitFileMessage.classList.remove('failed-color');
-  // }, 5000); // 1 second
 }
-
 
 submitVideoBtn?.addEventListener("click", async () => {
   videoPreview.innerHTML = '';
@@ -297,60 +347,6 @@ submitVideoBtn?.addEventListener("click", async () => {
   }
 })
 
-submitAudioBtn?.addEventListener("click", async () => {
-  audioPreview.innerHTML = '';
-  submitAudioBtn.classList.remove("active-button");
-  try {
-    const audioFile = await blobToFile(recordedAudioBlob, "audio.wav");
-    const formData = new FormData();
-    formData.append("audio", audioFile);
-    console.log(formData);
-    const fileName = `audio_${dayjs().format('YYYY_MM_DD_HH_mm_ss_ms')}.wav`
-    const response = await fetch(`${backendOrigin}/upload/audio/${fileName}`, {
-      method : "POST",
-      body : formData
-    });
-
-    if(!response.ok) {
-      showUploadFailedMessage('err');
-      return;
-    }
-    showUploadSuccessMessage();
-
-    const audioUrl = URL.createObjectURL(recordedAudioBlob);
-    const previewHTML = `
-      <div class="js-audio-container audio-container ${fileName}">
-        <p class="audio-filename">${fileName}</p>
-        <div class="audio-preview">
-          <audio src=${audioUrl} controls class="audio-file" id=${fileName}></audio>
-          <button class="generate-button">Generate</button>
-          <button class="remove-button">Delete</button>
-        </div>
-      </div>
-    `;
-    audiosPreviewContainer.innerHTML += previewHTML;
-    const audio = document.getElementById(fileName);
-
-    audio.addEventListener("loadedmetadata", ()=> {
-      console.log(audio.duration);
-      console.log(audio);
-      const gridsCount = calcGridCount(audio.duration);
-      updateCurrentFileName(fileName);
-      updateCurrentAudioDuration(audio);
-      renderAllGrids(gridsCount, fileName);
-      setAudioForAllCells(audio);
-      clearSelectedSpeedButtons();
-      setupAudioSpeedControls(audio);
-      makeCellsEditableOnMobile();
-      lockGrids();
-    });
-
-    const result = await response.json();
-    console.log(result);
-  } catch (err) {
-    console.error(err);
-  }
-});
 
 function calcGridCount(duration) {
   const bioesTime = 9;
@@ -368,7 +364,6 @@ document.addEventListener('click', (e) => {
     }
   }
 });
-
 
 
 function generateGrids() {
@@ -418,7 +413,7 @@ function clearSelectedSpeedButtons() {
   buttons.forEach(button => button.classList.remove('selected-button'));
 }
 
-
+//generate grids
 document.addEventListener("click", (e) => {
   if (!e.target.classList.contains("generate-btn")) return;
 

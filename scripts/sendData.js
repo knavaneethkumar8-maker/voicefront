@@ -13,7 +13,6 @@ sendDataButton?.addEventListener("click", async () => {
   const username = getCurrentUsername();
   const allData = collectAllGridsData();
   const fileName = getCurrentFileName();
-  console.log('button clicked');
   if (!fileName) return;
 
   const duration_ms = Math.round(getCurrentAudioDuration() * 1000);
@@ -77,11 +76,6 @@ export function showSubmitDataFailedMessage() {
   submitDataMessage.innerText = `Unexpected error occured, check internet connection and try again. `;
   submitDataMessage.classList.remove('success-color');
   submitDataMessage.classList.add('failed-color');
-
-  // //setTimeout(() => {
-  //   submitDataMessage.innerText = '(Note: After submitting please wait for the response. Do not refresh)';
-  //   submitDataMessage.classList.remove('failed-color');
-  // }, 5000); // 1 second
 }
 
 
@@ -94,7 +88,7 @@ function createPayloadJSON(fileName, gridsArray, duration, username) {
       file_name: `${root}.json`,
       file_id: `DATASETS-${username}-${root}`,
       owner: username,
-      status: "NEW",
+      status: "FINISHED",
       duration_ms: duration,
       language: "hi",
       sample_rate: 48000,
