@@ -325,56 +325,68 @@ const gridData = {
 
 }
 
-
-
+function getConfidenceClass(confidence) {
+  if (confidence > 0.9) return "ui-green";
+  if (confidence > 0.75) return "ui-blue";
+  if (confidence > 0.55) return "ui-yellow";
+  return "ui-red";
+}
 
 renderAllGrids(2, 'new-file-name');
 
 const gridElement = document.getElementById(`new-file-name_0`);
-applyAksharLabels(gridData["grid_216"], gridElement);
+applyLabelsAndConfidence(gridData["grid_216"], gridElement);
 
-
-function applyAksharLabels(gridJson, gridElement) {
+function applyLabelsAndConfidence(gridJson, gridElement) {
   if (!gridJson || !gridElement) return;
 
   const baseId = gridElement.id;
+  const COLOR_CLASSES = ["ui-green", "ui-blue", "ui-yellow", "ui-red"];
 
-  // helper
-  function setLabel(cellIndex, text) {
+  function setCell(cellIndex, akshar, confidence) {
     const cell = gridElement.querySelector(
       `#${CSS.escape(baseId + "_" + cellIndex)}`
     );
     if (!cell) return;
 
+    /* label */
     const label = cell.querySelector(".cell-label");
-    if (label) label.textContent = text ?? "";
+    if (label) label.textContent = akshar ?? "";
+
+    /* dot color */
+    const dot = cell.querySelector(".cell-dot");
+    if (dot) {
+      dot.classList.remove(...COLOR_CLASSES);
+      dot.classList.add(getConfidenceClass(confidence));
+    }
   }
 
   /* ---------- AKASH (216) ---------- */
-  setLabel(1, gridJson.akshar);
+  setCell(1, gridJson.akshar, gridJson.confidence);
 
   /* ---------- AGNI (108) ---------- */
   gridJson.children_108?.forEach((g108, i108) => {
-    setLabel(2 + i108, g108.akshar);
+    setCell(2 + i108, g108.akshar, g108.confidence);
 
     /* ---------- VAYU (54) ---------- */
     g108.children_54?.forEach((g54, i54) => {
       const vayuIndex = 4 + i108 * 2 + i54;
-      setLabel(vayuIndex, g54.akshar);
+      setCell(vayuIndex, g54.akshar, g54.confidence);
 
       /* ---------- JAL (27) ---------- */
       g54.children_27?.forEach((g27, i27) => {
         const jalIndex =
           8 +
-          (i108 * 4) +      // each agni has 4 jal
-          (i54 * 2) +       // each vayu has 2 jal
+          (i108 * 4) + // each agni → 4 jal
+          (i54 * 2) +  // each vayu → 2 jal
           i27;
 
-        setLabel(jalIndex, g27.akshar);
+        setCell(jalIndex, g27.akshar, g27.confidence);
       });
     });
   });
 }
+
 
 
 
