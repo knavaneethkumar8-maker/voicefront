@@ -445,6 +445,8 @@ document.addEventListener("click", (e) => {
   audioEl.load(); // ensure metadata is available
 });
 
+
+
 //make verify buttons active
 document.addEventListener("click", (e) => {
   const lockBtn = e.target.closest(".js-cell-lock");
@@ -455,5 +457,35 @@ document.addEventListener("click", (e) => {
   const cell = lockBtn.closest(".cell");
   if (!cell) return;
 
-  cell.classList.toggle("locked");
+  const isLocked = cell.classList.toggle("locked");
+
+  // include the cell itself + all descendants
+  const elementsToLock = [cell, ...cell.querySelectorAll("*")];
+
+  elementsToLock.forEach(el => {
+    if (el === lockBtn) return;
+
+    if (isLocked) {
+      // store original contenteditable once
+      if (!el.dataset.originalContenteditable) {
+        el.dataset.originalContenteditable =
+          el.getAttribute("contenteditable");
+      }
+
+      el.setAttribute("contenteditable", "false");
+      el.style.pointerEvents = "none";
+    } else {
+      // restore original contenteditable
+      const original = el.dataset.originalContenteditable;
+
+      if (original === null || original === undefined) {
+        el.removeAttribute("contenteditable");
+      } else {
+        el.setAttribute("contenteditable", original);
+      }
+
+      delete el.dataset.originalContenteditable;
+      el.style.pointerEvents = "";
+    }
+  });
 });
