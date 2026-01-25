@@ -325,6 +325,119 @@ const gridData = {
 
 }
 
+const gridJson = {
+    "grid_index": 5,
+    "grid_size_ms": 216,
+    "akshar": "कvitha",
+    "confidence": 0.81,
+
+    "children_108": [
+      {
+        "grid_index": 10,
+        "grid_size_ms": 108,
+        "akshar": "क",
+        "confidence": 0.83,
+
+        "children_54": [
+          {
+            "grid_index": 20,
+            "grid_size_ms": 54,
+            "akshar": "क",
+            "confidence": 0.85,
+
+            "children_27": [
+              {
+                "frame_index": 40,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.88
+              },
+              {
+                "frame_index": 41,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.82
+              }
+            ]
+          },
+          {
+            "grid_index": 21,
+            "grid_size_ms": 54,
+            "akshar": "ख",
+            "confidence": 0.64,
+
+            "children_27": [
+              {
+                "frame_index": 42,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.71
+              },
+              {
+                "frame_index": 43,
+                "frame_size_ms": 27,
+                "akshar": "ख",
+                "confidence": 0.57
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "grid_index": 11,
+        "cell_id" : 3,
+        "grid_size_ms": 108,
+        "akshar": "क",
+        "confidence": 0.79,
+
+        "children_54": [
+          {
+            "grid_index": 22,
+            "grid_size_ms": 54,
+            "akshar": "क",
+            "confidence": 0.81,
+
+            "children_27": [
+              {
+                "frame_index": 44,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.83
+              },
+              {
+                "frame_index": 45,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.79
+              }
+            ]
+          },
+          {
+            "grid_index": 23,
+            "grid_size_ms": 54,
+            "akshar": "शून्य",
+            "confidence": 0.91,
+
+            "children_27": [
+              {
+                "frame_index": 46,
+                "frame_size_ms": 27,
+                "akshar": "शून्य",
+                "confidence": 0.93
+              },
+              {
+                "frame_index": 47,
+                "frame_size_ms": 27,
+                "akshar": "शून्य",
+                "confidence": 0.89
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
 function getConfidenceClass(confidence) {
   if (confidence > 0.9) return "ui-green";
   if (confidence > 0.75) return "ui-blue";
@@ -334,8 +447,8 @@ function getConfidenceClass(confidence) {
 
 renderAllGrids(2, 'new-file-name');
 
-const gridElement = document.getElementById(`new-file-name_0`);
-applyLabelsAndConfidence(gridData["grid_216"], gridElement);
+
+const allGrids = document.querySelectorAll('.booth-grid');
 
 function applyLabelsAndConfidence(gridJson, gridElement) {
   if (!gridJson || !gridElement) return;
@@ -386,6 +499,238 @@ function applyLabelsAndConfidence(gridJson, gridElement) {
     });
   });
 }
+
+const gridsData = {
+  "audio_id": "aud_001",
+  "frame_size_ms": 27,
+
+  "grid_0": {
+      "grid_index": 0,
+      "grid_size_ms": 216,
+      "akshar": "क",
+      "confidence": 0.81,
+
+      "children_108": [
+        {
+          "grid_index": 0,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.83,
+
+          "children_54": [
+            {
+              "grid_index": 0,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.85,
+
+              "children_27": [
+                { "frame_index": 0, "akshar": "क", "confidence": 0.88 },
+                { "frame_index": 1, "akshar": "क", "confidence": 0.82 }
+              ]
+            },
+            {
+              "grid_index": 1,
+              "grid_size_ms": 54,
+              "akshar": "ख",
+              "confidence": 0.64,
+
+              "children_27": [
+                { "frame_index": 2, "akshar": "क", "confidence": 0.71 },
+                { "frame_index": 3, "akshar": "ख", "confidence": 0.57 }
+              ]
+            }
+          ]
+        },
+        {
+          "grid_index": 1,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.79,
+
+          "children_54": [
+            {
+              "grid_index": 2,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.81,
+
+              "children_27": [
+                { "frame_index": 4, "akshar": "क", "confidence": 0.83 },
+                { "frame_index": 5, "akshar": "क", "confidence": 0.79 }
+              ]
+            },
+            {
+              "grid_index": 3,
+              "grid_size_ms": 54,
+              "akshar": "शून्य",
+              "confidence": 0.91,
+
+              "children_27": [
+                { "frame_index": 6, "akshar": "शून्य", "confidence": 0.93 },
+                { "frame_index": 7, "akshar": "शून्य", "confidence": 0.89 }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+  "grid_1": {
+      "grid_index": 0,
+      "grid_size_ms": 216,
+      "akshar": "क",
+      "confidence": 0.81,
+
+      "children_108": [
+        {
+          "grid_index": 0,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.83,
+
+          "children_54": [
+            {
+              "grid_index": 0,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.85,
+
+              "children_27": [
+                { "frame_index": 0, "akshar": "क", "confidence": 0.88 },
+                { "frame_index": 1, "akshar": "क", "confidence": 0.82 }
+              ]
+            },
+            {
+              "grid_index": 1,
+              "grid_size_ms": 54,
+              "akshar": "ख",
+              "confidence": 0.64,
+
+              "children_27": [
+                { "frame_index": 2, "akshar": "क", "confidence": 0.71 },
+                { "frame_index": 3, "akshar": "ख", "confidence": 0.57 }
+              ]
+            }
+          ]
+        },
+        {
+          "grid_index": 1,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.79,
+
+          "children_54": [
+            {
+              "grid_index": 2,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.81,
+
+              "children_27": [
+                { "frame_index": 4, "akshar": "क", "confidence": 0.83 },
+                { "frame_index": 5, "akshar": "क", "confidence": 0.79 }
+              ]
+            },
+            {
+              "grid_index": 3,
+              "grid_size_ms": 54,
+              "akshar": "शून्य",
+              "confidence": 0.91,
+
+              "children_27": [
+                { "frame_index": 6, "akshar": "शून्य", "confidence": 0.93 },
+                { "frame_index": 7, "akshar": "शून्य", "confidence": 0.89 }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+  "grid_2": {
+      "grid_index": 0,
+      "grid_size_ms": 216,
+      "akshar": "क",
+      "confidence": 0.81,
+
+      "children_108": [
+        {
+          "grid_index": 0,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.83,
+
+          "children_54": [
+            {
+              "grid_index": 0,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.85,
+
+              "children_27": [
+                { "frame_index": 0, "akshar": "क", "confidence": 0.88 },
+                { "frame_index": 1, "akshar": "क", "confidence": 0.82 }
+              ]
+            },
+            {
+              "grid_index": 1,
+              "grid_size_ms": 54,
+              "akshar": "ख",
+              "confidence": 0.64,
+
+              "children_27": [
+                { "frame_index": 2, "akshar": "क", "confidence": 0.71 },
+                { "frame_index": 3, "akshar": "ख", "confidence": 0.57 }
+              ]
+            }
+          ]
+        },
+        {
+          "grid_index": 1,
+          "grid_size_ms": 108,
+          "akshar": "क",
+          "confidence": 0.79,
+
+          "children_54": [
+            {
+              "grid_index": 2,
+              "grid_size_ms": 54,
+              "akshar": "क",
+              "confidence": 0.81,
+
+              "children_27": [
+                { "frame_index": 4, "akshar": "क", "confidence": 0.83 },
+                { "frame_index": 5, "akshar": "क", "confidence": 0.79 }
+              ]
+            },
+            {
+              "grid_index": 3,
+              "grid_size_ms": 54,
+              "akshar": "शून्य",
+              "confidence": 0.91,
+
+              "children_27": [
+                { "frame_index": 6, "akshar": "शून्य", "confidence": 0.93 },
+                { "frame_index": 7, "akshar": "शून्य", "confidence": 0.89 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  
+}
+
+function mapAllJsonToGrids(gridsJson , gridElements) {
+  gridElements?.forEach((grid, index) => {
+    console.log(gridsData["grid_0"]);
+    applyLabelsAndConfidence(gridsJson[`grid_${index}`], grid);
+  });
+}
+
+mapAllJsonToGrids(gridsData, allGrids);
+
+
+
 
 
 
