@@ -413,4 +413,41 @@ body {
 }
 
 
+.cell-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background-color: red;
+  
+}
+
+
+
+
+/* UI color utility classes — background colors */
+
+.ui-green {
+  background-color: #127335;
+}
+
+.ui-blue {
+  background-color: #3B82F6;
+}
+
+.ui-yellow {
+  background-color: #ff9900;
+}
+
+.ui-red {
+ background-color: #da0202;
+}
+
+
 

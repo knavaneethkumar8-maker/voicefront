@@ -49,34 +49,40 @@ function renderGrid(gridNum, fileName) {
   const gridHTML = `
 <div class="booth-grid" id=${fileName + "_" + gridNum}>
 
-  <!-- GRID LOCK (UNCHANGED) -->
   <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
 
+  <!-- AKASH -->
   <div class="akash-tier">
     <div class="akash-cell cell" id=${fileName + "_" + gridNum + "_" + 1}>
+      <span class="cell-dot"></span>
       <span>${getAkashCellLabel(gridNum)}</span>
       <span class="cell-label"></span>
       <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
   </div>
 
+  <!-- AGNI -->
   <div class="agni-tier flex-display">
     <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 2}>
+      <span class="cell-dot"></span>
       <span>${getAgniCellLabel(gridNum,0)}</span>
       <span class="cell-label"></span>
       <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
 
     <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 3}>
+      <span class="cell-dot"></span>
       <span>${getAgniCellLabel(gridNum,1)}</span>
       <span class="cell-label"></span>
       <button class="cell-lock js-cell-lock" contenteditable="false"></button>
     </div>
   </div>
 
+  <!-- VAYU -->
   <div class="vayu-tier flex-display">
     ${[0,1,2,3].map(i => `
       <div class="vayu-cell cell" id=${fileName + "_" + gridNum + "_" + (4+i)}>
+        <span class="cell-dot"></span>
         <span>${getAyuvCellLabel(gridNum,i)}</span>
         <span class="cell-label"></span>
         <button class="cell-lock js-cell-lock" contenteditable="false"></button>
@@ -84,9 +90,11 @@ function renderGrid(gridNum, fileName) {
     `).join("")}
   </div>
 
+  <!-- JAL -->
   <div class="jal-tier flex-display">
     ${[...Array(8)].map((_, i) => `
       <div class="jal-cell cell" id=${fileName + "_" + gridNum + "_" + (8+i)}>
+        <span class="cell-dot"></span>
         <span>${getJalCellLabel(gridNum,i)}</span>
         <span class="cell-label"></span>
         <button class="cell-lock js-cell-lock" contenteditable="false"></button>
@@ -94,6 +102,7 @@ function renderGrid(gridNum, fileName) {
     `).join("")}
   </div>
 
+  <!-- PRITHVI -->
   <div class="prithvi-tier flex-display">
     ${[...Array(24)].map((_, i) => `
       <div class="prithvi-cell cell" id=${fileName + "_" + gridNum + "_" + (16+i)}>
@@ -107,6 +116,7 @@ function renderGrid(gridNum, fileName) {
   gridTimeLine.innerHTML += gridHTML;
   enableDropForCells(".cell");
 }
+
 
 
 export function renderAllGrids(gridsCount, fileName) {
