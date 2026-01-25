@@ -444,3 +444,16 @@ document.addEventListener("click", (e) => {
   );
   audioEl.load(); // ensure metadata is available
 });
+
+//make verify buttons active
+document.addEventListener("click", (e) => {
+  const lockBtn = e.target.closest(".js-cell-lock");
+  if (!lockBtn) return;
+
+  e.stopPropagation();
+
+  const cell = lockBtn.closest(".cell");
+  if (!cell) return;
+
+  cell.classList.toggle("locked");
+});

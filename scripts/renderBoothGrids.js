@@ -45,106 +45,64 @@ const gridTimeLine = document.querySelector('.js-grid-timeline');
 function renderGrid(gridNum, fileName) {
   const startTime = gridNum*24*bioesTime;
   const gridEndTime = startTime + (24*bioesTime);
-  const gridHTML = `
-  <div class="booth-grid" id= ${fileName + "_" + gridNum}>
-          <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
-          <div class="akash-tier">
-            <div class="akash-cell cell" id= ${fileName + "_" +gridNum + "_" + 1} >
-            <span>${getAkashCellLabel(gridNum)}</span>
-            <span class="cell-label"></span>
-              
-            </div>
-          </div>
-          <div class="agni-tier flex-display">
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+2} >
-              <span>${getAgniCellLabel(gridNum,0)}</span>
-              <span class="cell-label"></span>
-            </div>
-            <div class="agni-cell cell" id=${fileName + "_" + gridNum+"_"+3} >
-              <span>${getAgniCellLabel(gridNum,1)}</span>
-              <span class="cell-label"></span>
-            </div>
-          </div>
-          <div class="vayu-tier flex-display">
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+ 4} >
-            <span>${getAyuvCellLabel(gridNum,0)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+5} >
-            <span>${getAyuvCellLabel(gridNum,1)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+6} >
-            <span>${getAyuvCellLabel(gridNum,2)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="vayu-cell cell" id=${fileName + "_" + gridNum+"_"+7} >
-            <span>${getAyuvCellLabel(gridNum,3)}</span>
-            <span class="cell-label"></span>
-            </div>
-          </div>
-          <div class="jal-tier flex-display">
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+8} >
-            <span>${getJalCellLabel(gridNum,0)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+9} >
-            <span>${getJalCellLabel(gridNum,1)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+10} >
-            <span>${getJalCellLabel(gridNum,2)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+11} >
-            <span>${getJalCellLabel(gridNum,3)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+12} >
-            <span>${getJalCellLabel(gridNum,4)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+13} >
-            <span>${getJalCellLabel(gridNum,5)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+14} >
-            <span>${getJalCellLabel(gridNum,6)}</span>
-            <span class="cell-label"></span>
-            </div>
-            <div class="jal-cell cell" id=${fileName + "_" + gridNum+"_"+15} >
-            <span>${getJalCellLabel(gridNum,7)}</span>
-            <span class="cell-label"></span>
-            </div>
-          </div>
-          <div class="prithvi-tier flex-display">
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+16}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+17}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+18}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+19}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+20}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+21}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+22}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+23}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+24}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+25}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+26}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+27}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+28}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+29}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+30}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+31}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+32}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+33}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+34}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+35}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+36}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+37}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+38}></div>
-            <div class="prithvi-cell" id=${fileName + "_" + gridNum+"_"+39}></div>
-          </div>
-        </div>
-  `;
+const gridHTML = `
+<div class="booth-grid" id=${fileName + "_" + gridNum}>
+
+  <!-- GRID LOCK (UNCHANGED) -->
+  <div class="lock js-lock" data-id=${fileName + "_" + gridNum}>🔓</div>
+
+  <div class="akash-tier">
+    <div class="akash-cell cell" id=${fileName + "_" + gridNum + "_" + 1}>
+      <span>${getAkashCellLabel(gridNum)}</span>
+      <span class="cell-label"></span>
+      <button class="cell-lock js-cell-lock"></button>
+    </div>
+  </div>
+
+  <div class="agni-tier flex-display">
+    <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 2}>
+      <span>${getAgniCellLabel(gridNum,0)}</span>
+      <span class="cell-label"></span>
+      <button class="cell-lock js-cell-lock"></button>
+    </div>
+
+    <div class="agni-cell cell" id=${fileName + "_" + gridNum + "_" + 3}>
+      <span>${getAgniCellLabel(gridNum,1)}</span>
+      <span class="cell-label"></span>
+      <button class="cell-lock js-cell-lock"></button>
+    </div>
+  </div>
+
+  <div class="vayu-tier flex-display">
+    ${[0,1,2,3].map(i => `
+      <div class="vayu-cell cell" id=${fileName + "_" + gridNum + "_" + (4+i)}>
+        <span>${getAyuvCellLabel(gridNum,i)}</span>
+        <span class="cell-label"></span>
+        <button class="cell-lock js-cell-lock"></button>
+      </div>
+    `).join("")}
+  </div>
+
+  <div class="jal-tier flex-display">
+    ${[...Array(8)].map((_, i) => `
+      <div class="jal-cell cell" id=${fileName + "_" + gridNum + "_" + (8+i)}>
+        <span>${getJalCellLabel(gridNum,i)}</span>
+        <span class="cell-label"></span>
+        <button class="cell-lock js-cell-lock"></button>
+      </div>
+    `).join("")}
+  </div>
+
+  <div class="prithvi-tier flex-display">
+    ${[...Array(24)].map((_, i) => `
+      <div class="prithvi-cell cell" id=${fileName + "_" + gridNum + "_" + (16+i)}>
+      </div>
+    `).join("")}
+  </div>
+
+</div>
+`;
+
 
   gridTimeLine.innerHTML += gridHTML;
   enableDropForCells(".cell");

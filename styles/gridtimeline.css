@@ -368,4 +368,49 @@ body {
 }
 
 
+/* unlocked = empty */
+.cell-lock {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+
+  width: 14px;
+  height: 14px;
+
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  border: none;
+
+  cursor: pointer;
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* locked cell */
+.cell.locked {
+  pointer-events: none;
+}
+
+/* allow clicking the lock */
+.cell.locked .cell-lock {
+  pointer-events: auto;
+  background-color: green;
+}
+
+/* EXPLICIT tick */
+.cell.locked .cell-lock::before {
+  content: "✓";
+  color: white;
+  font-size: 12px;
+  line-height: 1;
+}
+
+
 
