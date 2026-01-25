@@ -7,9 +7,25 @@ const urls = getUrls();
 const {backendOrigin} = urls;
 
 
+function areAllGridsLocked() {
+  const grids = document.querySelectorAll('.booth-grid');
+  if (grids.length === 0) return false;
+
+  return Array.from(grids).every(grid =>
+    grid.classList.contains('locked')
+  );
+}
+
 const sendDataButton = document.querySelector('.js-submit-data');
 
 sendDataButton?.addEventListener("click", async () => {
+  console.log('clicked');
+  if (!areAllGridsLocked()) {
+    showLockGridsMessage();
+    return;
+  }
+
+  // ✅ safe to submit
   const username = getCurrentUsername();
   const allData = collectAllGridsData();
   const fileName = getCurrentFileName();
@@ -30,28 +46,23 @@ sendDataButton?.addEventListener("click", async () => {
       {
         method: "PUT",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       }
     );
 
-    console.log(response);
     if (!response.ok) {
       showSubmitDataFailedMessage();
       return;
     }
 
     showSubmitDataSuccessMessage();
-    const result = await response.json();
-    console.log(result);
-
   } catch (err) {
     console.error(err);
     showSubmitDataFailedMessage();
   }
 });
+
 
 
 function getFileRoot(fileName) {
@@ -65,6 +76,19 @@ export function showSubmitDataSuccessMessage() {
   submitDataMessage.innerText = 'Successfully submitted';
   submitDataMessage.classList.add('success-color');
   submitDataMessage.classList.remove('failed-color');
+  submitDataMessage.style.display = "flex";
+
+  setTimeout(() => {
+    submitDataMessage.innerText = '';
+    submitDataMessage.classList.remove('success-color');
+  }, 5000); // 1 second
+}
+
+export function showLockGridsMessage() {
+  submitDataMessage.innerText = 'Lock all grids to submit data';
+  submitDataMessage.classList.add('failed-color');
+  submitDataMessage.classList.remove('success-color');
+  submitDataMessage.style.display = "flex";
 
   setTimeout(() => {
     submitDataMessage.innerText = '';
