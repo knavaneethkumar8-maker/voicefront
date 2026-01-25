@@ -16,6 +16,8 @@ export const akshars = [
   { char:"", start:301, end:330 }
 ];
 
+let gridObject = {};
+
 
 const bioesTime = 9;
 const fileName = 'voice1';
@@ -201,6 +203,179 @@ export function updateAllGridLabels(fileName) {
     }
   }
 }
+
+const gridData = {
+  "audio_id": "aud_001",
+
+  "frame_size_ms": 27,
+
+  "grid_216": {
+    "grid_index": 5,
+    "grid_size_ms": 216,
+    "akshar": "कvitha",
+    "confidence": 0.81,
+
+    "children_108": [
+      {
+        "grid_index": 10,
+        "grid_size_ms": 108,
+        "akshar": "क",
+        "confidence": 0.83,
+
+        "children_54": [
+          {
+            "grid_index": 20,
+            "grid_size_ms": 54,
+            "akshar": "क",
+            "confidence": 0.85,
+
+            "children_27": [
+              {
+                "frame_index": 40,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.88
+              },
+              {
+                "frame_index": 41,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.82
+              }
+            ]
+          },
+          {
+            "grid_index": 21,
+            "grid_size_ms": 54,
+            "akshar": "ख",
+            "confidence": 0.64,
+
+            "children_27": [
+              {
+                "frame_index": 42,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.71
+              },
+              {
+                "frame_index": 43,
+                "frame_size_ms": 27,
+                "akshar": "ख",
+                "confidence": 0.57
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "grid_index": 11,
+        "cell_id" : 3,
+        "grid_size_ms": 108,
+        "akshar": "क",
+        "confidence": 0.79,
+
+        "children_54": [
+          {
+            "grid_index": 22,
+            "grid_size_ms": 54,
+            "akshar": "क",
+            "confidence": 0.81,
+
+            "children_27": [
+              {
+                "frame_index": 44,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.83
+              },
+              {
+                "frame_index": 45,
+                "frame_size_ms": 27,
+                "akshar": "क",
+                "confidence": 0.79
+              }
+            ]
+          },
+          {
+            "grid_index": 23,
+            "grid_size_ms": 54,
+            "akshar": "शून्य",
+            "confidence": 0.91,
+
+            "children_27": [
+              {
+                "frame_index": 46,
+                "frame_size_ms": 27,
+                "akshar": "शून्य",
+                "confidence": 0.93
+              },
+              {
+                "frame_index": 47,
+                "frame_size_ms": 27,
+                "akshar": "शून्य",
+                "confidence": 0.89
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+
+}
+
+
+
+
+renderAllGrids(2, 'new-file-name');
+
+const gridElement = document.getElementById(`new-file-name_0`);
+applyAksharLabels(gridData["grid_216"], gridElement);
+
+
+function applyAksharLabels(gridJson, gridElement) {
+  if (!gridJson || !gridElement) return;
+
+  const baseId = gridElement.id;
+
+  // helper
+  function setLabel(cellIndex, text) {
+    const cell = gridElement.querySelector(
+      `#${CSS.escape(baseId + "_" + cellIndex)}`
+    );
+    if (!cell) return;
+
+    const label = cell.querySelector(".cell-label");
+    if (label) label.textContent = text ?? "";
+  }
+
+  /* ---------- AKASH (216) ---------- */
+  setLabel(1, gridJson.akshar);
+
+  /* ---------- AGNI (108) ---------- */
+  gridJson.children_108?.forEach((g108, i108) => {
+    setLabel(2 + i108, g108.akshar);
+
+    /* ---------- VAYU (54) ---------- */
+    g108.children_54?.forEach((g54, i54) => {
+      const vayuIndex = 4 + i108 * 2 + i54;
+      setLabel(vayuIndex, g54.akshar);
+
+      /* ---------- JAL (27) ---------- */
+      g54.children_27?.forEach((g27, i27) => {
+        const jalIndex =
+          8 +
+          (i108 * 4) +      // each agni has 4 jal
+          (i54 * 2) +       // each vayu has 2 jal
+          i27;
+
+        setLabel(jalIndex, g27.akshar);
+      });
+    });
+  });
+}
+
 
 
 

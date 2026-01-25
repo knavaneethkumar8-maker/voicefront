@@ -16,7 +16,7 @@ import "./controlMobileUI.js"
 
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
-renderAllGrids(2, 'new-file-name');
+//renderAllGrids(2, 'new-file-name');
 renderAkshars(width, setAudioForAllCells);
 setAudioForAllCells();
 lockGrids();
