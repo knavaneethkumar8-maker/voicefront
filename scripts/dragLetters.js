@@ -132,30 +132,42 @@ export function enableDropForCells(selector, row) {
 
 
 
-const deleteRegion = document.querySelector(".js-delete-region");
+export function setAllDeleteRegionsActive() {
 
-deleteRegion.addEventListener("dragover", e => {
-  e.preventDefault();
-  deleteRegion.classList.add("active-delete");
-});
+  const allDeleteRegions = document.querySelectorAll(".js-delete-region");
 
-deleteRegion.addEventListener("dragleave", () => {
-  deleteRegion.classList.remove("active-delete");
-});
+  allDeleteRegions?.forEach(deleteRegion => {
+    deleteRegion.addEventListener("dragover", e => {
+      e.preventDefault();
+      deleteRegion.classList.add("active-delete");
+    });
 
-deleteRegion.addEventListener("drop", e => {
-  e.preventDefault();
-  deleteRegion.classList.remove("active-delete");
+    deleteRegion.addEventListener("dragleave", () => {
+      deleteRegion.classList.remove("active-delete");
+    });
 
-  // 🔥 DELETE ONLY if dragged from a cell
-  if (draggedFromCell && draggedBlock) {
-    const parentCell = draggedBlock.closest(".cell");
-    draggedBlock.remove();
-     if (parentCell) {
-      updateCellLabel(parentCell);
-    }
-  }
-});
+    deleteRegion.addEventListener("drop", e => {
+      e.preventDefault();
+      deleteRegion.classList.remove("active-delete");
+
+      // 🔥 DELETE ONLY if dragged from a cell
+      if (draggedFromCell && draggedBlock) {
+        const parentCell = draggedBlock.closest(".cell");
+        draggedBlock.remove();
+        if (parentCell) {
+          updateCellLabel(parentCell);
+        }
+      }
+    });
+
+  })
+
+}
+
+
+
+
+
 
 
 function getCellLetters(cell) {

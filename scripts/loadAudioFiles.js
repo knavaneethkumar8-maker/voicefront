@@ -2,6 +2,7 @@ import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
 import { createLettersContainer } from "./dragLetters.js";
 import { generateAudioTimeLine } from "./recorder.js";
+import { setAllDeleteRegionsActive } from "./dragLetters.js";
 
 
 const urls = getUrls();
@@ -31,6 +32,7 @@ async function loadRecordings() {
   const data = await res.json();
   console.log(data);
   renderRecordings(data, user);
+  setAllDeleteRegionsActive();
 }
 
 function renderRecordings(records, user) {
