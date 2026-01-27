@@ -44,7 +44,7 @@ function collectChars(start9, end9) {
 
 const gridTimeLine = document.querySelector('.js-grid-timeline');
 
-function renderGrid(gridNum, fileName) {
+function renderGrid(gridNum, fileName, gridTimeLine, row) {
   const startTime = gridNum * 24 * bioesTime;
   const gridEndTime = startTime + (24 * bioesTime);
 
@@ -116,18 +116,18 @@ function renderGrid(gridNum, fileName) {
 `;
 
   gridTimeLine.innerHTML += gridHTML;
-  enableDropForCells(".cell");
+  enableDropForCells(".cell", row);
 }
 
 
 
-export function renderAllGrids(gridsCount, fileName) {
+export function renderAllGrids(gridsCount, fileName, gridTimeLine, row) {
   console.log(gridsCount);
   const fileLabel = document.querySelector('.js-rendered-filename');
   fileLabel.innerText = fileName;
   gridTimeLine.innerHTML = '';
   for(let i =0; i < gridsCount ; i++) {
-    renderGrid(i, fileName);
+    renderGrid(i, fileName, gridTimeLine, row);
   }
 }
 
@@ -445,7 +445,7 @@ function getConfidenceClass(confidence) {
   return "ui-red";
 }
 
-renderAllGrids(2, 'new-file-name');
+//renderAllGrids(2, 'new-file-name');
 
 
 const allGrids = document.querySelectorAll('.booth-grid');

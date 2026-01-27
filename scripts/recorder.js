@@ -447,6 +447,37 @@ document.addEventListener("click", (e) => {
 
 
 
+
+export function generateAudioTimeLine(row, gridTimeLine) {
+  const audioEl = row.querySelector("audio");
+  if (!audioEl) return;
+
+  audioEl.addEventListener(
+    "loadedmetadata",
+    () => {
+      const duration = audioEl.duration;
+      const fileName = row.querySelector(".file-name").textContent;
+
+      const gridsCount = calcGridCount(duration);
+
+      updateCurrentFileName(fileName);
+      updateCurrentAudioDuration(audioEl);
+
+      renderAllGrids(gridsCount, fileName, gridTimeLine, row);
+      setAudioForAllCells(audioEl);
+
+      clearSelectedSpeedButtons();
+      setupAudioSpeedControls(audioEl);
+      makeCellsEditableOnMobile();
+      lockGrids(row);
+    },
+    { once: true }
+  );
+  audioEl.load(); // ensure metadata is available
+}
+
+
+
 //make verify buttons active
 document.addEventListener("click", (e) => {
   const lockBtn = e.target.closest(".js-cell-lock");

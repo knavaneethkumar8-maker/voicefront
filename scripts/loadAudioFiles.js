@@ -1,6 +1,7 @@
 import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
 import { createLettersContainer } from "./dragLetters.js";
+import { generateAudioTimeLine } from "./recorder.js";
 
 
 const urls = getUrls();
@@ -94,8 +95,10 @@ function renderRecordings(records, user) {
 
     // ✅ PASS IT INTO createLettersContainer
     createLettersContainer(lettersContainer);
-
     row.querySelector("audio").load();
+    const gridTimeLine = row.querySelector('.js-grid-timeline');
+    console.log(gridTimeLine);
+    generateAudioTimeLine(row, gridTimeLine);
   });
 }
 

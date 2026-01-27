@@ -17,9 +17,9 @@ import "./controlMobileUI.js"
 const audio = document.querySelector('.js-audio-file');
 const width = getAksharWidth();
 //renderAllGrids(2, 'new-file-name');
-renderAkshars(width, setAudioForAllCells);
-setAudioForAllCells();
-lockGrids();
+//renderAkshars(width, setAudioForAllCells);
+//setAudioForAllCells();
+//lockGrids();
 document.addEventListener("DOMContentLoaded", initPageNavigation);
 
 //enableDropForCells('.cell');
@@ -35,8 +35,8 @@ export function setAudioForAllCells(audio) {
   })
 }
 
-export function lockGrids() {
-  const allLocks = document.querySelectorAll('.js-lock');
+export function lockGrids(row) {
+  const allLocks = row.querySelectorAll('.js-lock');
   allLocks.forEach(lock => {
     lock.addEventListener("click", () => {
       const gridId = lock.dataset.id;

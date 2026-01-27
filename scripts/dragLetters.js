@@ -109,8 +109,8 @@ div.addEventListener("touchend", e => {
   return div;
 }
 
-export function enableDropForCells(selector) {
-  document.querySelectorAll(selector).forEach(cell => {
+export function enableDropForCells(selector, row) {
+  row.querySelectorAll(selector).forEach(cell => {
 
     cell.addEventListener("dragover", e => {
       e.preventDefault();
