@@ -389,12 +389,12 @@ exportBtn.onclick = async () => {
     const user = getCurrentUsername();
 
     const formData = new FormData();
-    formData.append("file", blob, meta.filename);
+    formData.append("audio", blob, meta.filename);
     formData.append("metadata", JSON.stringify(meta));
 
     try {
       const res = await fetch(
-        `${backendOrigin}/${user}/recordings/${meta.filename}`,
+        `${backendOrigin}/upload/audio/${meta.filename}`,
         {
           method: "POST",
           body: formData
@@ -402,6 +402,9 @@ exportBtn.onclick = async () => {
       );
 
       if (!res.ok) throw new Error("Upload failed");
+
+      const result = await res.json();
+      console.log(result);
 
       // ✅ Update UI
       badge.textContent = "Saved";

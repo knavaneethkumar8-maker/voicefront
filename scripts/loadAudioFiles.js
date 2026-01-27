@@ -24,11 +24,11 @@ async function loadRecordings() {
   const time = document.querySelector(".js-time-select").value;
 
   const res = await fetch(
-    `${backendOrigin}/api/recordings?user=${user}&time=${time}`
+    `${backendOrigin}/api/recordings`
   );
 
   const data = await res.json();
-  console.log(res);
+  console.log(data);
   renderRecordings(data, user);
 }
 
@@ -42,8 +42,9 @@ function renderRecordings(records, user) {
   }
 
   records.forEach((r) => {
+    console.log(r.textgrid);
     const audioUrl =
-      `${backendOrigin}/uploads/${user}/recordings/${r.filename}`;
+      `${backendOrigin}/uploads/recordings/${r.filename}`;
 
     const mime =
       r.filename.endsWith(".wav")  ? "audio/wav"  :
