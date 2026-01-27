@@ -32,6 +32,14 @@ AKSHAR_SET.forEach(char => {
 
 //enableDropForCells(".cell");
 
+export function createLettersContainer(container) {
+  AKSHAR_SET.forEach(char => {
+    const div = createLetterBlock(char, "letter");
+    div.classList.add(char);
+    container.appendChild(div);
+  });
+}
+
 function createLetterBlock(char) {
   const div = document.createElement("div");
   div.className = "letter-block";

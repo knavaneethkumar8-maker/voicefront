@@ -1,5 +1,6 @@
 import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
+import { createLettersContainer } from "./dragLetters.js";
 
 
 const urls = getUrls();
@@ -40,7 +41,7 @@ function renderRecordings(records, user) {
     return;
   }
 
-  records.forEach(r => {
+  records.forEach((r) => {
     const audioUrl =
       `${backendOrigin}/uploads/${user}/recordings/${r.filename}`;
 
@@ -54,37 +55,49 @@ function renderRecordings(records, user) {
     row.className = "load-row";
 
     row.innerHTML = `
-    <div class="file-details-container">
-      <audio controls preload="metadata" playsinline>
-        <source src="${audioUrl}" type="${mime}">
-      </audio>
+      <div class="file-details-container">
+        <audio controls preload="metadata" playsinline>
+          <source src="${audioUrl}" type="${mime}">
+        </audio>
 
-      <div class="file-name">${r.filename}</div>
-      <div class="status ${r.status.toLowerCase()}">${r.status}</div>
+        <div class="file-name">${r.filename}</div>
+        <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
-      <button class="generate-btn">Generate</button>
-      <button class="delete-btn">Remove</button>
-    </div>
-    <div class="js-askhar-editor akshar-editor" id="${r.filename}">
-      <p class="rendered-filename js-rendered-filename">${r.filename}</p>
-      <div class="letters-container js-letters-container" id="lettersContainer"></div>
-      <div class="delete-region js-delete-region">Drop here to delete</div>
-      <div class="js-timeline timeline">
-        <div class="js-grid-timeline grid-timeline">
+        <button class="generate-btn">Generate</button>
+        <button class="delete-btn">Remove</button>
+      </div>
+
+      <div class="js-askhar-editor akshar-editor" id="${r.filename}">
+        <p class="rendered-filename js-rendered-filename">${r.filename}</p>
+
+        <div class="letters-container js-letters-container"
+             id="letter-container-${r.filename}">
         </div>
-        <div class="adjust-akshar-timeline js-akshar-timeline">
+
+        <div class="delete-region js-delete-region">
+          Drop here to delete
+        </div>
+
+        <div class="js-timeline timeline">
+          <div class="js-grid-timeline grid-timeline"></div>
+          <div class="adjust-akshar-timeline js-akshar-timeline"></div>
         </div>
       </div>
-    </div>
-      
     `;
 
     container.appendChild(row);
 
-    // Safari fix
+    // ✅ SELECT THE CLOSEST LETTERS CONTAINER
+    const lettersContainer =
+      row.querySelector(".js-letters-container");
+
+    // ✅ PASS IT INTO createLettersContainer
+    createLettersContainer(lettersContainer);
+
     row.querySelector("audio").load();
   });
 }
+
 
 
 const loadRecordingsButton = document.querySelector('.js-load-btn');
@@ -102,8 +115,6 @@ document.addEventListener("click", (e) => {
     row.remove();
   }
 });
-
-
 
 
 
