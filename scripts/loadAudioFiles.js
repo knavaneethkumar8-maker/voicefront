@@ -54,6 +54,7 @@ function renderRecordings(records, user) {
     row.className = "load-row";
 
     row.innerHTML = `
+    <div class="file-details-container">
       <audio controls preload="metadata" playsinline>
         <source src="${audioUrl}" type="${mime}">
       </audio>
@@ -63,6 +64,19 @@ function renderRecordings(records, user) {
 
       <button class="generate-btn">Generate</button>
       <button class="delete-btn">Remove</button>
+    </div>
+    <div class="js-askhar-editor akshar-editor" id="${r.filename}">
+      <p class="rendered-filename js-rendered-filename">${r.filename}</p>
+      <div class="letters-container js-letters-container" id="lettersContainer"></div>
+      <div class="delete-region js-delete-region">Drop here to delete</div>
+      <div class="js-timeline timeline">
+        <div class="js-grid-timeline grid-timeline">
+        </div>
+        <div class="adjust-akshar-timeline js-akshar-timeline">
+        </div>
+      </div>
+    </div>
+      
     `;
 
     container.appendChild(row);
