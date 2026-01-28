@@ -132,6 +132,9 @@
   overflow-y: auto;
   border: 1px solid rgb(210, 210, 210);
   border-radius: 10px;
+  max-height: 650px;
+  overflow: auto;
+  margin-bottom: 400px;
 }
 
 .loaded-files-container::-webkit-scrollbar{
@@ -206,6 +209,10 @@
 
 .delete-btn:hover {
   background-color: #f9dbe0;
+}
+
+.submit-data-response{
+  margin-bottom: 20px;
 }
 
 

@@ -22,13 +22,13 @@ let longPressTimer = null;
 
 
 
-const lettersContainer = document.getElementById("lettersContainer");
+/* const lettersContainer = document.getElementById("lettersContainer");
 
 AKSHAR_SET.forEach(char => {
   const div = createLetterBlock(char, "letter");
   div.classList.add(char);
   lettersContainer.appendChild(div);
-});
+}); */
 
 //enableDropForCells(".cell");
 

@@ -3,11 +3,12 @@ import { showSubmitDataFailedMessage, showSubmitDataSuccessMessage } from "./sen
 
 const urls = getUrls();
 const {backendOrigin} = urls;
-
-const gridTimeLine = document.querySelector('.js-grid-timeline');
 const bioesTime = 9;
 
-gridTimeLine.addEventListener("click", (e) => {
+const gridTimeLine = document.querySelector('.js-grid-timeline');
+
+
+gridTimeLine?.addEventListener("click", (e) => {
   e.preventDefault();
   const cell = e.target.closest(".cell");
   if (!cell) return;
@@ -19,6 +20,8 @@ gridTimeLine.addEventListener("click", (e) => {
 
 export function collectLockedCellData() {
   document.addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const lockBtn = e.target.closest(".js-cell-lock");
     if (!lockBtn) return;
 
@@ -233,7 +236,7 @@ export function collectLockedGridData() {
 }
 
 
-gridTimeLine.addEventListener("click", async (e) => {
+gridTimeLine?.addEventListener("click", async (e) => {
   e.preventDefault();
   const lock = e.target.closest(".js-lock");
   if (!lock) return;

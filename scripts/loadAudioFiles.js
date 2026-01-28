@@ -35,9 +35,9 @@ async function loadRecordings() {
   console.log(data);
   renderRecordings(data, user);
   setAllDeleteRegionsActive();
-  makeVerifyButtonsActive();
   collectLockedGridData();
   collectLockedCellData();
+  makeVerifyButtonsActive();
 }
 
 async function renderRecordings(records, user) {
@@ -79,7 +79,6 @@ async function renderRecordings(records, user) {
         <div class="delete-region js-delete-region">Drop here to delete</div>
         <div class="js-timeline timeline">
           <div class="js-grid-timeline grid-timeline"></div>
-          <div class="adjust-akshar-timeline js-akshar-timeline"></div>
         </div>
       </div>
     `;
@@ -101,7 +100,7 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
-    setRowDeleteRegionsActive(row)
+    setRowDeleteRegionsActive(row);
   }
 }
 
@@ -152,6 +151,8 @@ export function applyTextgridToRenderedGrids(textgrid) {
 
   console.log('applied labels');
 }
+
+
 
 
 

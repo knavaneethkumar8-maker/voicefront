@@ -494,11 +494,17 @@ export function generateAudioTimeLine(row, gridTimeLine) {
 
 
 //make verify buttons active
+let verifyListenerAttached = false;
+
 export function makeVerifyButtonsActive() {
+  if (verifyListenerAttached) return;
+  verifyListenerAttached = true;
+
   document.addEventListener("click", (e) => {
     const lockBtn = e.target.closest(".js-cell-lock");
     if (!lockBtn) return;
 
+    e.preventDefault();
     e.stopPropagation();
 
     const cell = lockBtn.closest(".cell");
@@ -506,14 +512,12 @@ export function makeVerifyButtonsActive() {
 
     const isLocked = cell.classList.toggle("locked");
 
-    // include the cell itself + all descendants
     const elementsToLock = [cell, ...cell.querySelectorAll("*")];
 
     elementsToLock.forEach(el => {
       if (el === lockBtn) return;
 
       if (isLocked) {
-        // store original contenteditable once
         if (!el.dataset.originalContenteditable) {
           el.dataset.originalContenteditable =
             el.getAttribute("contenteditable");
@@ -522,7 +526,6 @@ export function makeVerifyButtonsActive() {
         el.setAttribute("contenteditable", "false");
         el.style.pointerEvents = "none";
       } else {
-        // restore original contenteditable
         const original = el.dataset.originalContenteditable;
 
         if (original === null || original === undefined) {

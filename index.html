@@ -188,9 +188,16 @@
       (Note: After submitting please wait for the response. Do not refresh)
     </p>
 
+    <div class="speed-buttons-container">
+      <button class="audio-speed-button js-audio-speed-button" data-speed="0.25">4x slower</button>
+      <button class="audio-speed-button js-audio-speed-button" data-speed="0.125">8x slower</button>
+      <button class="audio-speed-button js-audio-speed-button" data-speed="0.0625">16x slower</button>
+      <button class="select-drag-drop-button drag-selected">Drag & Drop</button>
+    </div>
+
     <div class="load-files-container">
       <div class="load-files-header">
-        <div class="load-filters">
+        <div class="load-filters hide">
           <select class="load-select js-account-select"></select>
 
           <select class="load-select js-time-select">
@@ -198,26 +205,22 @@
             <option value="yesterday">Yesterday</option>
             <option value="last-week">Last week</option>
           </select>
-        </div>
+        </div> 
 
         <div class="load-actions">
           <button class="load-btn js-load-btn">Load recordings</button>
         </div>
       </div>
+      <div class="submit-data-response js-submit-data-response"></div>
       <div class="loaded-files-container"></div>
     </div>
 
    
-    <div class="speed-buttons-container">
-      <button class="audio-speed-button js-audio-speed-button" data-speed="0.25">4x slower</button>
-      <button class="audio-speed-button js-audio-speed-button" data-speed="0.125">8x slower</button>
-      <button class="audio-speed-button js-audio-speed-button" data-speed="0.0625">16x slower</button>
-      <button class="select-drag-drop-button drag-selected">Drag & Drop</button>
-    </div>
+    
     <div class="js-audio-files-container audio-files-container">
     </div>
 
-    <div class="js-askhar-editor akshar-editor" >
+    <div class="js-askhar-editor akshar-editor hide" >
         <p class="rendered-filename js-rendered-filename"></p>
 
         <div class="letters-container js-letters-container"
@@ -234,8 +237,8 @@
         </div>
       </div>
 
-    <div class="submit-data-response js-submit-data-response"></div>
-    <div class="submit-button-container">
+    
+    <div class="submit-button-container hide">
       <button class="submit-data js-submit-data">Submit</button>
     </div>
 
