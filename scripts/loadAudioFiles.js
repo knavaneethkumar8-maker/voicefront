@@ -1,8 +1,10 @@
 import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
 import { createLettersContainer } from "./dragLetters.js";
-import { generateAudioTimeLine } from "./recorder.js";
+import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
 import { setAllDeleteRegionsActive } from "./dragLetters.js";
+import { collectLockedGridData } from "./collectData.js";
+import { activateSubmitForRow } from "./sendData.js";
 
 
 const urls = getUrls();
@@ -33,6 +35,8 @@ async function loadRecordings() {
   console.log(data);
   renderRecordings(data, user);
   setAllDeleteRegionsActive();
+  makeVerifyButtonsActive();
+  collectLockedGridData();
 }
 
 async function renderRecordings(records, user) {
@@ -62,10 +66,10 @@ async function renderRecordings(records, user) {
           <source src="${audioUrl}" type="${mime}">
         </audio>
 
-        <div class="file-name">${r.filename}</div>
+        <div class="file-name js-file-name">${r.filename}</div>
         <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
-        <button class="generate-btn">Generate</button>
+        <button class="generate-btn js-submit-annotation">Submit</button>
         <button class="delete-btn">Remove</button>
       </div>
 
@@ -94,6 +98,8 @@ async function renderRecordings(records, user) {
     if (r.textgrid) {
       applyTextgridToRenderedGrids(r.textgrid);
     }
+
+    activateSubmitForRow(row);
   }
 }
 

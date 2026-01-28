@@ -16,6 +16,15 @@ function areAllGridsLocked() {
   );
 }
 
+function areAllRowGridsLocked(row) {
+  const grids = row.querySelectorAll('.booth-grid');
+  if (grids.length === 0) return false;
+
+  return Array.from(grids).every(grid =>
+    grid.classList.contains('locked')
+  );
+}
+
 const sendDataButton = document.querySelector('.js-submit-data');
 
 sendDataButton?.addEventListener("click", async () => {
@@ -62,6 +71,73 @@ sendDataButton?.addEventListener("click", async () => {
     showSubmitDataFailedMessage();
   }
 });
+
+
+export function activateSubmitForRow(row) {
+  const sendDataButton = row.querySelector('.js-submit-annotation');
+  if (!sendDataButton) return;
+
+  // 🚫 prevent multiple listeners
+  //if (sendDataButton.dataset.bound === "true") return;
+  //sendDataButton.dataset.bound = "true";
+
+  sendDataButton.addEventListener("click", async () => {
+    console.log("clicked");
+
+    if (!areAllRowGridsLocked(row)) {
+      showLockGridsMessage();
+      console.log('lock grids');
+      return;
+    }
+
+    // 🔹 get data purely from DOM
+    const username = getCurrentUsername();
+
+    const fileName =
+      row.querySelector(".js-file-name")?.innerText?.trim();
+    if (!fileName) return;
+
+    const audioEl = row.querySelector("audio");
+    if (!audioEl || isNaN(audioEl.duration)) {
+      showSubmitDataFailedMessage();
+      return;
+    }
+
+    const duration_ms = Math.round(audioEl.duration * 1000);
+
+    const allData = collectAllGridsData(row);
+
+    const payload = createPayloadJSON(
+      fileName,
+      allData.grids,
+      duration_ms,
+      username
+    );
+    console.log(payload);
+
+    try {
+      const response = await fetch(
+        `${backendOrigin}/upload/textgrids/${fileName}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!response.ok) {
+        showSubmitDataFailedMessage();
+        return;
+      }
+
+      showSubmitDataSuccessMessage();
+    } catch (err) {
+      console.error(err);
+      showSubmitDataFailedMessage();
+    }
+  });
+}
 
 
 
@@ -111,7 +187,7 @@ function createPayloadJSON(fileName, gridsArray, duration, username) {
     metadata: {
       file_name: `${root}.json`,
       file_id: `DATASETS-${username}-${root}`,
-      owner: username,
+      owner: "username",
       status: "FINISHED",
       duration_ms: duration,
       language: "hi",
@@ -130,7 +206,7 @@ function createPayloadJSON(fileName, gridsArray, duration, username) {
 
     storage: {
       scope: "user",
-      path: `${username}/textgrids/${root}.json`
+      path: `/textgrids/${root}.json`
     },
 
     play_intervals: {

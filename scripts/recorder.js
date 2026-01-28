@@ -415,36 +415,39 @@ function clearSelectedSpeedButtons() {
 }
 
 //generate grids
-document.addEventListener("click", (e) => {
-  if (!e.target.classList.contains("generate-btn")) return;
+function makeGenerateGridsActive() {
+  document.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("generate-btn")) return;
 
-  const row = e.target.closest(".load-row");
-  const audioEl = row.querySelector("audio");
-  if (!audioEl) return;
+    const row = e.target.closest(".load-row");
+    const audioEl = row.querySelector("audio");
+    if (!audioEl) return;
 
-  audioEl.addEventListener(
-    "loadedmetadata",
-    () => {
-      const duration = audioEl.duration;
-      const fileName = row.querySelector(".file-name").textContent;
+    audioEl.addEventListener(
+      "loadedmetadata",
+      () => {
+        const duration = audioEl.duration;
+        const fileName = row.querySelector(".file-name").textContent;
 
-      const gridsCount = calcGridCount(duration);
+        const gridsCount = calcGridCount(duration);
 
-      updateCurrentFileName(fileName);
-      updateCurrentAudioDuration(audioEl);
+        updateCurrentFileName(fileName);
+        updateCurrentAudioDuration(audioEl);
 
-      renderAllGrids(gridsCount, fileName);
-      setAudioForAllCells(audioEl, row);
+        renderAllGrids(gridsCount, fileName);
+        setAudioForAllCells(audioEl, row);
 
-      clearSelectedSpeedButtons();
-      setupAudioSpeedControls(audioEl);
-      makeCellsEditableOnMobile();
-      lockGrids();
-    },
-    { once: true }
-  );
-  audioEl.load(); // ensure metadata is available
-});
+        clearSelectedSpeedButtons();
+        setupAudioSpeedControls(audioEl);
+        makeCellsEditableOnMobile();
+        lockGrids();
+      },
+      { once: true }
+    );
+    audioEl.load(); // ensure metadata is available
+  });
+}
+
 
 
 
@@ -491,44 +494,47 @@ export function generateAudioTimeLine(row, gridTimeLine) {
 
 
 //make verify buttons active
-document.addEventListener("click", (e) => {
-  const lockBtn = e.target.closest(".js-cell-lock");
-  if (!lockBtn) return;
+export function makeVerifyButtonsActive() {
+  document.addEventListener("click", (e) => {
+    const lockBtn = e.target.closest(".js-cell-lock");
+    if (!lockBtn) return;
 
-  e.stopPropagation();
+    e.stopPropagation();
 
-  const cell = lockBtn.closest(".cell");
-  if (!cell) return;
+    const cell = lockBtn.closest(".cell");
+    if (!cell) return;
 
-  const isLocked = cell.classList.toggle("locked");
+    const isLocked = cell.classList.toggle("locked");
 
-  // include the cell itself + all descendants
-  const elementsToLock = [cell, ...cell.querySelectorAll("*")];
+    // include the cell itself + all descendants
+    const elementsToLock = [cell, ...cell.querySelectorAll("*")];
 
-  elementsToLock.forEach(el => {
-    if (el === lockBtn) return;
+    elementsToLock.forEach(el => {
+      if (el === lockBtn) return;
 
-    if (isLocked) {
-      // store original contenteditable once
-      if (!el.dataset.originalContenteditable) {
-        el.dataset.originalContenteditable =
-          el.getAttribute("contenteditable");
-      }
+      if (isLocked) {
+        // store original contenteditable once
+        if (!el.dataset.originalContenteditable) {
+          el.dataset.originalContenteditable =
+            el.getAttribute("contenteditable");
+        }
 
-      el.setAttribute("contenteditable", "false");
-      el.style.pointerEvents = "none";
-    } else {
-      // restore original contenteditable
-      const original = el.dataset.originalContenteditable;
-
-      if (original === null || original === undefined) {
-        el.removeAttribute("contenteditable");
+        el.setAttribute("contenteditable", "false");
+        el.style.pointerEvents = "none";
       } else {
-        el.setAttribute("contenteditable", original);
-      }
+        // restore original contenteditable
+        const original = el.dataset.originalContenteditable;
 
-      delete el.dataset.originalContenteditable;
-      el.style.pointerEvents = "";
-    }
+        if (original === null || original === undefined) {
+          el.removeAttribute("contenteditable");
+        } else {
+          el.setAttribute("contenteditable", original);
+        }
+
+        delete el.dataset.originalContenteditable;
+        el.style.pointerEvents = "";
+      }
+    });
   });
-});
+}
+

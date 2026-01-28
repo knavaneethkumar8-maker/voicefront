@@ -17,6 +17,21 @@ gridTimeLine.addEventListener("click", (e) => {
   console.log(cellData, allData);
 });
 
+function collectLockedCellData() {
+  document.addEventListener("click", (e) => {
+    e.preventDefault();
+    const cell = e.target.closest(".cell");
+    if (!cell) return;
+
+    const cellData = collectCellData(cell);
+    const allData = collectAllGridsData();
+    console.log(cellData, allData);
+  });
+}
+
+collectLockedCellData();
+
+
 function getCellLetters(cell) {
   // Select all letter blocks inside the cell
   const blocks = cell.querySelectorAll(".letter-block");
@@ -26,12 +41,14 @@ function getCellLetters(cell) {
 }
 
 
-function collectCellData(cellEl) {
+export function collectCellData(cellEl) {
   const id = cellEl.id; // fileName_gridNo_cellNo
-  const [file, gridNoStr, cellNoStr] = id.split("_");
+  const parts = id.split("_");
 
-  const gridNo = Number(gridNoStr);
-  const cellNo = Number(cellNoStr);
+const cellNo = Number(parts.pop());   // 7
+const gridNo = Number(parts.pop());
+
+  //console.log(gridNo, cellNo);
 
   const { start_ms, end_ms } = getCellTimeRange(gridNo, cellNo);
 
@@ -42,8 +59,8 @@ function collectCellData(cellEl) {
     end_ms: end_ms ?? 0,
     text: getCellLetters(cellEl) || cellEl.textContent?.trim() || "",
     conf: 0,
-    status: "NEW",
-    is_locked: false,
+    status: "LOCKED",
+    is_locked: true,
     metadata: {}
   };
 }
@@ -104,7 +121,69 @@ function getCellTimeRange(gridNum, cellNo) {
 
 let finished = 0;
 const finishedLabel = document.querySelector('.finished-target');
+
+
 //get data when grid locked
+export function collectLockedGridData() {
+  document.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const lock = e.target.closest(".js-lock");
+    if (!lock) return;
+
+    const gridEl = lock.closest(".booth-grid");
+    if (!gridEl) return;
+
+    if(gridEl.classList.contains('locked')) {
+      finished++;
+      console.log(finished);
+      finishedLabel.innerText = finished;
+      const allGridCells = gridEl.querySelectorAll("*");
+      allGridCells?.forEach(cell => {
+        cell.contentEditable = "false";
+      });
+    }else {
+      const allGridCells = gridEl.querySelectorAll("*");
+      finished--;
+      console.log(finished);
+      finishedLabel.innerText = finished;
+      allGridCells?.forEach(cell => {
+        //cell.contentEditable = "true";
+      });
+    }
+
+    if(!gridEl.classList.contains('locked')) {
+      return;
+    }
+    
+    const gridData = collectGridData(gridEl);
+    console.log(gridData);
+    const gridId = gridEl.id;
+
+    try {
+      const response = await fetch(`${backendOrigin}/upload/grids/${gridId}`, {
+        method : "PUT",
+        body : JSON.stringify(gridData),
+        credentials : "include",
+        headers : {
+          "Content-Type" : "application/json"
+        }
+      });
+      if(!response.ok) {
+        showSubmitDataFailedMessage();
+      }
+      console.log('grid data sent');
+      showSubmitDataSuccessMessage();
+
+      const result = await response.json();
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+
+  });
+}
+
+
 gridTimeLine.addEventListener("click", async (e) => {
   e.preventDefault();
   const lock = e.target.closest(".js-lock");
@@ -197,8 +276,8 @@ export function collectGridData(gridEl) {
     index: gridIndex,
     start_ms: gridStart,
     end_ms: gridEnd,
-    status: "NEW",
-    is_locked: false,
+    status: "LOCKED",
+    is_locked: true,
     metadata: {},
     tiers
   };
@@ -237,8 +316,8 @@ function collectTierData(gridEl, gridIndex, tierKey, tierInfo, gridStart, gridEn
 }
 
 
-export function collectAllGridsData() {
-  const gridEls = document.querySelectorAll(".booth-grid");
+export function collectAllGridsData(row) {
+  const gridEls = row.querySelectorAll(".booth-grid");
 
   const grids = Array.from(gridEls).map((gridEl) =>
     collectGridData(gridEl)

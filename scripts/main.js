@@ -58,10 +58,10 @@ export function lockGrids(row) {
 
 function getStartEndTimes(id) {
   const idArray = id.split("_");
-  console.log(idArray);
+  //console.log(idArray);
   const gridNum = parseInt(idArray.at(-2));
   const cellId = parseInt(idArray.at(-1));
-  console.log(gridNum, cellId);
+  //console.log(gridNum, cellId);
 
   let start;
   let end;
