@@ -49,10 +49,7 @@ body {
   border-radius: 12px;
   padding: 10px 10px 10px 10px;
   border: 1px solid rgb(201, 201, 201);
-}
-
-.timeline::-webkit-scrollbar{
-  display: none;
+  overflow-x: auto;
 }
 
 .flex-display {

@@ -137,9 +137,7 @@
   margin-bottom: 400px;
 }
 
-.loaded-files-container::-webkit-scrollbar{
-  display: none;
-}
+
 
 .load-row {
  padding: 0px 10px 20px 10px;
