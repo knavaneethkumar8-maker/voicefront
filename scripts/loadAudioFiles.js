@@ -58,7 +58,7 @@ async function renderRecordings(records, user) {
 
     row.innerHTML = `
       <div class="file-details-container">
-        <audio controls preload="metadata" playsinline>
+        <audio controls preload="metadata" playsinline id="audioEl_${r.filename}">
           <source src="${audioUrl}" type="${mime}">
         </audio>
 
@@ -70,7 +70,6 @@ async function renderRecordings(records, user) {
       </div>
 
       <div class="js-askhar-editor akshar-editor" id="${r.filename}">
-        <p class="rendered-filename js-rendered-filename">${r.filename}</p>
         <div class="letters-container js-letters-container"></div>
         <div class="delete-region js-delete-region">Drop here to delete</div>
         <div class="js-timeline timeline">
@@ -123,21 +122,21 @@ export function applyTextgridToRenderedGrids(textgrid) {
 
   textgrid.grids.forEach(grid => {
     const tiers = grid.tiers;
-    console.log(tiers);
+    //console.log(tiers);
 
     Object.values(tiers).forEach(tier => {
-      console.log("came to objec values");
+      //console.log("came to objec values");
       tier.cells.forEach(cell => {
         const cellEl = document.getElementById(cell.id);
-        console.log('came to cells tiers')
-        console.log(cellEl)
+        //console.log('came to cells tiers')
+        //console.log(cellEl)
 
         if (!cellEl) return;
-        console.log('cell el exits')
+        //console.log('cell el exits')
         const labelEl = cellEl.querySelector(".cell-label");
         if (!labelEl) return;
-        console.log(labelEl);
-        console.log(cell.text);
+        //console.log(labelEl);
+        //console.log(cell.text);
         labelEl.textContent = cell.text || "";
       });
     });

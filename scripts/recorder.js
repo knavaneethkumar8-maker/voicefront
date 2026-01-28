@@ -434,7 +434,7 @@ document.addEventListener("click", (e) => {
       updateCurrentAudioDuration(audioEl);
 
       renderAllGrids(gridsCount, fileName);
-      setAudioForAllCells(audioEl);
+      setAudioForAllCells(audioEl, row);
 
       clearSelectedSpeedButtons();
       setupAudioSpeedControls(audioEl);
@@ -453,6 +453,7 @@ export function generateAudioTimeLine(row, gridTimeLine) {
   return new Promise((resolve) => {
     const audioEl = row.querySelector("audio");
     if (!audioEl) return;
+    console.log(audioEl.id);
 
     audioEl.addEventListener(
       "loadedmetadata",
@@ -462,12 +463,12 @@ export function generateAudioTimeLine(row, gridTimeLine) {
 
         const gridsCount = calcGridCount(duration);
 
-        updateCurrentFileName(fileName);
-        updateCurrentAudioDuration(audioEl);
+        //updateCurrentFileName(fileName);
+        //updateCurrentAudioDuration(audioEl);
 
         // ✅ GRIDS + CELLS CREATED HERE
         renderAllGrids(gridsCount, fileName, gridTimeLine, row);
-        setAudioForAllCells(audioEl);
+        setAudioForAllCells(audioEl, row);
 
         clearSelectedSpeedButtons();
         setupAudioSpeedControls(audioEl);

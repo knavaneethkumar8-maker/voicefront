@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", initPageNavigation);
 //enableDropForCells('.cell');
 
 
-export function setAudioForAllCells(audio) {
-  const allCells = document.querySelectorAll('.cell');
+export function setAudioForAllCells(audio, row) {
+  const allCells = row.querySelectorAll('.cell');
   allCells?.forEach(cell => {
     cell.addEventListener("click", () => {
       const times = getStartEndTimes(cell.id);
