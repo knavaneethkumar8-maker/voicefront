@@ -2,7 +2,7 @@ import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
 import { createLettersContainer } from "./dragLetters.js";
 import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
-import { setAllDeleteRegionsActive } from "./dragLetters.js";
+import { setAllDeleteRegionsActive , setRowDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
 
@@ -101,6 +101,7 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
+    setRowDeleteRegionsActive(row)
   }
 }
 

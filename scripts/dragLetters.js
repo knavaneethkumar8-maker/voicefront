@@ -164,6 +164,34 @@ export function setAllDeleteRegionsActive() {
 
 }
 
+export function setRowDeleteRegionsActive(row) {
+  const deleteRegion = row.querySelector(".js-delete-region");
+  deleteRegion.addEventListener("dragover", e => {
+    e.preventDefault();
+    deleteRegion.classList.add("active-delete");
+  });
+
+  deleteRegion.addEventListener("dragleave", () => {
+    deleteRegion.classList.remove("active-delete");
+  });
+
+  deleteRegion.addEventListener("drop", e => {
+    e.preventDefault();
+    deleteRegion.classList.remove("active-delete");
+
+    // 🔥 DELETE ONLY if dragged from a cell
+    if (draggedFromCell && draggedBlock) {
+      const parentCell = draggedBlock.closest(".cell");
+      draggedBlock.remove();
+      if (parentCell) {
+        updateCellLabel(parentCell);
+      }
+    }
+  });
+
+
+}
+
 
 
 
