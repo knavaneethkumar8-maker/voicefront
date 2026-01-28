@@ -132,6 +132,9 @@ export function activateSubmitForRow(row) {
       }
 
       showSubmitDataSuccessMessage();
+      const statusLabel = row?.querySelector('.status');
+      statusLabel.innerText = "FINISHED";
+      statusLabel.classList.add("finished");
     } catch (err) {
       console.error(err);
       showSubmitDataFailedMessage();
