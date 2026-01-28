@@ -4,6 +4,7 @@ import { renderAllGrids } from "./renderBoothGrids.js";
 import { lockGrids } from "./main.js";
 import { getUrls } from "../config/urls.js";
 import { makeCellsEditableOnMobile } from "./controlMobileUI.js";
+import { applyTextgridToRenderedGrids } from "./loadAudioFiles.js";
 
 let recordedAudioBlob = null;
 let recordedVideoBlob = null;
@@ -449,32 +450,42 @@ document.addEventListener("click", (e) => {
 
 
 export function generateAudioTimeLine(row, gridTimeLine) {
-  const audioEl = row.querySelector("audio");
-  if (!audioEl) return;
+  return new Promise((resolve) => {
+    const audioEl = row.querySelector("audio");
+    if (!audioEl) return;
 
-  audioEl.addEventListener(
-    "loadedmetadata",
-    () => {
-      const duration = audioEl.duration;
-      const fileName = row.querySelector(".file-name").textContent;
+    audioEl.addEventListener(
+      "loadedmetadata",
+      () => {
+        const duration = audioEl.duration;
+        const fileName = row.querySelector(".file-name").textContent;
 
-      const gridsCount = calcGridCount(duration);
+        const gridsCount = calcGridCount(duration);
 
-      updateCurrentFileName(fileName);
-      updateCurrentAudioDuration(audioEl);
+        updateCurrentFileName(fileName);
+        updateCurrentAudioDuration(audioEl);
 
-      renderAllGrids(gridsCount, fileName, gridTimeLine, row);
-      setAudioForAllCells(audioEl);
+        // ✅ GRIDS + CELLS CREATED HERE
+        renderAllGrids(gridsCount, fileName, gridTimeLine, row);
+        setAudioForAllCells(audioEl);
 
-      clearSelectedSpeedButtons();
-      setupAudioSpeedControls(audioEl);
-      makeCellsEditableOnMobile();
-      lockGrids(row);
-    },
-    { once: true }
-  );
-  audioEl.load(); // ensure metadata is available
+        clearSelectedSpeedButtons();
+        setupAudioSpeedControls(audioEl);
+        makeCellsEditableOnMobile();
+        lockGrids(row);
+
+        // ✅ WAIT FOR DOM PAINT
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      },
+      { once: true }
+    );
+
+    audioEl.load();
+  });
 }
+
 
 
 

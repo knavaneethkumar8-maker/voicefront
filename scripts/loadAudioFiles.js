@@ -35,7 +35,7 @@ async function loadRecordings() {
   setAllDeleteRegionsActive();
 }
 
-function renderRecordings(records, user) {
+async function renderRecordings(records, user) {
   const container = document.querySelector(".loaded-files-container");
   container.innerHTML = "";
 
@@ -44,10 +44,8 @@ function renderRecordings(records, user) {
     return;
   }
 
-  records.forEach((r) => {
-    console.log(r.textgrid);
-    const audioUrl =
-      `${backendOrigin}/uploads/recordings/${r.filename}`;
+  for (const r of records) {
+    const audioUrl = `${backendOrigin}/uploads/recordings/${r.filename}`;
 
     const mime =
       r.filename.endsWith(".wav")  ? "audio/wav"  :
@@ -73,15 +71,8 @@ function renderRecordings(records, user) {
 
       <div class="js-askhar-editor akshar-editor" id="${r.filename}">
         <p class="rendered-filename js-rendered-filename">${r.filename}</p>
-
-        <div class="letters-container js-letters-container"
-             id="letter-container-${r.filename}">
-        </div>
-
-        <div class="delete-region js-delete-region">
-          Drop here to delete
-        </div>
-
+        <div class="letters-container js-letters-container"></div>
+        <div class="delete-region js-delete-region">Drop here to delete</div>
         <div class="js-timeline timeline">
           <div class="js-grid-timeline grid-timeline"></div>
           <div class="adjust-akshar-timeline js-akshar-timeline"></div>
@@ -91,18 +82,22 @@ function renderRecordings(records, user) {
 
     container.appendChild(row);
 
-    // ✅ SELECT THE CLOSEST LETTERS CONTAINER
-    const lettersContainer =
-      row.querySelector(".js-letters-container");
+    createLettersContainer(
+      row.querySelector(".js-letters-container")
+    );
 
-    // ✅ PASS IT INTO createLettersContainer
-    createLettersContainer(lettersContainer);
-    row.querySelector("audio").load();
-    const gridTimeLine = row.querySelector('.js-grid-timeline');
-    console.log(gridTimeLine);
-    generateAudioTimeLine(row, gridTimeLine);
-  });
+    const gridTimeLine = row.querySelector(".js-grid-timeline");
+
+    // ✅ THIS NOW REALLY WAITS
+    await generateAudioTimeLine(row, gridTimeLine);
+
+    // ✅ SAFE: cells now exist
+    if (r.textgrid) {
+      applyTextgridToRenderedGrids(r.textgrid);
+    }
+  }
 }
+
 
 
 
@@ -121,6 +116,36 @@ document.addEventListener("click", (e) => {
     row.remove();
   }
 });
+
+
+export function applyTextgridToRenderedGrids(textgrid) {
+  if (!textgrid || !textgrid.grids) return;
+
+  textgrid.grids.forEach(grid => {
+    const tiers = grid.tiers;
+    console.log(tiers);
+
+    Object.values(tiers).forEach(tier => {
+      console.log("came to objec values");
+      tier.cells.forEach(cell => {
+        const cellEl = document.getElementById(cell.id);
+        console.log('came to cells tiers')
+        console.log(cellEl)
+
+        if (!cellEl) return;
+        console.log('cell el exits')
+        const labelEl = cellEl.querySelector(".cell-label");
+        if (!labelEl) return;
+        console.log(labelEl);
+        console.log(cell.text);
+        labelEl.textContent = cell.text || "";
+      });
+    });
+  });
+
+  console.log('applied labels');
+}
+
 
 
 
