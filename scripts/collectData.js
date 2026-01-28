@@ -19,22 +19,22 @@ gridTimeLine.addEventListener("click", (e) => {
 
 export function collectLockedCellData() {
   document.addEventListener("click", async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    const lockBtn = e.target.closest(".js-cell-lock");
+    if (!lockBtn) return;
 
-    const cellEl = e.target.closest(".cell");
+    const cellEl = lockBtn.closest(".cell");
     if (!cellEl) return;
 
+    // 🔒 ONLY when cell is NOW locked
+    if (!cellEl.classList.contains("locked")) {
+      // unlocking → do nothing
+      return;
+    }
+
     const gridEl = cellEl.closest(".booth-grid");
-    if (!gridEl) return;
-
-    // ❌ allow updates only when grid is locked
-    //if (!gridEl.classList.contains("locked")) return;
-
-    const gridId = gridEl.id;
+    const gridId = gridEl?.id;
     const cellId = cellEl.id;
 
-    // collect ONLY cell data
     const cellData = collectCellData(cellEl);
 
     const payload = {
@@ -62,7 +62,7 @@ export function collectLockedCellData() {
         return;
       }
 
-      console.log("cell data sent ✅");
+      console.log("cell locked → data sent ✅");
       showSubmitDataSuccessMessage();
 
       const result = await response.json();
@@ -70,9 +70,11 @@ export function collectLockedCellData() {
 
     } catch (err) {
       console.error("CELL UPLOAD ERROR:", err);
+      showSubmitDataFailedMessage();
     }
   });
 }
+
 
 
 //collectLockedCellData();
