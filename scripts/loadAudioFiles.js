@@ -3,7 +3,7 @@ import { getUrls } from "../config/urls.js";
 import { createLettersContainer } from "./dragLetters.js";
 import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
 import { setAllDeleteRegionsActive } from "./dragLetters.js";
-import { collectLockedGridData } from "./collectData.js";
+import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
 
 
@@ -37,6 +37,7 @@ async function loadRecordings() {
   setAllDeleteRegionsActive();
   makeVerifyButtonsActive();
   collectLockedGridData();
+  collectLockedCellData();
 }
 
 async function renderRecordings(records, user) {

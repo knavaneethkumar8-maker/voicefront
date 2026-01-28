@@ -17,19 +17,65 @@ gridTimeLine.addEventListener("click", (e) => {
   console.log(cellData, allData);
 });
 
-function collectLockedCellData() {
-  document.addEventListener("click", (e) => {
+export function collectLockedCellData() {
+  document.addEventListener("click", async (e) => {
     e.preventDefault();
-    const cell = e.target.closest(".cell");
-    if (!cell) return;
+    e.stopPropagation();
 
-    const cellData = collectCellData(cell);
-    const allData = collectAllGridsData();
-    console.log(cellData, allData);
+    const cellEl = e.target.closest(".cell");
+    if (!cellEl) return;
+
+    const gridEl = cellEl.closest(".booth-grid");
+    if (!gridEl) return;
+
+    // ❌ allow updates only when grid is locked
+    //if (!gridEl.classList.contains("locked")) return;
+
+    const gridId = gridEl.id;
+    const cellId = cellEl.id;
+
+    // collect ONLY cell data
+    const cellData = collectCellData(cellEl);
+
+    const payload = {
+      grid_id: gridId,
+      cell_id: cellId,
+      cell: cellData,
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch(
+        `${backendOrigin}/upload/cells/${cellId}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      if (!response.ok) {
+        showSubmitDataFailedMessage();
+        return;
+      }
+
+      console.log("cell data sent ✅");
+      showSubmitDataSuccessMessage();
+
+      const result = await response.json();
+      console.log(result);
+
+    } catch (err) {
+      console.error("CELL UPLOAD ERROR:", err);
+    }
   });
 }
 
-collectLockedCellData();
+
+//collectLockedCellData();
 
 
 function getCellLetters(cell) {
@@ -127,6 +173,7 @@ const finishedLabel = document.querySelector('.finished-target');
 export function collectLockedGridData() {
   document.addEventListener("click", async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const lock = e.target.closest(".js-lock");
     if (!lock) return;
 
