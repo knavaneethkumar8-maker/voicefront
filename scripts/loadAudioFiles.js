@@ -71,12 +71,10 @@ async function renderRecordings(records, user) {
         <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
         <button class="generate-btn js-submit-annotation">Submit</button>
-        <button class="delete-btn">Remove</button>
+        <button class="delete-btn">Clear</button>
       </div>
 
       <div class="js-askhar-editor akshar-editor" id="${r.filename}">
-        <div class="letters-container js-letters-container"></div>
-        <div class="delete-region js-delete-region">Drop here to delete</div>
         <div class="js-timeline timeline">
           <div class="js-grid-timeline grid-timeline"></div>
         </div>
@@ -84,10 +82,6 @@ async function renderRecordings(records, user) {
     `;
 
     container.appendChild(row);
-
-    createLettersContainer(
-      row.querySelector(".js-letters-container")
-    );
 
     const gridTimeLine = row.querySelector(".js-grid-timeline");
 
@@ -100,7 +94,6 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
-    setRowDeleteRegionsActive(row);
   }
 }
 

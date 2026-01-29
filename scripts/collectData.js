@@ -194,12 +194,10 @@ export function collectLockedGridData() {
         cell.contentEditable = "false";
       });
     }else {
-      const allGridCells = gridEl.querySelectorAll("*");
-      finished--;
-      console.log(finished);
+      const allGridCells = gridEl.querySelectorAll(".cell");
       finishedLabel.innerText = finished;
       allGridCells?.forEach(cell => {
-        //cell.contentEditable = "true";
+        cell.contentEditable = "true";
       });
     }
 
