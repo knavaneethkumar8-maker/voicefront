@@ -146,9 +146,9 @@
 
 .file-details-container {
   display: grid;
-  grid-template-columns: 280px 1fr 80px 100px 80px;
+  grid-template-columns: 280px 1fr 80px 80px 100px 80px;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .load-row audio {
@@ -214,3 +214,52 @@
 }
 
 
+.predict-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* hide native checkbox */
+.predict-checkbox input {
+  display: none;
+}
+
+/* custom box */
+.checkbox-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #9ca3af; /* gray-400 */
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* tick mark */
+.checkbox-box::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+/* checked state */
+.predict-checkbox input:checked + .checkbox-box {
+  background: #22c55e; /* green-500 */
+  border-color: #22c55e;
+}
+
+.predict-checkbox input:checked + .checkbox-box::after {
+  transform: rotate(45deg) scale(1);
+}

@@ -38,6 +38,7 @@ async function loadRecordings() {
   collectLockedGridData();
   collectLockedCellData();
   makeVerifyButtonsActive();
+  makePredictCheckboxesActive();
 }
 
 async function renderRecordings(records, user) {
@@ -68,8 +69,18 @@ async function renderRecordings(records, user) {
         </audio>
 
         <div class="file-name js-file-name">${r.filename}</div>
-        <div class="status ${r.status.toLowerCase()}">${r.status}</div>
 
+        <!-- Predict toggle -->
+        <label class="predict-checkbox">
+          <input type="checkbox"
+                class="js-predict-checkbox"
+                data-file="${r.filename}">
+          <span class="checkbox-box" data-file="${r.filename}"></span>
+          <span class="checkbox-label">Predict</span>
+        </label>
+
+
+        <div class="status ${r.status.toLowerCase()}">${r.status}</div>
         <button class="generate-btn js-submit-annotation">Submit</button>
         <button class="delete-btn">Clear</button>
       </div>
@@ -80,6 +91,7 @@ async function renderRecordings(records, user) {
         </div>
       </div>
     `;
+
 
     container.appendChild(row);
 
@@ -96,9 +108,6 @@ async function renderRecordings(records, user) {
     activateSubmitForRow(row);
   }
 }
-
-
-
 
 const loadRecordingsButton = document.querySelector('.js-load-btn');
 
@@ -144,6 +153,41 @@ export function applyTextgridToRenderedGrids(textgrid) {
 
   console.log('applied labels');
 }
+
+
+function makePredictCheckboxesActive() {
+  document.addEventListener("click", (e) => {
+
+    // Only react to clicks on the box or label
+    if (!e.target.classList.contains("checkbox-box") &&
+        !e.target.classList.contains("checkbox-label")) return;
+
+    // Find the label container
+    const label = e.target.closest("label.predict-checkbox");
+    if (!label) return;
+
+    // Find the input inside the label
+    const checkbox = label.querySelector(".js-predict-checkbox");
+    if (!checkbox) return;
+
+    // 🔄 MANUAL TOGGLE
+    checkbox.checked = !checkbox.checked;
+
+    const filename = checkbox.dataset.file;
+    const enabled = checkbox.checked;
+
+    console.log("Predict:", filename, enabled);
+
+    // 🔽 Put your predict logic here
+  });
+}
+
+
+
+
+
+
+
 
 
 
