@@ -229,6 +229,9 @@ videoSubmitBtn.onclick = () => {
 
 
 
+
+
+
 const filesBody = document.getElementById("filesBody");
 
 function addFileRow(blob,fileName ,type = "audio") {
@@ -290,15 +293,24 @@ const clearAllBtn    = document.getElementById("clearAllBtn");
 const deselectAllBtn = document.getElementById("deselectAllBtn");
 const deleteBtn      = document.getElementById("deleteBtn");
 const exportBtn      = document.getElementById("exportBtn");
+const selectAllBtn  = document.getElementById("selectAllBtn");
+
 
 
 
 function updateActionButtons() {
   const rows = filesBody.querySelectorAll(".file-row");
+
+  const visibleRows = filesBody.querySelectorAll(
+    '.file-row:not([style*="display: none"])'
+  );
+
   const selected = filesBody.querySelectorAll(
     '.file-row:not([style*="display: none"]) input[type="checkbox"]:checked'
   );
 
+  // ✅ Enable Select All if at least one file exists
+  selectAllBtn.disabled = visibleRows.length === 0;
 
   // Clear all → at least one file exists
   clearAllBtn.disabled = rows.length === 0;
@@ -340,6 +352,18 @@ function attachRowSelection(row) {
   });
 }
 
+selectAllBtn.onclick = () => {
+  const visibleRows = filesBody.querySelectorAll(
+    '.file-row:not([style*="display: none"])'
+  );
+
+  visibleRows.forEach(row => {
+    row.classList.add("selected");
+    row.querySelector('input[type="checkbox"]').checked = true;
+  });
+
+  updateActionButtons();
+};
 
 
 clearAllBtn.onclick = () => {
@@ -523,21 +547,33 @@ dropZone.addEventListener("drop", async e => {
 --------------------------- */
 async function handleFileList(fileList) {
   for (const file of fileList) {
-    if (!file.type.startsWith("audio/")) {
+    // Accept ALL audio formats (even if type is missing)
+    if (
+      !file.type.startsWith("audio/") &&
+      !file.name.match(/\.(wav|mp3|m4a|aac|ogg|flac|webm)$/i)
+    ) {
       console.warn("Skipped (not audio):", file.name);
       continue;
     }
 
-    const wavBlob = await convertAudioToWav(file);
-    const wavFile = new File(
-      [wavBlob],
-      file.name.replace(/\.[^/.]+$/, "") + ".wav",
-      { type: "audio/wav" }
-    );
+    try {
+      // Convert ANY audio → WAV
+      const wavBlob = await convertAudioToWav(file);
 
-    addUploadedFileRow(wavFile);
+      const wavFile = new File(
+        [wavBlob],
+        file.name.replace(/\.[^/.]+$/, "") + ".wav",
+        { type: "audio/wav" }
+      );
+
+      // Add ONLY WAV to filesBody
+      addUploadedFileRow(wavFile);
+    } catch (err) {
+      console.error("Failed to convert:", file.name, err);
+    }
   }
 }
+
 
 /* ---------------------------
    FOLDER EXTRACTION

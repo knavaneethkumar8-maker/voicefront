@@ -124,11 +124,11 @@
         <input
           type="file"
           id="fileInput"
-          accept=".wav,audio/wav"
+          accept="audio/*"
           multiple
           hidden
         />
-        <button id="browseFilesBtn">Browse files</button>
+        <button id="browseFilesBtn" class="browse-files-button">Browse files</button>
       </div>
     </div>
 
@@ -149,6 +149,7 @@
       </div>
 
       <div class="actions">
+        <button id="selectAllBtn" disabled>Select All Files</button>
         <button id="clearAllBtn" disabled>Clear All Files</button>
         <button id="deselectAllBtn" disabled>Deselect all</button>
         <button id="deleteBtn" disabled>Remove</button>
