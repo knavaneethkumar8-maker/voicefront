@@ -114,10 +114,28 @@
       <div id="videoPreview-1" class="video-preview"></div>
       <button class="submit-video-button-1 js-submit-video-button-1">Submit</button>
     </div>
+    <!-- FILE UPLOAD -->
+    <div class="panel-1">
+      <h4>Upload WAV Files</h4>
+
+      <div id="dropZone" class="drop-zone">
+        <p>Drag & drop WAV files here</p>
+        <p>or</p>
+        <input
+          type="file"
+          id="fileInput"
+          accept=".wav,audio/wav"
+          multiple
+          hidden
+        />
+        <button id="browseFilesBtn">Browse files</button>
+      </div>
+    </div>
+
 
   </div>
 
-  <p class="record-submit-note"></p>
+  <!-- <p class="record-submit-note"></p> -->
 
   <!-- FILES TABLE -->
   <section id="filesSection">

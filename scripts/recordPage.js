@@ -480,6 +480,188 @@ function getRowMetadata(row) {
 
 
 
+/* ===========================
+   WAV FILE UPLOAD (DRAG/DROP + FOLDERS + CONVERSION)
+=========================== */
+
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+const browseFilesBtn = document.getElementById("browseFilesBtn");
+
+browseFilesBtn.onclick = () => fileInput.click();
+
+fileInput.onchange = async () => {
+  await handleFileList(fileInput.files);
+  fileInput.value = "";
+};
+
+/* ---------------------------
+   DRAG EVENTS
+--------------------------- */
+["dragenter", "dragover"].forEach(evt => {
+  dropZone.addEventListener(evt, e => {
+    e.preventDefault();
+    dropZone.classList.add("drag-over");
+  });
+});
+
+["dragleave", "drop"].forEach(evt => {
+  dropZone.addEventListener(evt, e => {
+    e.preventDefault();
+    dropZone.classList.remove("drag-over");
+  });
+});
+
+dropZone.addEventListener("drop", async e => {
+  const items = e.dataTransfer.items;
+  const files = await extractFilesFromItems(items);
+  await handleFileList(files);
+});
+
+/* ---------------------------
+   HANDLE FILES
+--------------------------- */
+async function handleFileList(fileList) {
+  for (const file of fileList) {
+    if (!file.type.startsWith("audio/")) {
+      console.warn("Skipped (not audio):", file.name);
+      continue;
+    }
+
+    const wavBlob = await convertAudioToWav(file);
+    const wavFile = new File(
+      [wavBlob],
+      file.name.replace(/\.[^/.]+$/, "") + ".wav",
+      { type: "audio/wav" }
+    );
+
+    addUploadedFileRow(wavFile);
+  }
+}
+
+/* ---------------------------
+   FOLDER EXTRACTION
+--------------------------- */
+async function extractFilesFromItems(items) {
+  const files = [];
+
+  async function traverse(entry) {
+    if (entry.isFile) {
+      await new Promise(resolve => {
+        entry.file(file => {
+          files.push(file);
+          resolve();
+        });
+      });
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      const entries = await new Promise(resolve => reader.readEntries(resolve));
+      for (const e of entries) {
+        await traverse(e);
+      }
+    }
+  }
+
+  for (const item of items) {
+    const entry = item.webkitGetAsEntry?.();
+    if (entry) await traverse(entry);
+  }
+
+  return files;
+}
+
+/* ---------------------------
+   AUDIO → WAV CONVERSION
+--------------------------- */
+async function convertAudioToWav(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const audioCtx = new AudioContext();
+  const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+  const wavBuffer = encodeWAV(audioBuffer);
+  return new Blob([wavBuffer], { type: "audio/wav" });
+}
+
+function encodeWAV(audioBuffer) {
+  const numChannels = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const samples = audioBuffer.length;
+  const buffer = new ArrayBuffer(44 + samples * numChannels * 2);
+  const view = new DataView(buffer);
+
+  let offset = 0;
+
+  const writeString = s => {
+    for (let i = 0; i < s.length; i++) {
+      view.setUint8(offset++, s.charCodeAt(i));
+    }
+  };
+
+  writeString("RIFF");
+  view.setUint32(offset, 36 + samples * numChannels * 2, true);
+  offset += 4;
+  writeString("WAVE");
+  writeString("fmt ");
+  view.setUint32(offset, 16, true); offset += 4;
+  view.setUint16(offset, 1, true); offset += 2;
+  view.setUint16(offset, numChannels, true); offset += 2;
+  view.setUint32(offset, sampleRate, true); offset += 4;
+  view.setUint32(offset, sampleRate * numChannels * 2, true); offset += 4;
+  view.setUint16(offset, numChannels * 2, true); offset += 2;
+  view.setUint16(offset, 16, true); offset += 2;
+  writeString("data");
+  view.setUint32(offset, samples * numChannels * 2, true);
+  offset += 4;
+
+  for (let i = 0; i < samples; i++) {
+    for (let ch = 0; ch < numChannels; ch++) {
+      const sample = audioBuffer.getChannelData(ch)[i];
+      view.setInt16(offset, Math.max(-1, Math.min(1, sample)) * 0x7fff, true);
+      offset += 2;
+    }
+  }
+
+  return buffer;
+}
+
+/* ---------------------------
+   TABLE ROW (UNCHANGED BEHAVIOR)
+--------------------------- */
+function addUploadedFileRow(file) {
+  const url = URL.createObjectURL(file);
+  const now = new Date();
+
+  const row = document.createElement("div");
+  row.className = "file-row";
+  row.dataset.saved = "false";
+
+  row.innerHTML = `
+    <input type="checkbox" />
+    <audio controls src="${url}"></audio>
+    <span class="filename recorded-filename">${file.name}</span>
+    <span class="duration">--:--</span>
+    <span class="recorded-at">${now.toLocaleString()}</span>
+    <span class="status-badge">UPLOADED</span>
+    <span class="recorder-name">${getCurrentUsername()}</span>
+    <span class="saved-badge not-saved">Not Saved</span>
+  `;
+
+  const audioEl = row.querySelector("audio");
+  const durationEl = row.querySelector(".duration");
+
+  audioEl.addEventListener("loadedmetadata", () => {
+    const d = Math.floor(audioEl.duration);
+    durationEl.textContent =
+      `${Math.floor(d / 60)}:${String(d % 60).padStart(2, "0")}`;
+  });
+
+  filesBody.prepend(row);
+  attachRowSelection(row);
+  updateActionButtons();
+}
+
+
+
 
 
 
