@@ -120,3 +120,8 @@
      width: 290px;
   }
 }
+
+
+.file-uploader {
+  min-height: 300px;
+}

@@ -677,7 +677,7 @@ function addUploadedFileRow(file) {
     <span class="filename recorded-filename">${file.name}</span>
     <span class="duration">--:--</span>
     <span class="recorded-at">${now.toLocaleString()}</span>
-    <span class="status-badge">UPLOADED</span>
+    <span class="status-badge">NEW</span>
     <span class="recorder-name">${getCurrentUsername()}</span>
     <span class="saved-badge not-saved">Not Saved</span>
   `;
