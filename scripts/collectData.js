@@ -20,63 +20,70 @@ gridTimeLine?.addEventListener("click", (e) => {
 
 export function collectLockedCellData() {
   document.addEventListener("click", async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
     const lockBtn = e.target.closest(".js-cell-lock");
     if (!lockBtn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
 
     const cellEl = lockBtn.closest(".cell");
     if (!cellEl) return;
 
-    // 🔒 ONLY when cell is NOW locked
-    if (!cellEl.classList.contains("locked")) {
-      // unlocking → do nothing
-      return;
-    }
+    // ✅ capture state BEFORE toggle
+    const wasLocked = cellEl.classList.contains("locked");
 
-    const gridEl = cellEl.closest(".booth-grid");
-    const gridId = gridEl?.id;
-    const cellId = cellEl.id;
+    // allow other handlers to toggle first
+    requestAnimationFrame(async () => {
+      const isLockedNow = cellEl.classList.contains("locked");
 
-    const cellData = collectCellData(cellEl);
+      // 🔒 only unlocked → locked transition
+      if (wasLocked || !isLockedNow) return;
 
-    const payload = {
-      grid_id: gridId,
-      cell_id: cellId,
-      cell: cellData,
-      updated_at: new Date().toISOString()
-    };
+      const gridEl = cellEl.closest(".booth-grid");
+      const gridId = gridEl?.id;
+      const cellId = cellEl.id;
 
-    try {
-      const response = await fetch(
-        `${backendOrigin}/upload/cells/${cellId}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
+      const cellData = collectCellData(cellEl);
+
+      const payload = {
+        grid_id: gridId,
+        cell_id: cellId,
+        cell: cellData,
+        updated_at: new Date().toISOString()
+      };
+
+      try {
+        const response = await fetch(
+          `${backendOrigin}/upload/cells/${cellId}`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        if (!response.ok) {
+          showSubmitDataFailedMessage();
+          return;
         }
-      );
 
-      if (!response.ok) {
+        showSubmitDataSuccessMessage();
+        console.log("cell locked → data sent ✅");
+
+        const result = await response.json();
+        console.log(result);
+
+      } catch (err) {
+        console.error("CELL UPLOAD ERROR:", err);
         showSubmitDataFailedMessage();
-        return;
       }
-
-      console.log("cell locked → data sent ✅");
-      showSubmitDataSuccessMessage();
-
-      const result = await response.json();
-      console.log(result);
-
-    } catch (err) {
-      console.error("CELL UPLOAD ERROR:", err);
-      showSubmitDataFailedMessage();
-    }
+    });
   });
 }
+
 
 
 
