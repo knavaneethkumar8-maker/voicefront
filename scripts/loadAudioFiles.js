@@ -5,7 +5,7 @@ import { setAllDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
 
-
+let predictListenerAttached = false;
 const urls = getUrls();
 const {backendOrigin} = urls;
 
@@ -37,7 +37,6 @@ async function loadRecordings() {
   collectLockedGridData();
   collectLockedCellData();
   makeVerifyButtonsActive();
-  makePredictCheckboxesActive();
 }
 
 async function renderRecordings(records, user) {
@@ -181,6 +180,9 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
 
 
 function makePredictCheckboxesActive() {
+  if (predictListenerAttached) return; // 🔒 prevent duplicates
+  predictListenerAttached = true;
+
   document.addEventListener("click", (e) => {
 
     if (
@@ -201,18 +203,21 @@ function makePredictCheckboxesActive() {
     if (!row) return;
 
     if (checkbox.checked) {
-      // 🔮 APPLY prediction
       if (row._textgrid) {
         applyTextgridToRenderedGrids(row, row._textgrid);
       }
     } else {
-      // 🧹 CLEAR prediction
       clearPredictedTextFromRow(row);
     }
 
-    console.log("Predict toggled:", checkbox.dataset.file, checkbox.checked);
+    console.log(
+      "Predict toggled:",
+      checkbox.dataset.file,
+      checkbox.checked
+    );
   });
 }
+
 
 
 
@@ -266,7 +271,7 @@ function isCellProtected(cellEl) {
 
   return false;
 }
-
+ makePredictCheckboxesActive();
 
 
 
