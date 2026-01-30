@@ -248,11 +248,25 @@ function clearPredictedTextFromRow(row) {
 
 
 function isCellProtected(cellEl) {
-  return (
+  if (!cellEl) return true;
+
+  // cell-level protection
+  if (
     cellEl.classList.contains("locked") ||
     cellEl.classList.contains("verified")
-  );
+  ) {
+    return true;
+  }
+
+  // grid-level protection
+  const gridEl = cellEl.closest(".booth-grid");
+  if (gridEl && gridEl.classList.contains("locked")) {
+    return true;
+  }
+
+  return false;
 }
+
 
 
 
