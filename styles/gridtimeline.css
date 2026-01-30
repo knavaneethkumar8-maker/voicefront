@@ -76,6 +76,7 @@ body {
   flex-shrink: 0;
   gap: 5px;
   position: relative;
+  color: rgb(55, 55, 55);
 }
 
 .locked {

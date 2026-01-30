@@ -102,7 +102,9 @@ async function renderRecordings(records, user) {
 
     // ✅ SAFE: cells now exist
     if (r.textgrid) {
-      applyTextgridToRenderedGrids(r.textgrid);
+      // store textgrid ON the row
+      row._textgrid = r.textgrid;
+      applyTextgridToRenderedGrids(row, r.textgrid);
     }
 
     activateSubmitForRow(row);
@@ -126,8 +128,8 @@ document.addEventListener("click", (e) => {
 });
 
 
-export function applyTextgridToRenderedGrids(textgrid) {
-  if (!textgrid || !textgrid.grids) return;
+export function applyTextgridToRenderedGrids(row, textgrid) {
+  if (!row || !textgrid || !textgrid.grids) return;
 
   const COLOR_CLASSES = ["ui-green", "ui-blue", "ui-yellow", "ui-red"];
 
@@ -137,10 +139,12 @@ export function applyTextgridToRenderedGrids(textgrid) {
 
     Object.entries(tiers).forEach(([tierKey, tier]) => {
       tier.cells?.forEach(cell => {
-        const cellEl = document.getElementById(cell.id);
+
+        // 🔒 scoped lookup: ONLY inside this row
+        const cellEl = row.querySelector(`#${CSS.escape(cell.id)}`);
         if (!cellEl) return;
 
-        /* ---------- REMOVE any existing text nodes ---------- */
+        /* ---------- REMOVE existing text nodes ---------- */
         [...cellEl.childNodes].forEach(node => {
           if (node.nodeType === Node.TEXT_NODE) {
             node.remove();
@@ -155,7 +159,7 @@ export function applyTextgridToRenderedGrids(textgrid) {
           );
         }
 
-        /* ---------- confidence dot ---------- */
+        /* ---------- CONFIDENCE DOT ---------- */
         const dotEl = cellEl.querySelector(".cell-dot");
         if (dotEl) {
           dotEl.classList.remove(...COLOR_CLASSES);
@@ -165,8 +169,9 @@ export function applyTextgridToRenderedGrids(textgrid) {
     });
   });
 
-  console.log("TextGrid text + confidence applied (prithvi hidden)");
+  console.log("TextGrid text + confidence applied (row-scoped)");
 }
+
 
 
 
@@ -175,29 +180,37 @@ export function applyTextgridToRenderedGrids(textgrid) {
 function makePredictCheckboxesActive() {
   document.addEventListener("click", (e) => {
 
-    // Only react to clicks on the box or label
-    if (!e.target.classList.contains("checkbox-box") &&
-        !e.target.classList.contains("checkbox-label")) return;
+    if (
+      !e.target.classList.contains("checkbox-box") &&
+      !e.target.classList.contains("checkbox-label")
+    ) return;
 
-    // Find the label container
     const label = e.target.closest("label.predict-checkbox");
     if (!label) return;
 
-    // Find the input inside the label
     const checkbox = label.querySelector(".js-predict-checkbox");
     if (!checkbox) return;
 
-    // 🔄 MANUAL TOGGLE
+    // manual toggle
     checkbox.checked = !checkbox.checked;
 
-    const filename = checkbox.dataset.file;
-    const enabled = checkbox.checked;
+    const row = checkbox.closest(".load-row");
+    if (!row) return;
 
-    console.log("Predict:", filename, enabled);
+    if (checkbox.checked) {
+      // 🔮 APPLY prediction
+      if (row._textgrid) {
+        applyTextgridToRenderedGrids(row, row._textgrid);
+      }
+    } else {
+      // 🧹 CLEAR prediction
+      clearPredictedTextFromRow(row);
+    }
 
-    // 🔽 Put your predict logic here
+    console.log("Predict toggled:", checkbox.dataset.file, checkbox.checked);
   });
 }
+
 
 
 function getConfidenceClass(confidence) {
@@ -206,6 +219,26 @@ function getConfidenceClass(confidence) {
   if (confidence > 0.55) return "ui-yellow";
   return "ui-red";
 }
+
+function clearPredictedTextFromRow(row) {
+  const cells = row.querySelectorAll(".cell");
+
+  cells.forEach(cell => {
+    // remove text nodes only
+    [...cell.childNodes].forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.remove();
+      }
+    });
+
+    // clear confidence dot
+    const dotEl = cell.querySelector(".cell-dot");
+    if (dotEl) {
+      dotEl.classList.remove("ui-green", "ui-blue", "ui-yellow", "ui-red");
+    }
+  });
+}
+
 
 
 
