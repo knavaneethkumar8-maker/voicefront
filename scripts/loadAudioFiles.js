@@ -140,9 +140,11 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
     Object.entries(tiers).forEach(([tierKey, tier]) => {
       tier.cells?.forEach(cell => {
 
-        // 🔒 scoped lookup: ONLY inside this row
         const cellEl = row.querySelector(`#${CSS.escape(cell.id)}`);
         if (!cellEl) return;
+
+        // 🔒 DO NOT TOUCH locked / verified cells
+        if (isCellProtected(cellEl)) return;
 
         /* ---------- REMOVE existing text nodes ---------- */
         [...cellEl.childNodes].forEach(node => {
@@ -169,8 +171,9 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
     });
   });
 
-  console.log("TextGrid text + confidence applied (row-scoped)");
+  console.log("Prediction applied (unlocked only)");
 }
+
 
 
 
@@ -224,7 +227,11 @@ function clearPredictedTextFromRow(row) {
   const cells = row.querySelectorAll(".cell");
 
   cells.forEach(cell => {
-    // remove text nodes only
+
+    // 🔒 Skip locked / verified cells
+    if (isCellProtected(cell)) return;
+
+    // remove predicted text nodes
     [...cell.childNodes].forEach(node => {
       if (node.nodeType === Node.TEXT_NODE) {
         node.remove();
@@ -239,6 +246,13 @@ function clearPredictedTextFromRow(row) {
   });
 }
 
+
+function isCellProtected(cellEl) {
+  return (
+    cellEl.classList.contains("locked") ||
+    cellEl.classList.contains("verified")
+  );
+}
 
 
 
