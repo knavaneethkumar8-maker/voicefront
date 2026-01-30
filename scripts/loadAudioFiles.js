@@ -1,11 +1,9 @@
 import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
-import { createLettersContainer } from "./dragLetters.js";
 import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
-import { setAllDeleteRegionsActive , setRowDeleteRegionsActive} from "./dragLetters.js";
+import { setAllDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
-import { mapAllJsonToGrids } from "./renderBoothGrids.js";
 
 
 const urls = getUrls();
@@ -137,15 +135,24 @@ export function applyTextgridToRenderedGrids(textgrid) {
     const tiers = grid.tiers;
     if (!tiers) return;
 
-    Object.values(tiers).forEach(tier => {
+    Object.entries(tiers).forEach(([tierKey, tier]) => {
       tier.cells?.forEach(cell => {
         const cellEl = document.getElementById(cell.id);
         if (!cellEl) return;
 
-        /* ---------- label ---------- */
-        const labelEl = cellEl.querySelector(".cell-label");
-        if (labelEl) {
-          labelEl.textContent = cell.text ?? "";
+        /* ---------- REMOVE any existing text nodes ---------- */
+        [...cellEl.childNodes].forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.remove();
+          }
+        });
+
+        /* ---------- APPLY TEXT (skip PRITHVI) ---------- */
+        if (tierKey !== "prithvi" && cell.text) {
+          cellEl.insertBefore(
+            document.createTextNode(cell.text),
+            cellEl.firstChild
+          );
         }
 
         /* ---------- confidence dot ---------- */
@@ -158,8 +165,10 @@ export function applyTextgridToRenderedGrids(textgrid) {
     });
   });
 
-  console.log("TextGrid labels + confidence applied");
+  console.log("TextGrid text + confidence applied (prithvi hidden)");
 }
+
+
 
 
 

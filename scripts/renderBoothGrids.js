@@ -48,7 +48,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
   const startTime = gridNum * 24 * bioesTime;
   const gridEndTime = startTime + (24 * bioesTime);
 
-  const gridHTML = `
+const gridHTML = `
 <div class="booth-grid"
      id=${fileName + "_" + gridNum}
      contenteditable="false">
@@ -64,7 +64,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
          id=${fileName + "_" + gridNum + "_" + 1}>
       <span class="cell-dot" contenteditable="false"></span>
       <span contenteditable="false">${getAkashCellLabel(gridNum)}</span>
-      <span class="cell-label" contenteditable="false"></span>
       <button class="cell-lock js-cell-lock"
               contenteditable="false"></button>
     </div>
@@ -77,7 +76,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
          id=${fileName + "_" + gridNum + "_" + 2}>
       <span class="cell-dot" contenteditable="false"></span>
       <span contenteditable="false">${getAgniCellLabel(gridNum,0)}</span>
-      <span class="cell-label"></span>
       <button class="cell-lock js-cell-lock"
               contenteditable="false"></button>
     </div>
@@ -87,7 +85,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
          id=${fileName + "_" + gridNum + "_" + 3}>
       <span class="cell-dot" contenteditable="false"></span>
       <span contenteditable="false">${getAgniCellLabel(gridNum,1)}</span>
-      <span class="cell-label"></span>
       <button class="cell-lock js-cell-lock"
               contenteditable="false"></button>
     </div>
@@ -101,7 +98,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
            id=${fileName + "_" + gridNum + "_" + (4+i)}>
         <span class="cell-dot" contenteditable="false"></span>
         <span contenteditable="false">${getAyuvCellLabel(gridNum,i)}</span>
-        <span class="cell-label"></span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -116,7 +112,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
            id=${fileName + "_" + gridNum + "_" + (8+i)}>
         <span class="cell-dot" contenteditable="false"></span>
         <span contenteditable="false">${getJalCellLabel(gridNum,i)}</span>
-        <span class="cell-label"></span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -126,7 +121,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
   <!-- PRITHVI (NOT EDITABLE) -->
   <div class="prithvi-tier flex-display" contenteditable="false">
     ${[...Array(24)].map((_, i) => `
-      <div class="prithvi-cell cell"
+      <div class="prithvi-cell"
            contenteditable="false"
            id=${fileName + "_" + gridNum + "_" + (16+i)}>
       </div>
@@ -135,6 +130,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
 
 </div>
 `;
+
 
   gridTimeLine.innerHTML += gridHTML;
   //enableDropForCells(".cell", row);
