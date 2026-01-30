@@ -64,7 +64,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
          id=${fileName + "_" + gridNum + "_" + 1}>
       <span class="cell-dot" contenteditable="false"></span>
       <span contenteditable="false">${getAkashCellLabel(gridNum)}</span>
-      <span class="cell-label"></span>
+      <span class="cell-label" contenteditable="false"></span>
       <button class="cell-lock js-cell-lock"
               contenteditable="false"></button>
     </div>
@@ -139,8 +139,6 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
   gridTimeLine.innerHTML += gridHTML;
   //enableDropForCells(".cell", row);
 }
-
-
 
 
 
@@ -743,14 +741,14 @@ const gridsData = {
   
 }
 
-function mapAllJsonToGrids(gridsJson , gridElements) {
+export function mapAllJsonToGrids(gridsJson , gridElements) {
   gridElements?.forEach((grid, index) => {
     console.log(gridsData["grid_0"]);
     applyLabelsAndConfidence(gridsJson[`grid_${index}`], grid);
   });
 }
 
-mapAllJsonToGrids(gridsData, allGrids);
+//mapAllJsonToGrids(gridsData, allGrids);
 
 
 

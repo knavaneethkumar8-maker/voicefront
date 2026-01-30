@@ -44,6 +44,7 @@ export function collectLockedCellData() {
       const cellId = cellEl.id;
 
       const cellData = collectCellData(cellEl);
+      console.log(cellData);
 
       const payload = {
         grid_id: gridId,

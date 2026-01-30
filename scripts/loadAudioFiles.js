@@ -5,6 +5,7 @@ import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
 import { setAllDeleteRegionsActive , setRowDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
+import { mapAllJsonToGrids } from "./renderBoothGrids.js";
 
 
 const urls = getUrls();
@@ -73,6 +74,7 @@ async function renderRecordings(records, user) {
         <!-- Predict toggle -->
         <label class="predict-checkbox">
           <input type="checkbox"
+                checked = "true"
                 class="js-predict-checkbox"
                 data-file="${r.filename}">
           <span class="checkbox-box" data-file="${r.filename}"></span>
@@ -129,30 +131,36 @@ document.addEventListener("click", (e) => {
 export function applyTextgridToRenderedGrids(textgrid) {
   if (!textgrid || !textgrid.grids) return;
 
+  const COLOR_CLASSES = ["ui-green", "ui-blue", "ui-yellow", "ui-red"];
+
   textgrid.grids.forEach(grid => {
     const tiers = grid.tiers;
-    //console.log(tiers);
+    if (!tiers) return;
 
     Object.values(tiers).forEach(tier => {
-      //console.log("came to objec values");
-      tier.cells.forEach(cell => {
+      tier.cells?.forEach(cell => {
         const cellEl = document.getElementById(cell.id);
-        //console.log('came to cells tiers')
-        //console.log(cellEl)
-
         if (!cellEl) return;
-        //console.log('cell el exits')
+
+        /* ---------- label ---------- */
         const labelEl = cellEl.querySelector(".cell-label");
-        if (!labelEl) return;
-        //console.log(labelEl);
-        //console.log(cell.text);
-        labelEl.textContent = cell.text || "";
+        if (labelEl) {
+          labelEl.textContent = cell.text ?? "";
+        }
+
+        /* ---------- confidence dot ---------- */
+        const dotEl = cellEl.querySelector(".cell-dot");
+        if (dotEl) {
+          dotEl.classList.remove(...COLOR_CLASSES);
+          dotEl.classList.add(getConfidenceClass(cell.conf));
+        }
       });
     });
   });
 
-  console.log('applied labels');
+  console.log("TextGrid labels + confidence applied");
 }
+
 
 
 function makePredictCheckboxesActive() {
@@ -183,8 +191,12 @@ function makePredictCheckboxesActive() {
 }
 
 
-
-
+function getConfidenceClass(confidence) {
+  if (confidence > 0.9) return "ui-green";
+  if (confidence > 0.75) return "ui-blue";
+  if (confidence > 0.55) return "ui-yellow";
+  return "ui-red";
+}
 
 
 
