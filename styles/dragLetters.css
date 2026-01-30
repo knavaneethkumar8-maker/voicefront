@@ -86,4 +86,11 @@
   transform: scale(1.1);
 }
 
+.allowed-akshars-container{
+  background-color: rgb(251, 247, 241);
+  border: 1px solid rgb(245, 197, 171);
+  color: rgb(54, 53, 53);
+  border-radius: 10px;
+  padding: 6px 10px;
+}
 
