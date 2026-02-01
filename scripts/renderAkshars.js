@@ -4,7 +4,7 @@ import { getCurrentFileName } from "./recorder.js";
 
 const aksharTimeline = document.querySelector('.js-akshar-timeline');
 
-export function renderAkshars(width, setAudio) {
+export function renderAkshars(aksharTimeline,width, setAudio) {
   akshars.forEach((akshar, index )=> {
     const newAkshar = document.createElement('div');
     newAkshar.classList.add('akshar', 'js-akshar');
@@ -23,25 +23,25 @@ function snap(value) {
 
 export function makeAksharResizable(clip, akshar, setAudio) {
 
-let startX = 0;
-let startWidth = 0;
-let startLeft = 0;
-let mode = null;
+  let startX = 0;
+  let startWidth = 0;
+  let startLeft = 0;
+  let mode = null;
 
 
-const EDGE_SIZE = 8;
-const MIN_WIDTH = 10;
+  const EDGE_SIZE = 8;
+  const MIN_WIDTH = 10;
 
-clip.addEventListener("mousemove", (e) => {
-    e.preventDefault();
-    const rect = clip.getBoundingClientRect();
-    const x = e.clientX - rect.left;
+  clip.addEventListener("mousemove", (e) => {
+      e.preventDefault();
+      const rect = clip.getBoundingClientRect();
+      const x = e.clientX - rect.left;
 
-    if (x < EDGE_SIZE || x > rect.width - EDGE_SIZE) {
-      clip.style.cursor = "ew-resize";
-    } else {
-      clip.style.cursor = "default";
-    }
+      if (x < EDGE_SIZE || x > rect.width - EDGE_SIZE) {
+        clip.style.cursor = "ew-resize";
+      } else {
+        clip.style.cursor = "default";
+      }
   });
 
   clip.addEventListener("mousedown", (e) => {

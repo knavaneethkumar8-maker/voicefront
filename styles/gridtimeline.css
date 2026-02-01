@@ -186,13 +186,14 @@ body {
 
 .adjust-akshar-timeline {
   background-color: #e5e7eb;
+  background-color: rgb(247, 169, 169);
   height: 44px;
   display: flex;
   position: relative;
 }
 
 
-.akshar {
+.akshardfdfd {
   height: 100%;
   width: 100px;
   background-color: rgb(53, 134, 241);

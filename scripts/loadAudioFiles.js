@@ -4,10 +4,27 @@ import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
 import { setAllDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
+import { createAksharEditor } from "./createAksharTimeline.js";
+import { akshars } from "./renderBoothGrids.js";
 
 let predictListenerAttached = false;
 const urls = getUrls();
 const {backendOrigin} = urls;
+
+const newAkshars = [
+  { char:"a", start:0,   end:200 },
+  { char:"b", start:210,  end:350 },
+  { char:"c", start:360,  end:550 },
+  { char:"d", start:600,  end:900 },
+  { char:"e", start:910,  end:1100 },
+  { char:"n", start:1110, end:1400 },
+  { char:"df", start:1410, end:1700 },
+  { char:"d", start:1710, end:2000 },
+  { char:"", start:2100, end:2400 },
+  { char:"dd", start:2410, end:2700 },
+  { char:"d", start:2710, end:3000 },
+  { char:"d", start:3010, end:3300 }
+];
 
 fetchUsers().then(users => {
   const select = document.querySelector(".js-account-select");
@@ -62,8 +79,7 @@ async function renderRecordings(records, user) {
 
     row.innerHTML = `
       <div class="file-details-container">
-        <audio controls preload="metadata" playsinline id="audioEl_${r.filename}">
-          <source src="${audioUrl}" type="${mime}">
+        <audio controls preload="metadata" playsinline id="audioEl_${r.filename}" src="${audioUrl}" type="${mime}">
         </audio>
 
         <div class="file-name js-file-name">${r.filename}</div>
@@ -87,6 +103,13 @@ async function renderRecordings(records, user) {
       <div class="js-askhar-editor akshar-editor" id="${r.filename}">
         <div class="js-timeline timeline">
           <div class="js-grid-timeline grid-timeline"></div>
+          <div class="viewport">
+            <button class="playPause">Play</button>
+            <div class="wave-container">
+              <canvas></canvas>
+              <div class="cursor"></div>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -107,6 +130,7 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
+    createAksharEditor(row, newAkshars, 8)
   }
 }
 

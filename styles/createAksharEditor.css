@@ -1,0 +1,77 @@
+.row-element {
+  margin-bottom: 30px;
+}
+
+.viewport {
+  width: 100%;
+  height: 100px;
+  overflow-x: auto;
+  border: 1px solid #333;
+  background: #151515;
+  position: relative;
+}
+
+.playPause {
+  position: sticky;
+  top: 6px;
+  left: 6px;
+  z-index: 30;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.85);
+  color: #eee;
+  border: 1px solid #444;
+  cursor: pointer;
+}
+
+.wave-container {
+  position: relative;
+  height: 90px;
+  padding-left: 50px;
+  box-sizing: border-box;
+}
+
+canvas {
+  display: block;
+}
+
+.cursor {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: red;
+  pointer-events: none;
+}
+
+.akshar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(0,120,255,0.35);
+  border: 1px solid rgba(0,120,255,0.9);
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  box-sizing: border-box;
+  cursor: grab;
+}
+
+.akshar:active {
+  cursor: grabbing;
+}
+
+.akshar.selected {
+  outline: 2px solid #ffe055;
+  background: rgba(202,165,255,0.35);
+}
+
+.akshar.editing {
+  background: rgba(0,180,255,0.35);
+  border-color: #6cf;
+  cursor: text;
+}

@@ -48,88 +48,88 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
   const startTime = gridNum * 24 * bioesTime;
   const gridEndTime = startTime + (24 * bioesTime);
 
-const gridHTML = `
-<div class="booth-grid"
-     id=${fileName + "_" + gridNum}
-     contenteditable="false">
+  const gridHTML = `
+  <div class="booth-grid"
+      id=${fileName + "_" + gridNum}
+      contenteditable="false">
 
-  <div class="lock js-lock"
-       data-id=${fileName + "_" + gridNum}
-       contenteditable="false">🔓</div>
+    <div class="lock js-lock"
+        data-id=${fileName + "_" + gridNum}
+        contenteditable="false">🔓</div>
 
-  <!-- AKASH -->
-  <div class="akash-tier" contenteditable="false">
-    <div class="akash-cell cell"
-         contenteditable="true"
-         id=${fileName + "_" + gridNum + "_" + 1}>
-      <span class="cell-dot" contenteditable="false"></span>
-      <span contenteditable="false">${getAkashCellLabel(gridNum)}</span>
-      <button class="cell-lock js-cell-lock"
-              contenteditable="false"></button>
-    </div>
-  </div>
-
-  <!-- AGNI -->
-  <div class="agni-tier flex-display" contenteditable="false">
-    <div class="agni-cell cell"
-         contenteditable="true"
-         id=${fileName + "_" + gridNum + "_" + 2}>
-      <span class="cell-dot" contenteditable="false"></span>
-      <span contenteditable="false">${getAgniCellLabel(gridNum,0)}</span>
-      <button class="cell-lock js-cell-lock"
-              contenteditable="false"></button>
-    </div>
-
-    <div class="agni-cell cell"
-         contenteditable="true"
-         id=${fileName + "_" + gridNum + "_" + 3}>
-      <span class="cell-dot" contenteditable="false"></span>
-      <span contenteditable="false">${getAgniCellLabel(gridNum,1)}</span>
-      <button class="cell-lock js-cell-lock"
-              contenteditable="false"></button>
-    </div>
-  </div>
-
-  <!-- VAYU -->
-  <div class="vayu-tier flex-display" contenteditable="false">
-    ${[0,1,2,3].map(i => `
-      <div class="vayu-cell cell"
-           contenteditable="true"
-           id=${fileName + "_" + gridNum + "_" + (4+i)}>
+    <!-- AKASH -->
+    <div class="akash-tier" contenteditable="false">
+      <div class="akash-cell cell"
+          contenteditable="true"
+          id=${fileName + "_" + gridNum + "_" + 1}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false">${getAyuvCellLabel(gridNum,i)}</span>
+        <span contenteditable="false">${getAkashCellLabel(gridNum)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
-    `).join("")}
-  </div>
+    </div>
 
-  <!-- JAL -->
-  <div class="jal-tier flex-display" contenteditable="false">
-    ${[...Array(8)].map((_, i) => `
-      <div class="jal-cell cell"
-           contenteditable="true"
-           id=${fileName + "_" + gridNum + "_" + (8+i)}>
+    <!-- AGNI -->
+    <div class="agni-tier flex-display" contenteditable="false">
+      <div class="agni-cell cell"
+          contenteditable="true"
+          id=${fileName + "_" + gridNum + "_" + 2}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false">${getJalCellLabel(gridNum,i)}</span>
+        <span contenteditable="false">${getAgniCellLabel(gridNum,0)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
-    `).join("")}
-  </div>
 
-  <!-- PRITHVI (NOT EDITABLE) -->
-  <div class="prithvi-tier flex-display" contenteditable="false">
-    ${[...Array(24)].map((_, i) => `
-      <div class="prithvi-cell"
-           contenteditable="false"
-           id=${fileName + "_" + gridNum + "_" + (16+i)}>
+      <div class="agni-cell cell"
+          contenteditable="true"
+          id=${fileName + "_" + gridNum + "_" + 3}>
+        <span class="cell-dot" contenteditable="false"></span>
+        <span contenteditable="false">${getAgniCellLabel(gridNum,1)}</span>
+        <button class="cell-lock js-cell-lock"
+                contenteditable="false"></button>
       </div>
-    `).join("")}
-  </div>
+    </div>
 
-</div>
-`;
+    <!-- VAYU -->
+    <div class="vayu-tier flex-display" contenteditable="false">
+      ${[0,1,2,3].map(i => `
+        <div class="vayu-cell cell"
+            contenteditable="true"
+            id=${fileName + "_" + gridNum + "_" + (4+i)}>
+          <span class="cell-dot" contenteditable="false"></span>
+          <span contenteditable="false">${getAyuvCellLabel(gridNum,i)}</span>
+          <button class="cell-lock js-cell-lock"
+                  contenteditable="false"></button>
+        </div>
+      `).join("")}
+    </div>
+
+    <!-- JAL -->
+    <div class="jal-tier flex-display" contenteditable="false">
+      ${[...Array(8)].map((_, i) => `
+        <div class="jal-cell cell"
+            contenteditable="true"
+            id=${fileName + "_" + gridNum + "_" + (8+i)}>
+          <span class="cell-dot" contenteditable="false"></span>
+          <span contenteditable="false">${getJalCellLabel(gridNum,i)}</span>
+          <button class="cell-lock js-cell-lock"
+                  contenteditable="false"></button>
+        </div>
+      `).join("")}
+    </div>
+
+    <!-- PRITHVI (NOT EDITABLE) -->
+    <div class="prithvi-tier flex-display" contenteditable="false">
+      ${[...Array(24)].map((_, i) => `
+        <div class="prithvi-cell"
+            contenteditable="false"
+            id=${fileName + "_" + gridNum + "_" + (16+i)}>
+        </div>
+      `).join("")}
+    </div>
+
+  </div>
+  `;
 
 
   gridTimeLine.innerHTML += gridHTML;
