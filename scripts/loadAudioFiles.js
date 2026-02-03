@@ -3,7 +3,8 @@ import { getUrls } from "../config/urls.js";
 import { generateAudioTimeLine , makeVerifyButtonsActive, generateSlowedCellsForTimeline} from "./recorder.js";
 import { setAllDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
-import { activateSubmitForRow } from "./sendData.js";
+import { activateSubmitForRow , activateSlowedSubmit} from "./sendData.js";
+import { getCurrentUsername } from "./loginPage.js";
 import { createAksharEditor } from "./createAksharTimeline.js";
 import { akshars } from "./renderBoothGrids.js";
 
@@ -217,12 +218,6 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
 }
 
 
-
-
-
-
-
-
 function makePredictCheckboxesActive() {
   if (predictListenerAttached) return; // 🔒 prevent duplicates
   predictListenerAttached = true;
@@ -261,8 +256,6 @@ function makePredictCheckboxesActive() {
     );
   });
 }
-
-
 
 
 function getConfidenceClass(confidence) {
@@ -315,65 +308,11 @@ function isCellProtected(cellEl) {
 
   return false;
 }
- makePredictCheckboxesActive();
-
-function collectSlowedTimelineData(slowTimelineEl) {
-  const factor = Number(slowTimelineEl.dataset.speedFactor);
-  const audioEl = slowTimelineEl.querySelector("audio");
-  const cells = slowTimelineEl.querySelectorAll(".slowed-cell");
-
-  // audioEl_audio_....wav_8x  → audio_...._8x.wav
-  let filename = audioEl.id.replace(/^audioEl_/, "");
-
-  filename = filename.replace(
-    /\.wav_(\d+x)$/,
-    "_$1.wav"
-  );
-
-  const data = {
-    filename,               // ✅ audio_XXXX_8x.wav / _16x.wav
-    speedFactor: factor,
-    cellDurationMs: 9,
-    totalCells: cells.length,
-    cells: []
-  };
-
-  cells.forEach((cell, index) => {
-    data.cells.push({
-      index,
-      value: cell.textContent.trim()
-    });
-  });
-
-  return data;
-}
+makePredictCheckboxesActive();
 
 
 
-function activateSlowedSubmit(row) {
-  const submit8x = row.querySelector(".js-submit_8x-data");
-  const submit16x = row.querySelector(".js-submit_16x-data");
 
-  if (submit8x) {
-    submit8x.addEventListener("click", () => {
-      const slowTimeline = row.querySelector(".js-slow-timeline_8x");
-      const payload = collectSlowedTimelineData(slowTimeline);
-
-      console.log("8x payload", payload);
-      // sendSlowedData(payload);
-    });
-  }
-
-  if (submit16x) {
-    submit16x.addEventListener("click", () => {
-      const slowTimeline = row.querySelector(".js-slow-timeline_16x");
-      const payload = collectSlowedTimelineData(slowTimeline);
-
-      console.log("16x payload", payload);
-      // sendSlowedData(payload);
-    });
-  }
-}
 
 
 

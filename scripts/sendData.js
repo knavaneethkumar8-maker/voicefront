@@ -235,3 +235,103 @@ function createPayloadJSON(fileName, gridsArray, duration, username) {
   };
 }
 
+
+
+
+function collectSlowedTimelineData(slowTimelineEl) {
+  const factor = Number(slowTimelineEl.dataset.speedFactor);
+  const audioEl = slowTimelineEl.querySelector("audio");
+  const cells = slowTimelineEl.querySelectorAll(".slowed-cell");
+
+  // audioEl_audio_....wav_8x  → audio_...._8x.wav
+  let filename = audioEl.id.replace(/^audioEl_/, "");
+
+  filename = filename.replace(
+    /\.wav_(\d+x)$/,
+    "_$1.wav"
+  );
+
+  const data = {
+    filename,               // ✅ audio_XXXX_8x.wav / _16x.wav
+    speedFactor: factor,
+    cellDurationMs: 9,
+    totalCells: cells.length,
+    cells: []
+  };
+
+  cells.forEach((cell, index) => {
+    data.cells.push({
+      index,
+      value: cell.textContent.trim()
+    });
+  });
+
+  return data;
+}
+
+export function activateSlowedSubmit(row) {
+  const submit8x = row.querySelector(".js-submit_8x-data");
+  const submit16x = row.querySelector(".js-submit_16x-data");
+
+  const username = getCurrentUsername();
+
+  if (submit8x) {
+    submit8x.addEventListener("click", async () => {
+      const slowTimeline = row.querySelector(".js-slow-timeline_8x");
+      if (!slowTimeline) return;
+
+      const payload = collectSlowedTimelineData(slowTimeline);
+      console.log("8x payload", payload);
+
+      const ok = await sendSlowedData(payload, username);
+      if (ok) {
+        submit8x.innerText = "SUBMITTED";
+        submit8x.classList.add("finished");
+      }
+    });
+  }
+
+  if (submit16x) {
+    submit16x.addEventListener("click", async () => {
+      const slowTimeline = row.querySelector(".js-slow-timeline_16x");
+      if (!slowTimeline) return;
+
+      const payload = collectSlowedTimelineData(slowTimeline);
+      console.log("16x payload", payload);
+
+      const ok = await sendSlowedData(payload, username);
+      if (ok) {
+        submit16x.innerText = "SUBMITTED";
+        submit16x.classList.add("finished");
+      }
+    });
+  }
+}
+
+async function sendSlowedData(payload, username) {
+  const { filename } = payload;
+
+  try {
+    const response = await fetch(
+      `${backendOrigin}/upload/textgrids/${filename}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      showSubmitDataFailedMessage();
+      return false;
+    }
+
+    showSubmitDataSuccessMessage();
+    return true;
+  } catch (err) {
+    console.error(err);
+    showSubmitDataFailedMessage();
+    return false;
+  }
+}
