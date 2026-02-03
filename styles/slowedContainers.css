@@ -22,6 +22,7 @@
   width: 60px;
   height: 60px;
   border: 0.9px solid black;
+  overflow: hidden;
 }
 
 .cell-text{

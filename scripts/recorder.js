@@ -491,7 +491,7 @@ export function generateAudioTimeLine(row, gridTimeLine) {
 }
 
 
-export function generateSlowedCellsForTimeline(slowTimelineEl, factor) {
+export function generateSlowedCellsForTimeline(slowTimelineEl, factor, originalAudioEl) {
   return new Promise((resolve) => {
     if (!slowTimelineEl) return;
 
@@ -505,9 +505,11 @@ export function generateSlowedCellsForTimeline(slowTimelineEl, factor) {
     audioEl.addEventListener(
       "loadedmetadata",
       () => {
-        const duration = audioEl.duration;
+        const duration = originalAudioEl.duration;
         const gridsCount = calcGridCount(duration);
-        const slowedCellsCount = gridsCount * 24;
+        console.log(gridsCount);
+        const slowedCellsCount = gridsCount * 24
+        console.log(slowedCellsCount);
 
         // clear old cells
         cellsContainer.innerHTML = "";

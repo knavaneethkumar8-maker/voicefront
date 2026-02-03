@@ -66,7 +66,14 @@ async function renderRecordings(records, user) {
   }
 
   for (const r of records) {
+    const baseName = r.filename.replace(/\.wav$/, "");
+
     const audioUrl = `${backendOrigin}/uploads/recordings/${r.filename}`;
+    const audioUrl_8x = `${backendOrigin}/uploads/recordings/${baseName}_8x.wav`;
+    const audioUrl_16x = `${backendOrigin}/uploads/recordings/${baseName}_16x.wav`;
+
+    console.log(audioUrl_8x);
+
 
     const mime =
       r.filename.endsWith(".wav")  ? "audio/wav"  :
@@ -104,12 +111,12 @@ async function renderRecordings(records, user) {
           <div class="js-grid-timeline grid-timeline "></div>
         </div>
         <div class="js-slow-timeline_8x slow-timeline" data-speed-factor="8">
-          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
+          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl_8x}" type="${mime}"></audio>
           <div class="prithvi-cells-container">
           </div>
         </div>
         <div class="js-slow-timeline_16x slow-timeline" data-speed-factor="16">
-          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_16x" src="${audioUrl}" type="${mime}"></audio>
+          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_16x" src="${audioUrl_16x}" type="${mime}"></audio>
           <div class="prithvi-cells-container">
           </div>
         </div>
@@ -121,12 +128,14 @@ async function renderRecordings(records, user) {
 
     const gridTimeLine = row.querySelector(".js-grid-timeline");
     const slow8x = row.querySelector('.js-slow-timeline_8x')
-    const slow16x = row.querySelector('.js-slow-timeline_16x')
+    const slow16x = row.querySelector('.js-slow-timeline_16x');
+
+    const audioEl = row.querySelector("audio");
 
     // ✅ THIS NOW REALLY WAITS
     await generateAudioTimeLine(row, gridTimeLine);
-    await generateSlowedCellsForTimeline(slow8x, 8);
-    await generateSlowedCellsForTimeline(slow16x, 16);
+    await generateSlowedCellsForTimeline(slow8x, 8, audioEl);
+    await generateSlowedCellsForTimeline(slow16x, 16, audioEl);
 
     // ✅ SAFE: cells now exist
     if (r.textgrid) {
