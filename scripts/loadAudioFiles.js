@@ -95,6 +95,7 @@ async function renderRecordings(records, user) {
         <!-- Predict toggle -->
         <label class="predict-checkbox">
           <input type="checkbox"
+                checked="true"
                 class="js-predict-checkbox"
                 data-file="${r.filename}">
           <span class="checkbox-box" data-file="${r.filename}"></span>
@@ -149,7 +150,7 @@ async function renderRecordings(records, user) {
     if (r.textgrid) {
       // store textgrid ON the row
       row._textgrid = r.textgrid;
-      //applyTextgridToRenderedGrids(row, r.textgrid);
+      applyTextgridToRenderedGrids(row, r.textgrid);
     }
 
     activateSubmitForRow(row);
@@ -181,10 +182,9 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
   const COLOR_CLASSES = ["ui-green", "ui-blue", "ui-yellow", "ui-red"];
 
   textgrid.grids.forEach(grid => {
-    const tiers = grid.tiers;
-    if (!tiers) return;
+    if (!grid.tiers) return;
 
-    Object.entries(tiers).forEach(([tierKey, tier]) => {
+    Object.values(grid.tiers).forEach(tier => {
       tier.cells?.forEach(cell => {
 
         const cellEl = row.querySelector(
@@ -192,7 +192,7 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
         );
         if (!cellEl) return;
 
-        // 🔒 Respect locks / verification
+        // 🔒 Respect locks
         if (isCellProtected(cellEl)) return;
 
         // ---------- CONFIDENCE DOT ----------
@@ -202,20 +202,25 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
           dotEl.classList.add(getConfidenceClass(cell.conf));
         }
 
-        // ---------- PRITHVI: NEVER WRITE ----------
-        if (tierKey === "prithvi") return;
-
-        // ---------- WRITE INTO .cell-text ----------
+        // ---------- TEXT APPLY RULE ----------
         const textEl = cellEl.querySelector(".cell-text");
-        if (!textEl) return;
 
-        textEl.innerText = cell.text || "";
+        if (textEl) {
+          // Normal cells
+          textEl.innerText = cell.text || "";
+        } else {
+          // Cells without .cell-text (e.g. prithvi)
+          if (cell.text !== undefined && cell.text !== null) {
+            cellEl.innerText = cell.text;
+          }
+        }
       });
     });
   });
 
-  console.log("Prediction applied → cell-text only (safe)");
+  console.log("TextGrid applied → conditional cell-text handling");
 }
+
 
 
 function makePredictCheckboxesActive() {
