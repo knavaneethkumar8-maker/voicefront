@@ -234,7 +234,7 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
 
   // ---------- JAL (8–15) : 3 prithvi ----------
   for (let i = 0; i < 8; i++) {
-    const text =
+    const combined =
       prithvi[i * 3] +
       prithvi[i * 3 + 1] +
       prithvi[i * 3 + 2];
@@ -243,14 +243,14 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
     const textEl = getCellTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      textEl.innerText = text;
+      appendIfDifferent(textEl, combined);
     }
   }
 
   // ---------- VAYU (4–7) : 6 prithvi ----------
   for (let i = 0; i < 4; i++) {
     const base = i * 6;
-    const text =
+    const combined =
       prithvi[base] +
       prithvi[base + 1] +
       prithvi[base + 2] +
@@ -262,39 +262,55 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
     const textEl = getCellTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      textEl.innerText = text;
+      appendIfDifferent(textEl, combined);
     }
   }
 
   // ---------- AGNI (2–3) : 12 prithvi ----------
   for (let i = 0; i < 2; i++) {
-    let text = "";
+    let combined = "";
     for (let j = 0; j < 12; j++) {
-      text += prithvi[i * 12 + j];
+      combined += prithvi[i * 12 + j];
     }
 
     const cell = getCell(2 + i);
     const textEl = getCellTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      textEl.innerText = text;
+      appendIfDifferent(textEl, combined);
     }
   }
 
   // ---------- AKASH (1) : 24 prithvi ----------
   {
-    let text = "";
-    for (let i = 0; i < 24; i++) text += prithvi[i];
+    let combined = "";
+    for (let i = 0; i < 24; i++) combined += prithvi[i];
 
     const cell = getCell(1);
     const textEl = getCellTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      textEl.innerText = text;
+      appendIfDifferent(textEl, combined);
     }
   }
 }
 
+
+
+function appendIfDifferent(textEl, newText) {
+  if (!textEl) return;
+
+  const existing = textEl.innerText || "";
+  if (!newText) return;
+
+  const lastExistingChar = existing.slice(-1);
+  const lastNewChar = newText.slice(-1);
+
+  // ❌ do not append if same last character
+  if (lastExistingChar === lastNewChar) return;
+
+  textEl.innerText = existing + lastNewChar;
+}
 
 
 function isCellProtected(cellEl) {
