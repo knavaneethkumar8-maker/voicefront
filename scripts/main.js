@@ -55,25 +55,31 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
     });
 
     // ✍️ annotation → normal grid
-    cell.addEventListener("input", (e) => {
-      const text = cell.textContent;
-      if (!text) return;
+    cell.addEventListener("input", () => {
+      const slowedCells = slowTimelineEl.querySelectorAll(".slowed-cell");
 
-      const { start, end } = getNormalTimeFromSlowedCell(index, factor);
+      const segments = parseSlowedStages(slowedCells);
 
-      applySlowedInputToNormalGrid({
+      applySlowedStagesToPrithvi({
         row,
-        text,
-        normalStart: start,
-        normalEnd: end,
-        inputType: e.inputType
+        segments,
+        factor
       });
 
-      const fileName = row.querySelector('.js-file-name').innerText;
-      const gridNo = getGridNoFromStartTime(start);
+      const fileName = row.querySelector(".js-file-name").innerText;
 
-      propagateGridFromPrithvi(row, fileName, gridNo);
+      // propagate all affected grids
+      const affectedGrids = new Set();
+      segments.forEach(seg => {
+        const { start } = getNormalTimeFromSlowedCell(seg.startIndex, factor);
+        affectedGrids.add(getGridNoFromStartTime(start));
+      });
+
+      affectedGrids.forEach(gridNo => {
+        propagateGridFromPrithvi(row, fileName, gridNo);
+      });
     });
+
 
   });
 }
@@ -337,6 +343,102 @@ function isCellProtected(cellEl) {
 
   return false;
 }
+
+function parseSlowedStages(slowedCells) {
+  const segments = [];
+
+  let current = null;
+
+  slowedCells.forEach((cell, index) => {
+    const raw = cell.textContent.trim();
+    if (!raw) return;
+
+    const parts = raw.split(",");
+    const stage = Number(parts[0]);
+    const letter = parts[1]?.trim();
+
+    // new letter starts
+    if (letter) {
+      // close previous letter
+      if (current) {
+        current.endIndex = index - 1;
+        segments.push(current);
+      }
+
+      current = {
+        letter,
+        startIndex: index,
+        endIndex: index
+      };
+      return;
+    }
+
+    // stage-only continuation
+    if (current) {
+      current.endIndex = index;
+    }
+
+    // stage 7 ends letter
+    if (stage === 7 && current) {
+      segments.push(current);
+      current = null;
+    }
+  });
+
+  // close dangling letter
+  if (current) {
+    segments.push(current);
+  }
+
+  return segments;
+}
+
+
+
+function applySlowedStagesToPrithvi({
+  row,
+  segments,
+  factor
+}) {
+  const fileName = row.querySelector(".js-file-name").textContent;
+  const grids = row.querySelectorAll(".booth-grid");
+
+  // clear all Prithvi first
+  grids.forEach(gridEl => {
+    const gridNo = Number(gridEl.id.split("_").at(-1));
+    for (let i = 16; i < 40; i++) {
+      const cell = row.querySelector(
+        `#${CSS.escape(`${fileName}_${gridNo}_${i}`)}`
+      );
+      if (cell && !isCellProtected(cell)) {
+        cell.innerText = "";
+      }
+    }
+  });
+
+  // apply segments
+  segments.forEach(seg => {
+    for (let slowedIndex = seg.startIndex; slowedIndex <= seg.endIndex; slowedIndex++) {
+      const { start } = getNormalTimeFromSlowedCell(slowedIndex, factor);
+      const gridNo = getGridNoFromStartTime(start);
+
+      const prithviIndex =
+        Math.floor((start % 216) / 9); // 0–23
+
+      const cellNo = 16 + prithviIndex;
+
+      const cell = row.querySelector(
+        `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
+      );
+
+      if (cell && !isCellProtected(cell)) {
+        cell.innerText = seg.letter;
+      }
+    }
+  });
+}
+
+
 
 
 
