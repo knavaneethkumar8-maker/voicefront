@@ -57,10 +57,11 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
     // ✍️ annotation → normal grid
     cell.addEventListener("input", () => {
       const text = cell.textContent;
+      console.log(text);
       if (!text) return;
 
-      const { start, end } =
-        getNormalTimeFromSlowedCell(index, factor);
+      const { start, end } = getNormalTimeFromSlowedCell(index, factor);
+      console.log(start, end);
 
       applySlowedInputToNormalGrid({
         row,
@@ -68,12 +69,18 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
         normalStart: start,
         normalEnd: end
       });
+      const fileName = row.querySelector('.js-file-name').innerText
+      const gridNo = getGridNoFromStartTime(start);
+      console.log(gridNo);
       propagateGridFromPrithvi(row, fileName, gridNo);
 
     });
   });
 }
 
+function getGridNoFromStartTime(startMs) {
+  return Math.floor(startMs / 216);
+}
 
 
 function getNormalCellTimeRange(gridNo, cellNo) {
@@ -118,13 +125,17 @@ function applySlowedInputToNormalGrid({
   normalEnd
 }) {
   if (!text.trim()) return;
+  console.log(row, text, normalStart, normalEnd)
 
   const fileName = row.querySelector(".js-file-name").textContent;
   const grids = row.querySelectorAll(".booth-grid");
+  console.log(fileName)
 
   grids.forEach((gridEl) => {
-    const [_, gridNoStr] = gridEl.id.split("_");
+    const gridNoStr = gridEl.id.split("_").at(-1);
+    console.log(gridEl.id.split("_"));
     const gridNo = Number(gridNoStr);
+    console.log(gridNo)
 
     for (let cellNo = 16; cellNo < 40; cellNo++) {
       const range = getNormalCellTimeRange(gridNo, cellNo);
@@ -212,26 +223,31 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
       `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
     );
 
-  // ---------- PRITHVI (8–31) ----------
+  const getCellTextEl = (cell) =>
+    cell?.querySelector(".cell-text");
+
+  // ---------- PRITHVI (16–39) ----------
   const prithvi = [];
-  for (let i = 8; i < 32; i++) {
-    prithvi.push(getCell(i)?.textContent || "");
+  for (let i = 16; i < 40; i++) {
+    prithvi.push(getCell(i)?.innerText || "");
   }
 
-  // ---------- JAL (4–7) : 3 prithvi ----------
+  // ---------- JAL (8–15) : 3 prithvi ----------
   for (let i = 0; i < 8; i++) {
     const text =
       prithvi[i * 3] +
       prithvi[i * 3 + 1] +
       prithvi[i * 3 + 2];
 
-    const cell = getCell(4 + i);
-    if (cell && !isCellProtected(cell)) {
-      cell.textContent = text;
+    const cell = getCell(8 + i);
+    const textEl = getCellTextEl(cell);
+
+    if (textEl && !isCellProtected(cell)) {
+      textEl.innerText = text;
     }
   }
 
-  // ---------- VAYU (2–3) : 6 prithvi ----------
+  // ---------- VAYU (4–7) : 6 prithvi ----------
   for (let i = 0; i < 4; i++) {
     const base = i * 6;
     const text =
@@ -242,31 +258,63 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
       prithvi[base + 4] +
       prithvi[base + 5];
 
-    const cell = getCell(2 + i);
-    if (cell && !isCellProtected(cell)) {
-      cell.textContent = text;
+    const cell = getCell(4 + i);
+    const textEl = getCellTextEl(cell);
+
+    if (textEl && !isCellProtected(cell)) {
+      textEl.innerText = text;
     }
   }
 
-  // ---------- AGNI (1) : 12 prithvi ----------
-  {
+  // ---------- AGNI (2–3) : 12 prithvi ----------
+  for (let i = 0; i < 2; i++) {
     let text = "";
-    for (let i = 0; i < 12; i++) text += prithvi[i];
-    const cell = getCell(1);
-    if (cell && !isCellProtected(cell)) {
-      cell.textContent = text;
+    for (let j = 0; j < 12; j++) {
+      text += prithvi[i * 12 + j];
+    }
+
+    const cell = getCell(2 + i);
+    const textEl = getCellTextEl(cell);
+
+    if (textEl && !isCellProtected(cell)) {
+      textEl.innerText = text;
     }
   }
 
-  // ---------- AKASH / GRID (0) : 24 prithvi ----------
+  // ---------- AKASH (1) : 24 prithvi ----------
   {
     let text = "";
     for (let i = 0; i < 24; i++) text += prithvi[i];
-    const cell = getCell(0);
-    if (cell && !isCellProtected(cell)) {
-      cell.textContent = text;
+
+    const cell = getCell(1);
+    const textEl = getCellTextEl(cell);
+
+    if (textEl && !isCellProtected(cell)) {
+      textEl.innerText = text;
     }
   }
+}
+
+
+
+function isCellProtected(cellEl) {
+  if (!cellEl) return true;
+
+  // cell-level protection
+  if (
+    cellEl.classList.contains("locked") ||
+    cellEl.classList.contains("verified")
+  ) {
+    return true;
+  }
+
+  // grid-level protection
+  const gridEl = cellEl.closest(".booth-grid");
+  if (gridEl && gridEl.classList.contains("locked")) {
+    return true;
+  }
+
+  return false;
 }
 
 

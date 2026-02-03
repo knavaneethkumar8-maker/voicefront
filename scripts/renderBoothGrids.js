@@ -63,7 +63,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
           contenteditable="true"
           id=${fileName + "_" + gridNum + "_" + 1}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false">${getAkashCellLabel(gridNum)}</span>
+        <span contenteditable="false" class="cell-text">${getAkashCellLabel(gridNum)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -75,7 +75,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
           contenteditable="true"
           id=${fileName + "_" + gridNum + "_" + 2}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false">${getAgniCellLabel(gridNum,0)}</span>
+        <span contenteditable="false" class="cell-text">${getAgniCellLabel(gridNum,0)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -84,7 +84,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
           contenteditable="true"
           id=${fileName + "_" + gridNum + "_" + 3}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false">${getAgniCellLabel(gridNum,1)}</span>
+        <span contenteditable="false" class="cell-text">${getAgniCellLabel(gridNum,1)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -97,7 +97,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
             contenteditable="true"
             id=${fileName + "_" + gridNum + "_" + (4+i)}>
           <span class="cell-dot" contenteditable="false"></span>
-          <span contenteditable="false">${getAyuvCellLabel(gridNum,i)}</span>
+          <span contenteditable="false" class="cell-text">${getAyuvCellLabel(gridNum,i)}</span>
           <button class="cell-lock js-cell-lock"
                   contenteditable="false"></button>
         </div>
@@ -111,7 +111,7 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
             contenteditable="true"
             id=${fileName + "_" + gridNum + "_" + (8+i)}>
           <span class="cell-dot" contenteditable="false"></span>
-          <span contenteditable="false">${getJalCellLabel(gridNum,i)}</span>
+          <span contenteditable="false" class="cell-text">${getJalCellLabel(gridNum,i)}</span>
           <button class="cell-lock js-cell-lock"
                   contenteditable="false"></button>
         </div>
