@@ -68,16 +68,14 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
 
       const fileName = row.querySelector(".js-file-name").innerText;
 
-      // propagate all affected grids
-      const affectedGrids = new Set();
-      segments.forEach(seg => {
-        const { start } = getNormalTimeFromSlowedCell(seg.startIndex, factor);
-        affectedGrids.add(getGridNoFromStartTime(start));
-      });
+      // propagate all grids
+      const grids = row.querySelectorAll(".booth-grid");
 
-      affectedGrids.forEach(gridNo => {
+      grids.forEach(gridEl => {
+        const gridNo = Number(gridEl.id.split("_").at(-1));
         propagateGridFromPrithvi(row, fileName, gridNo);
       });
+
     });
 
 
@@ -174,8 +172,6 @@ function applySlowedInputToNormalGrid({
 }
 
 
-
-
 export function lockGrids(row) {
   const allLocks = row.querySelectorAll('.js-lock');
   allLocks.forEach(lock => {
@@ -235,77 +231,67 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
       `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
     );
 
-  const getCellTextEl = (cell) =>
+  const getTextEl = (cell) =>
     cell?.querySelector(".cell-text");
 
-  // ---------- PRITHVI (16–39) ----------
+  /* ---------------- PRITHVI (source of truth) ---------------- */
   const prithvi = [];
   for (let i = 16; i < 40; i++) {
     prithvi.push(getCell(i)?.innerText || "");
   }
 
-  // ---------- JAL (8–15) : 3 prithvi ----------
+  /* ---------------- JAL (3 prithvi = 27ms) ---------------- */
   for (let i = 0; i < 8; i++) {
-    const combined =
-      prithvi[i * 3] +
-      prithvi[i * 3 + 1] +
-      prithvi[i * 3 + 2];
+    const slice = prithvi.slice(i * 3, i * 3 + 3);
+    const value = collapseConsecutive(slice);
 
     const cell = getCell(8 + i);
-    const textEl = getCellTextEl(cell);
+    const textEl = getTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      appendIfDifferent(textEl, combined);
+      textEl.innerText = value;
     }
   }
 
-  // ---------- VAYU (4–7) : 6 prithvi ----------
+  /* ---------------- VAYU (6 prithvi) ---------------- */
   for (let i = 0; i < 4; i++) {
-    const base = i * 6;
-    const combined =
-      prithvi[base] +
-      prithvi[base + 1] +
-      prithvi[base + 2] +
-      prithvi[base + 3] +
-      prithvi[base + 4] +
-      prithvi[base + 5];
+    const slice = prithvi.slice(i * 6, i * 6 + 6);
+    const value = collapseConsecutive(slice);
 
     const cell = getCell(4 + i);
-    const textEl = getCellTextEl(cell);
+    const textEl = getTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      appendIfDifferent(textEl, combined);
+      textEl.innerText = value;
     }
   }
 
-  // ---------- AGNI (2–3) : 12 prithvi ----------
+  /* ---------------- AGNI (12 prithvi) ---------------- */
   for (let i = 0; i < 2; i++) {
-    let combined = "";
-    for (let j = 0; j < 12; j++) {
-      combined += prithvi[i * 12 + j];
-    }
+    const slice = prithvi.slice(i * 12, i * 12 + 12);
+    const value = collapseConsecutive(slice);
 
     const cell = getCell(2 + i);
-    const textEl = getCellTextEl(cell);
+    const textEl = getTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      appendIfDifferent(textEl, combined);
+      textEl.innerText = value;
     }
   }
 
-  // ---------- AKASH (1) : 24 prithvi ----------
+  /* ---------------- AKASH (24 prithvi) ---------------- */
   {
-    let combined = "";
-    for (let i = 0; i < 24; i++) combined += prithvi[i];
+    const value = collapseConsecutive(prithvi);
 
     const cell = getCell(1);
-    const textEl = getCellTextEl(cell);
+    const textEl = getTextEl(cell);
 
     if (textEl && !isCellProtected(cell)) {
-      appendIfDifferent(textEl, combined);
+      textEl.innerText = value;
     }
   }
 }
+
 
 
 function appendIfDifferent(textEl, newText) {
@@ -436,6 +422,22 @@ function applySlowedStagesToPrithvi({
       }
     }
   });
+}
+
+
+function collapseConsecutive(values) {
+  const result = [];
+  let last = null;
+
+  for (const v of values) {
+    if (!v) continue;          // ignore empty
+    if (v !== last) {
+      result.push(v);
+      last = v;
+    }
+  }
+
+  return result.join("");
 }
 
 
