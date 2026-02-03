@@ -111,12 +111,19 @@ async function renderRecordings(records, user) {
           <div class="js-grid-timeline grid-timeline "></div>
         </div>
         <div class="js-slow-timeline_8x slow-timeline" data-speed-factor="8">
-          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl_8x}" type="${mime}"></audio>
+          <div class="slow-audio-container">
+            <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl_8x}" type="${mime}"></audio>
+            <button class="js-submit_8x-data generate-btn submit-slow-button">Submit</button>
+          </div>
+          
           <div class="prithvi-cells-container">
           </div>
         </div>
         <div class="js-slow-timeline_16x slow-timeline" data-speed-factor="16">
-          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_16x" src="${audioUrl_16x}" type="${mime}"></audio>
+          <div class="slow-audio-container">
+            <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_16x" src="${audioUrl_16x}" type="${mime}"></audio>
+            <button class="js-submit_16x-data generate-btn submit-slow-button">Submit</button>
+          </div>
           <div class="prithvi-cells-container">
           </div>
         </div>
@@ -145,6 +152,7 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
+    activateSlowedSubmit(row);
     //createAksharEditor(row, newAkshars, 8)
   }
 }
@@ -308,6 +316,64 @@ function isCellProtected(cellEl) {
   return false;
 }
  makePredictCheckboxesActive();
+
+function collectSlowedTimelineData(slowTimelineEl) {
+  const factor = Number(slowTimelineEl.dataset.speedFactor);
+  const audioEl = slowTimelineEl.querySelector("audio");
+  const cells = slowTimelineEl.querySelectorAll(".slowed-cell");
+
+  // audioEl_audio_....wav_8x  → audio_...._8x.wav
+  let filename = audioEl.id.replace(/^audioEl_/, "");
+
+  filename = filename.replace(
+    /\.wav_(\d+x)$/,
+    "_$1.wav"
+  );
+
+  const data = {
+    filename,               // ✅ audio_XXXX_8x.wav / _16x.wav
+    speedFactor: factor,
+    cellDurationMs: 9,
+    totalCells: cells.length,
+    cells: []
+  };
+
+  cells.forEach((cell, index) => {
+    data.cells.push({
+      index,
+      value: cell.textContent.trim()
+    });
+  });
+
+  return data;
+}
+
+
+
+function activateSlowedSubmit(row) {
+  const submit8x = row.querySelector(".js-submit_8x-data");
+  const submit16x = row.querySelector(".js-submit_16x-data");
+
+  if (submit8x) {
+    submit8x.addEventListener("click", () => {
+      const slowTimeline = row.querySelector(".js-slow-timeline_8x");
+      const payload = collectSlowedTimelineData(slowTimeline);
+
+      console.log("8x payload", payload);
+      // sendSlowedData(payload);
+    });
+  }
+
+  if (submit16x) {
+    submit16x.addEventListener("click", () => {
+      const slowTimeline = row.querySelector(".js-slow-timeline_16x");
+      const payload = collectSlowedTimelineData(slowTimeline);
+
+      console.log("16x payload", payload);
+      // sendSlowedData(payload);
+    });
+  }
+}
 
 
 

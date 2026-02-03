@@ -34,3 +34,14 @@
   width: 100%;
   height: 100%;
 }
+
+.slow-audio-container{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.submit-slow-button{
+  width: 100px;
+}

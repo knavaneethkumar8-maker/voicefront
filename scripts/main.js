@@ -121,7 +121,6 @@ function getNormalTimeFromSlowedCell(index, factor) {
 }
 
 
-
 function applySlowedInputToNormalGrid({
   row,
   text,
@@ -224,7 +223,6 @@ function getStartEndTimes(id) {
   return times;
 }
 
-
 function propagateGridFromPrithvi(row, fileName, gridNo) {
   const getCell = (cellNo) =>
     row.querySelector(
@@ -291,7 +289,6 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
     }
   }
 }
-
 
 
 function appendIfDifferent(textEl, newText) {
@@ -378,7 +375,6 @@ function parseSlowedStages(slowedCells) {
 
   return segments;
 }
-
 
 
 function applySlowedStagesToPrithvi({
