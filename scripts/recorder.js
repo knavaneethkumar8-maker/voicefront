@@ -1,5 +1,5 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { setAudioForAllCells } from "./main.js";
+import { setAudioForAllCells, setAudioForSlowedCells } from "./main.js";
 import { renderAllGrids } from "./renderBoothGrids.js";
 import { lockGrids } from "./main.js";
 import { getUrls } from "../config/urls.js";
@@ -489,6 +489,56 @@ export function generateAudioTimeLine(row, gridTimeLine) {
     audioEl.load();
   });
 }
+
+
+export function generateSlowedCellsForTimeline(slowTimelineEl, factor) {
+  return new Promise((resolve) => {
+    if (!slowTimelineEl) return;
+
+    const audioEl = slowTimelineEl.querySelector("audio");
+    const cellsContainer = slowTimelineEl.querySelector(
+      ".prithvi-cells-container"
+    );
+
+    if (!audioEl || !cellsContainer) return;
+
+    audioEl.addEventListener(
+      "loadedmetadata",
+      () => {
+        const duration = audioEl.duration;
+        const gridsCount = calcGridCount(duration);
+        const slowedCellsCount = gridsCount * 24;
+
+        // clear old cells
+        cellsContainer.innerHTML = "";
+
+        for (let i = 0; i < slowedCellsCount; i++) {
+          const cell = document.createElement("div");
+          cell.className = "slowed-cell";
+          cell.id = `${audioEl.id}_${i}`;
+
+          // ✅ MAKE CELL EDITABLE
+          cell.contentEditable = "true";
+          cell.spellcheck = false;
+
+          cellsContainer.appendChild(cell);
+        }
+
+        // bind audio AFTER cells exist
+        setAudioForSlowedCells(slowTimelineEl, factor);
+
+        requestAnimationFrame(resolve);
+      },
+      { once: true }
+    );
+
+    audioEl.load();
+  });
+}
+
+
+
+
 
 
 

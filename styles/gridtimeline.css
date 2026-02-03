@@ -449,14 +449,7 @@ body {
   }
 }
 
-.slow-timeline{
-  height: 60px;
-  background-color: #b4b4fb;
-  display: flex;
-  overflow-x: auto;
-}
 
 
-.prithi-cells-container{
-  background-color: red;
-}
+
+

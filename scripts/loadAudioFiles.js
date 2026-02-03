@@ -1,6 +1,6 @@
 import { fetchUsers } from "./getUsersInfo.js";
 import { getUrls } from "../config/urls.js";
-import { generateAudioTimeLine , makeVerifyButtonsActive} from "./recorder.js";
+import { generateAudioTimeLine , makeVerifyButtonsActive, generateSlowedCellsForTimeline} from "./recorder.js";
 import { setAllDeleteRegionsActive} from "./dragLetters.js";
 import { collectLockedGridData , collectLockedCellData} from "./collectData.js";
 import { activateSubmitForRow } from "./sendData.js";
@@ -87,7 +87,6 @@ async function renderRecordings(records, user) {
         <!-- Predict toggle -->
         <label class="predict-checkbox">
           <input type="checkbox"
-                checked = "true"
                 class="js-predict-checkbox"
                 data-file="${r.filename}">
           <span class="checkbox-box" data-file="${r.filename}"></span>
@@ -105,15 +104,13 @@ async function renderRecordings(records, user) {
           <div class="js-grid-timeline grid-timeline "></div>
         </div>
         <div class="js-slow-timeline_8x slow-timeline" data-speed-factor="8">
-          <audio preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
-          <div class="prithi-cells-container">
-            8x pritvi cells
+          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
+          <div class="prithvi-cells-container">
           </div>
         </div>
         <div class="js-slow-timeline_16x slow-timeline" data-speed-factor="16">
-          <audio preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
-          <div class="prithi-cells-container">
-            8x pritvi cells
+          <audio controls preload="metadata" playsinline id="audioEl_${r.filename}_16x" src="${audioUrl}" type="${mime}"></audio>
+          <div class="prithvi-cells-container">
           </div>
         </div>
       </div>
@@ -123,15 +120,19 @@ async function renderRecordings(records, user) {
     container.appendChild(row);
 
     const gridTimeLine = row.querySelector(".js-grid-timeline");
+    const slow8x = row.querySelector('.js-slow-timeline_8x')
+    const slow16x = row.querySelector('.js-slow-timeline_16x')
 
     // ✅ THIS NOW REALLY WAITS
     await generateAudioTimeLine(row, gridTimeLine);
+    await generateSlowedCellsForTimeline(slow8x, 8);
+    await generateSlowedCellsForTimeline(slow16x, 16);
 
     // ✅ SAFE: cells now exist
     if (r.textgrid) {
       // store textgrid ON the row
       row._textgrid = r.textgrid;
-      applyTextgridToRenderedGrids(row, r.textgrid);
+      //applyTextgridToRenderedGrids(row, r.textgrid);
     }
 
     activateSubmitForRow(row);
