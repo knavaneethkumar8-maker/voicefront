@@ -75,3 +75,7 @@ canvas {
   border-color: #6cf;
   cursor: text;
 }
+
+.viewport{
+  display: none;
+}

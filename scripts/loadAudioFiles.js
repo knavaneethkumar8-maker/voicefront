@@ -102,13 +102,18 @@ async function renderRecordings(records, user) {
 
       <div class="js-askhar-editor akshar-editor" id="${r.filename}">
         <div class="js-timeline timeline">
-          <div class="js-grid-timeline grid-timeline"></div>
-          <div class="viewport">
-            <button class="playPause">Play</button>
-            <div class="wave-container">
-              <canvas></canvas>
-              <div class="cursor"></div>
-            </div>
+          <div class="js-grid-timeline grid-timeline "></div>
+        </div>
+        <div class="js-slow-timeline_8x slow-timeline" data-speed-factor="8">
+          <audio preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
+          <div class="prithi-cells-container">
+            8x pritvi cells
+          </div>
+        </div>
+        <div class="js-slow-timeline_16x slow-timeline" data-speed-factor="16">
+          <audio preload="metadata" playsinline id="audioEl_${r.filename}_8x" src="${audioUrl}" type="${mime}"></audio>
+          <div class="prithi-cells-container">
+            8x pritvi cells
           </div>
         </div>
       </div>
@@ -130,7 +135,7 @@ async function renderRecordings(records, user) {
     }
 
     activateSubmitForRow(row);
-    createAksharEditor(row, newAkshars, 8)
+    //createAksharEditor(row, newAkshars, 8)
   }
 }
 

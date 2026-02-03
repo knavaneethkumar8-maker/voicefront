@@ -29,6 +29,7 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
   let startLeft = 0;
   let startWidth = 0;
   let ghost = null;
+  let rafId = null;
 
   /* =========================
      HELPERS
@@ -44,12 +45,12 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
   }
 
   function leftLimit(i) {
-    return i > 0 ? msToPx(akshars[i-1].end) : 0;
+    return i > 0 ? msToPx(akshars[i - 1].end) : 0;
   }
 
   function rightLimit(i) {
     return i < akshars.length - 1
-      ? msToPx(akshars[i+1].start)
+      ? msToPx(akshars[i + 1].start)
       : container.offsetWidth;
   }
 
@@ -61,21 +62,75 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
 
   playPauseBtn.onclick = async () => {
     if (audioCtx.state === "suspended") await audioCtx.resume();
-    audio.paused ? audio.play() : audio.pause();
-    playPauseBtn.textContent = audio.paused ? "Play" : "Pause";
+
+    if (audio.paused) {
+      audio.play();
+      startCursorLoop();
+      playPauseBtn.textContent = "Pause";
+    } else {
+      audio.pause();
+      stopCursorLoop();
+      playPauseBtn.textContent = "Play";
+    }
   };
 
-  function updateCursor() {
-    cursor.style.left =
-      audio.currentTime * 1000 * PX_PER_MS + "px";
-    requestAnimationFrame(updateCursor);
-  }
-  audio.addEventListener("loadedmetadata", updateCursor);
+  function startCursorLoop() {
+    if (rafId) return;
 
-  container.addEventListener("click", e => {
-    const r = container.getBoundingClientRect();
-    audio.currentTime =
-      (e.clientX - r.left) / PX_PER_MS / 1000;
+    const loop = () => {
+      if (audio.paused) {
+        stopCursorLoop();
+        return;
+      }
+
+      const globalPx = audio.currentTime * 1000 * PX_PER_MS;
+      cursor.style.left = globalPx + "px";
+
+      if (audio.currentTime >= audio.duration) {
+        cursor.style.left = msToPx(audio.duration * 1000) + "px";
+        stopCursorLoop();
+        playPauseBtn.textContent = "Play";
+        return;
+      }
+
+      rafId = requestAnimationFrame(loop);
+    };
+
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function stopCursorLoop() {
+    if (!rafId) return;
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  audio.addEventListener("ended", () => {
+    stopCursorLoop();
+    cursor.style.left = msToPx(audio.duration * 1000) + "px";
+    playPauseBtn.textContent = "Play";
+  });
+
+  /* =========================
+     TIMELINE CLICK (FIXED)
+     ========================= */
+  viewport.addEventListener("click", async e => {
+    const rect = viewport.getBoundingClientRect();
+
+    // global timeline px (THIS IS THE KEY FIX)
+    const globalPx =
+      (e.clientX - rect.left) + viewport.scrollLeft;
+
+    const timeSec = globalPx / PX_PER_MS / 1000;
+    audio.currentTime = Math.max(0, Math.min(timeSec, audio.duration));
+
+    // cursor MUST always use global px
+    cursor.style.left = globalPx + "px";
+
+    if (!audio.paused) {
+      if (audioCtx.state === "suspended") await audioCtx.resume();
+      startCursorLoop();
+    }
   });
 
   /* =========================
@@ -95,12 +150,12 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
     canvas.width = width;
     canvas.height = height;
 
-    ctx.clearRect(0,0,width,height);
+    ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = "#00ff88";
 
     const spp = data.length / width;
     const mid = height / 2;
-    const amp = mid * 0.95*0.5;
+    const amp = mid * 0.475;
 
     for (let x = 0; x < width; x++) {
       let min = 1, max = -1;
@@ -111,7 +166,12 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
         min = Math.min(min, v);
         max = Math.max(max, v);
       }
-      ctx.fillRect(x, mid + min * amp, 1, Math.max(1,(max-min)*amp));
+      ctx.fillRect(
+        x,
+        mid + min * amp,
+        1,
+        Math.max(1, (max - min) * amp)
+      );
     }
 
     renderAkshars();
@@ -119,81 +179,40 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
 
   audio.readyState >= 1
     ? drawWaveform()
-    : audio.addEventListener("loadedmetadata", drawWaveform, { once:true });
+    : audio.addEventListener("loadedmetadata", drawWaveform, { once: true });
 
   /* =========================
-     TEXT EDIT
+     RENDER
      ========================= */
-  function enableEditing(el, akshar) {
-    el.classList.add("editing");
-    el.contentEditable = "true";
+  function renderAkshars() {
+    container.querySelectorAll(".akshar").forEach(e => e.remove());
 
-    const originalText = akshar.char;
-    el.textContent = originalText;
-    el.focus();
-
-    function commit() {
-      akshar.char = el.textContent.trim();
-      cleanup();
-    }
-
-    function cancel() {
-      el.textContent = originalText;
-      cleanup();
-    }
-
-    function cleanup() {
-      el.classList.remove("editing");
-      el.contentEditable = "false";
-      el.removeEventListener("keydown", onKey);
-      el.removeEventListener("blur", commit);
-      el.blur();
-    }
-
-    function onKey(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        commit();
-      } else if (e.key === "Escape") {
-        e.preventDefault();
-        cancel();
-      }
-    }
-
-    el.addEventListener("keydown", onKey);
-    el.addEventListener("blur", commit);
+    akshars.forEach((a, i) => {
+      const el = document.createElement("div");
+      el.className = "akshar";
+      el.textContent = a.char;
+      el.style.left = msToPx(a.start) + "px";
+      el.style.width = msToPx(a.end - a.start) + "px";
+      attachClip(el, a, i);
+      container.appendChild(el);
+    });
   }
 
   /* =========================
-     CLIPS
+     CLIPS (unchanged)
      ========================= */
   function attachClip(el, akshar, index) {
-
-    /* =========================
-      CURSOR FEEDBACK
-      ========================= */
     el.addEventListener("mousemove", e => {
       if (el.classList.contains("editing")) return;
-
       const rect = el.getBoundingClientRect();
       const x = e.clientX - rect.left;
-
-      if (x < EDGE || x > rect.width - EDGE) {
-        el.style.cursor = "ew-resize";
-      } else {
-        el.style.cursor = "grab";
-      }
+      el.style.cursor = (x < EDGE || x > rect.width - EDGE) ? "ew-resize" : "grab";
     });
 
     el.addEventListener("mouseleave", () => {
-      if (!el.classList.contains("editing")) {
-        el.style.cursor = "grab";
-      }
+      if (!el.classList.contains("editing")) el.style.cursor = "grab";
     });
 
-    /* =========================
-      MOUSEDOWN LOGIC
-      ========================= */
     el.addEventListener("mousedown", e => {
       if (el.classList.contains("editing")) return;
 
@@ -204,15 +223,10 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
       const rect = el.getBoundingClientRect();
       const x = e.clientX - rect.left;
 
-      if (e.altKey && x > EDGE && x < rect.width - EDGE) {
-        mode = "duplicate";
-      } else if (x < EDGE) {
-        mode = "left";
-      } else if (x > rect.width - EDGE) {
-        mode = "right";
-      } else {
-        mode = "move";
-      }
+      if (e.altKey && x > EDGE && x < rect.width - EDGE) mode = "duplicate";
+      else if (x < EDGE) mode = "left";
+      else if (x > rect.width - EDGE) mode = "right";
+      else mode = "move";
 
       startX = e.clientX;
       startLeft = el.offsetLeft;
@@ -239,26 +253,22 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
       const dx = snapPx(e.clientX - startX);
 
       if (mode === "duplicate") {
-        let left = snapPx(startLeft + dx);
-        ghost.style.left = left + "px";
+        ghost.style.left = snapPx(startLeft + dx) + "px";
         ghost.style.width = startWidth + "px";
         return;
       }
-
       if (mode === "move") {
         let left = snapPx(startLeft + dx);
         left = Math.max(left, leftLimit(index));
         left = Math.min(left, rightLimit(index) - startWidth);
         el.style.left = left + "px";
       }
-
       if (mode === "right") {
         let w = snapPx(startWidth + dx);
         w = Math.max(w, STEP_PX);
         w = Math.min(w, rightLimit(index) - startLeft);
         el.style.width = w + "px";
       }
-
       if (mode === "left") {
         const r = startLeft + startWidth;
         let left = snapPx(startLeft + dx);
@@ -283,7 +293,6 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
         ghost.remove();
         renderAkshars();
       }
-
       ghost = null;
       mode = null;
       document.removeEventListener("mousemove", onMove);
@@ -291,46 +300,20 @@ export function createAksharEditor(row, akshars, slowFactor = 8) {
     }
   }
 
-  /* =========================
-     RENDER
-     ========================= */
-  function renderAkshars() {
-    container.querySelectorAll(".akshar").forEach(e => e.remove());
-
-    akshars.forEach((a,i) => {
-      const el = document.createElement("div");
-      el.className = "akshar";
-      el.textContent = a.char;
-      el.style.left = msToPx(a.start) + "px";
-      el.style.width = msToPx(a.end - a.start) + "px";
-      attachClip(el, a, i);
-      container.appendChild(el);
-    });
-  }
-
-  /* =========================
-     DELETE (ROW SCOPED)
-     ========================= */
   document.addEventListener("keydown", e => {
-    if (e.key !== "Backspace" && e.key !== "Delete") return;
-    if (selectedIndex === null) return;
+    if ((e.key !== "Backspace" && e.key !== "Delete") || selectedIndex === null)
+      return;
 
     const el = container.querySelector(".akshar.selected");
-    if (!el) return;
-    if (el.classList.contains("editing")) return;
+    if (!el || el.classList.contains("editing")) return;
 
     e.preventDefault();
-
-    // delete ONLY the selected clip
     akshars.splice(selectedIndex, 1);
-
     selectedIndex = null;
     renderAkshars();
   });
 
-
   document.addEventListener("mousedown", e => {
-    if (e.target.closest(".akshar")) return;
-    clearSelection();
+    if (!e.target.closest(".akshar")) clearSelection();
   });
 }

@@ -64,7 +64,8 @@ body {
   align-items: center;
 }
 
-.grid-timeline {
+.grid-timeline ,
+.grid-timeline2{
   display: flex;
 }
 
@@ -236,17 +237,6 @@ body {
   opacity: 0.9;
 }
 
-.letters-container {
-  order: 1;
-}
-
-.delete-region {
-  order: 2;
-}
-
-.js-timeline {
-  order: 3;
-}
 
 
 @media (max-width: 640px ) {
@@ -450,3 +440,23 @@ body {
 
 
 
+.grid-timeline2{
+  .akash-tier,
+  .agni-tier,
+  .jal-tier,
+  .vayu-tier{
+    display: none;
+  }
+}
+
+.slow-timeline{
+  height: 60px;
+  background-color: #b4b4fb;
+  display: flex;
+  overflow-x: auto;
+}
+
+
+.prithi-cells-container{
+  background-color: red;
+}
