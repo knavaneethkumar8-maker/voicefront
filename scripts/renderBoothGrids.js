@@ -60,10 +60,10 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
     <!-- AKASH -->
     <div class="akash-tier" contenteditable="false">
       <div class="akash-cell cell"
-          contenteditable="true"
+          contenteditable="false"
           id=${fileName + "_" + gridNum + "_" + 1}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false" class="cell-text">${getAkashCellLabel(gridNum)}</span>
+        <span contenteditable="true" class="cell-text">${getAkashCellLabel(gridNum)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -72,19 +72,19 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
     <!-- AGNI -->
     <div class="agni-tier flex-display" contenteditable="false">
       <div class="agni-cell cell"
-          contenteditable="true"
+          contenteditable="false"
           id=${fileName + "_" + gridNum + "_" + 2}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false" class="cell-text">${getAgniCellLabel(gridNum,0)}</span>
+        <span contenteditable="true" class="cell-text">${getAgniCellLabel(gridNum,0)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
 
       <div class="agni-cell cell"
-          contenteditable="true"
+          contenteditable="false"
           id=${fileName + "_" + gridNum + "_" + 3}>
         <span class="cell-dot" contenteditable="false"></span>
-        <span contenteditable="false" class="cell-text">${getAgniCellLabel(gridNum,1)}</span>
+        <span contenteditable="true" class="cell-text">${getAgniCellLabel(gridNum,1)}</span>
         <button class="cell-lock js-cell-lock"
                 contenteditable="false"></button>
       </div>
@@ -94,10 +94,10 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
     <div class="vayu-tier flex-display" contenteditable="false">
       ${[0,1,2,3].map(i => `
         <div class="vayu-cell cell"
-            contenteditable="true"
+            contenteditable="false"
             id=${fileName + "_" + gridNum + "_" + (4+i)}>
           <span class="cell-dot" contenteditable="false"></span>
-          <span contenteditable="false" class="cell-text">${getAyuvCellLabel(gridNum,i)}</span>
+          <span contenteditable="true" class="cell-text">${getAyuvCellLabel(gridNum,i)}</span>
           <button class="cell-lock js-cell-lock"
                   contenteditable="false"></button>
         </div>
@@ -108,10 +108,10 @@ function renderGrid(gridNum, fileName, gridTimeLine, row) {
     <div class="jal-tier flex-display" contenteditable="false">
       ${[...Array(8)].map((_, i) => `
         <div class="jal-cell cell"
-            contenteditable="true"
+            contenteditable="false"
             id=${fileName + "_" + gridNum + "_" + (8+i)}>
           <span class="cell-dot" contenteditable="false"></span>
-          <span contenteditable="false" class="cell-text">${getJalCellLabel(gridNum,i)}</span>
+          <span contenteditable="true" class="cell-text">${getJalCellLabel(gridNum,i)}</span>
           <button class="cell-lock js-cell-lock"
                   contenteditable="false"></button>
         </div>

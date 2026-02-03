@@ -302,7 +302,6 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
 }
 
 
-
 function appendIfDifferent(textEl, newText) {
   if (!textEl) return;
 

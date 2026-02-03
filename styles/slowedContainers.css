@@ -23,3 +23,13 @@
   height: 60px;
   border: 0.9px solid black;
 }
+
+.cell-text{
+  color: black;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

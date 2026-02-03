@@ -169,39 +169,36 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
     Object.entries(tiers).forEach(([tierKey, tier]) => {
       tier.cells?.forEach(cell => {
 
-        const cellEl = row.querySelector(`#${CSS.escape(cell.id)}`);
+        const cellEl = row.querySelector(
+          `#${CSS.escape(cell.id)}`
+        );
         if (!cellEl) return;
 
-        // 🔒 DO NOT TOUCH locked / verified cells
+        // 🔒 Respect locks / verification
         if (isCellProtected(cellEl)) return;
 
-        /* ---------- REMOVE existing text nodes ---------- */
-        [...cellEl.childNodes].forEach(node => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            node.remove();
-          }
-        });
-
-        /* ---------- APPLY TEXT (skip PRITHVI) ---------- */
-        if (tierKey !== "prithvi" && cell.text) {
-          cellEl.insertBefore(
-            document.createTextNode(cell.text),
-            cellEl.firstChild
-          );
-        }
-
-        /* ---------- CONFIDENCE DOT ---------- */
+        // ---------- CONFIDENCE DOT ----------
         const dotEl = cellEl.querySelector(".cell-dot");
         if (dotEl) {
           dotEl.classList.remove(...COLOR_CLASSES);
           dotEl.classList.add(getConfidenceClass(cell.conf));
         }
+
+        // ---------- PRITHVI: NEVER WRITE ----------
+        if (tierKey === "prithvi") return;
+
+        // ---------- WRITE INTO .cell-text ----------
+        const textEl = cellEl.querySelector(".cell-text");
+        if (!textEl) return;
+
+        textEl.innerText = cell.text || "";
       });
     });
   });
 
-  console.log("Prediction applied (unlocked only)");
+  console.log("Prediction applied → cell-text only (safe)");
 }
+
 
 
 
