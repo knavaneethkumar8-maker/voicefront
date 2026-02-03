@@ -55,26 +55,26 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
     });
 
     // ✍️ annotation → normal grid
-    cell.addEventListener("input", () => {
+    cell.addEventListener("input", (e) => {
       const text = cell.textContent;
-      console.log(text);
       if (!text) return;
 
       const { start, end } = getNormalTimeFromSlowedCell(index, factor);
-      console.log(start, end);
 
       applySlowedInputToNormalGrid({
         row,
         text,
         normalStart: start,
-        normalEnd: end
+        normalEnd: end,
+        inputType: e.inputType
       });
-      const fileName = row.querySelector('.js-file-name').innerText
-      const gridNo = getGridNoFromStartTime(start);
-      console.log(gridNo);
-      propagateGridFromPrithvi(row, fileName, gridNo);
 
+      const fileName = row.querySelector('.js-file-name').innerText;
+      const gridNo = getGridNoFromStartTime(start);
+
+      propagateGridFromPrithvi(row, fileName, gridNo);
     });
+
   });
 }
 
@@ -122,20 +122,14 @@ function applySlowedInputToNormalGrid({
   row,
   text,
   normalStart,
-  normalEnd
+  normalEnd,
+  inputType
 }) {
-  if (!text.trim()) return;
-  console.log(row, text, normalStart, normalEnd)
-
   const fileName = row.querySelector(".js-file-name").textContent;
   const grids = row.querySelectorAll(".booth-grid");
-  console.log(fileName)
 
   grids.forEach((gridEl) => {
-    const gridNoStr = gridEl.id.split("_").at(-1);
-    console.log(gridEl.id.split("_"));
-    const gridNo = Number(gridNoStr);
-    console.log(gridNo)
+    const gridNo = Number(gridEl.id.split("_").at(-1));
 
     for (let cellNo = 16; cellNo < 40; cellNo++) {
       const range = getNormalCellTimeRange(gridNo, cellNo);
@@ -143,7 +137,6 @@ function applySlowedInputToNormalGrid({
 
       const overlaps =
         normalStart < range.end && normalEnd > range.start;
-
       if (!overlaps) continue;
 
       const cellId = `${fileName}_${gridNo}_${cellNo}`;
@@ -151,16 +144,29 @@ function applySlowedInputToNormalGrid({
         `#${CSS.escape(cellId)}`
       );
       if (!cellEl) continue;
-
-      // 🔒 skip protected
       if (isCellProtected(cellEl)) continue;
 
-      // append text
-      cellEl.textContent =
-        (cellEl.textContent || "") + text;
+      const existing = cellEl.textContent || "";
+
+      // ➕ INSERT
+      if (inputType === "insertText") {
+        const lastChar = text.slice(-1);
+        if (existing.slice(-1) !== lastChar) {
+          cellEl.textContent = existing + lastChar;
+        }
+      }
+
+      // ➖ DELETE / BACKSPACE
+      if (
+        inputType === "deleteContentBackward" ||
+        inputType === "deleteContentForward"
+      ) {
+        cellEl.textContent = existing.slice(0, -1);
+      }
     }
   });
 }
+
 
 
 
