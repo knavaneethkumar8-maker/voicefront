@@ -148,10 +148,32 @@ async function renderRecordings(records, user) {
 
     // ✅ SAFE: cells now exist
     if (r.textgrid) {
-      // store textgrid ON the row
-      row._textgrid = r.textgrid;
-      applyTextgridToRenderedGrids(row, r.textgrid);
+      row._textgrids = {
+        normal: r.textgrid.normal,
+        x8: r.textgrid.x8,
+        x16: r.textgrid.x16
+      };
+
+      // apply normal grid by default
+      if (r.textgrid.normal) {
+        applyTextgridToRenderedGrids(row, r.textgrid.normal);
+        console.log('applied normal')
+      }
+
+      // apply slowed grids
+      if (r.textgrid.x8) {
+        applyTextgridToSlowedTimeline(row, r.textgrid.x8, 8);
+        console.log('applied 8x')
+        console.log(r.textgrid.x8)
+      }
+
+      if (r.textgrid.x16) {
+        applyTextgridToSlowedTimeline(row, r.textgrid.x16, 16);
+        console.log('applied 16x')
+        console.log(r.textgrid.x16)
+      }
     }
+
 
     activateSubmitForRow(row);
     activateSlowedSubmit(row);
@@ -314,6 +336,33 @@ function isCellProtected(cellEl) {
   return false;
 }
 makePredictCheckboxesActive();
+
+function applyTextgridToSlowedTimeline(row, textgrid, factor) {
+  if (!row || !textgrid || !textgrid.grids) return;
+
+  const slowTimeline = row.querySelector(
+    `.js-slow-timeline_${factor}x`
+  );
+  if (!slowTimeline) return;
+
+  textgrid.grids.forEach(grid => {
+    if (!grid.tiers) return;
+
+    Object.values(grid.tiers).forEach(tier => {
+      tier.cells?.forEach(cell => {
+        const cellEl = slowTimeline.querySelector(
+          `#${CSS.escape(cell.id)}`
+        );
+        if (!cellEl) return;
+
+        // respect locks if you add them later
+        cellEl.innerText = cell.text || "";
+      });
+    });
+  });
+
+  console.log(`Slowed ${factor}x TextGrid applied`);
+}
 
 
 
