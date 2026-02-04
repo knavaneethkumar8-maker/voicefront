@@ -44,68 +44,52 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
   if (!audioEl || !slowedCells.length) return;
 
   const row = slowTimelineEl.closest(".load-row");
+  const fileName = row.querySelector(".js-file-name").innerText;
 
   slowedCells.forEach((cell, index) => {
 
-    // 🎧 audio (already correct)
+    // 🎧 audio playback (factor is ONLY for audio)
     cell.addEventListener("click", () => {
       const start = (index * 9 * factor) / 1000;
       const end = start + (9 * factor) / 1000;
       playAudioSegment(audioEl, start, end);
     });
 
-    // ✍️ annotation → normal grid
+    // ✍️ RAW slowed → RAW prithvi (1-to-1 index mapping)
     cell.addEventListener("input", () => {
-      const slowedCells = slowTimelineEl.querySelectorAll(".slowed-cell");
+      const rawValue = cell.textContent.trim();
 
-      const segments = parseSlowedStages(slowedCells);
+      // 🔑 1:1 cell mapping
+      const globalPrithviIndex = index;
 
-      applySlowedStagesToPrithvi({
-        row,
-        segments,
-        factor
-      });
+      const gridNo = Math.floor(globalPrithviIndex / 24);
+      const prithviIndex = globalPrithviIndex % 24; // 0–23
+      const cellNo = 16 + prithviIndex;
 
-      const fileName = row.querySelector(".js-file-name").innerText;
+      const prithviCell = row.querySelector(
+        `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
+      );
 
-      // propagate all grids
+      if (prithviCell && !isCellProtected(prithviCell)) {
+        prithviCell.innerText = rawValue;
+      }
+
+      // propagate upper tiers (unchanged)
       const grids = row.querySelectorAll(".booth-grid");
-
       grids.forEach(gridEl => {
-        const gridNo = Number(gridEl.id.split("_").at(-1));
-        propagateGridFromPrithvi(row, fileName, gridNo);
+        const gNo = Number(gridEl.id.split("_").at(-1));
+        propagateGridFromPrithvi(row, fileName, gNo);
       });
-
     });
-
-
   });
 }
+
+
 
 function getGridNoFromStartTime(startMs) {
   return Math.floor(startMs / 216);
 }
 
-
-function getNormalCellTimeRange(gridNo, cellNo) {
-  const GRID_MS = 216;
-  const PRITHVI_MS = 9;
-
-  const gridStart = gridNo * GRID_MS;
-
-  // PRITHVI tier (cellNo 16 → 39)
-  if (cellNo >= 16 && cellNo < 40) {
-    const index = cellNo - 16;
-    const start = gridStart + index * PRITHVI_MS;
-    return {
-      start,
-      end: start + PRITHVI_MS
-    };
-  }
-
-  // ignore higher tiers for now
-  return null;
-}
 
 
 function getNormalTimeFromSlowedCell(index, factor) {
@@ -120,55 +104,6 @@ function getNormalTimeFromSlowedCell(index, factor) {
   };
 }
 
-
-function applySlowedInputToNormalGrid({
-  row,
-  text,
-  normalStart,
-  normalEnd,
-  inputType
-}) {
-  const fileName = row.querySelector(".js-file-name").textContent;
-  const grids = row.querySelectorAll(".booth-grid");
-
-  grids.forEach((gridEl) => {
-    const gridNo = Number(gridEl.id.split("_").at(-1));
-
-    for (let cellNo = 16; cellNo < 40; cellNo++) {
-      const range = getNormalCellTimeRange(gridNo, cellNo);
-      if (!range) continue;
-
-      const overlaps =
-        normalStart < range.end && normalEnd > range.start;
-      if (!overlaps) continue;
-
-      const cellId = `${fileName}_${gridNo}_${cellNo}`;
-      const cellEl = row.querySelector(
-        `#${CSS.escape(cellId)}`
-      );
-      if (!cellEl) continue;
-      if (isCellProtected(cellEl)) continue;
-
-      const existing = cellEl.textContent || "";
-
-      // ➕ INSERT
-      if (inputType === "insertText") {
-        const lastChar = text.slice(-1);
-        if (existing.slice(-1) !== lastChar) {
-          cellEl.textContent = existing + lastChar;
-        }
-      }
-
-      // ➖ DELETE / BACKSPACE
-      if (
-        inputType === "deleteContentBackward" ||
-        inputType === "deleteContentForward"
-      ) {
-        cellEl.textContent = existing.slice(0, -1);
-      }
-    }
-  });
-}
 
 
 export function lockGrids(row) {
@@ -291,20 +226,6 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
 }
 
 
-function appendIfDifferent(textEl, newText) {
-  if (!textEl) return;
-
-  const existing = textEl.innerText || "";
-  if (!newText) return;
-
-  const lastExistingChar = existing.slice(-1);
-  const lastNewChar = newText.slice(-1);
-
-  // ❌ do not append if same last character
-  if (lastExistingChar === lastNewChar) return;
-
-  textEl.innerText = existing + lastNewChar;
-}
 
 
 function isCellProtected(cellEl) {
