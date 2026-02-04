@@ -338,31 +338,37 @@ function isCellProtected(cellEl) {
 makePredictCheckboxesActive();
 
 function applyTextgridToSlowedTimeline(row, textgrid, factor) {
-  if (!row || !textgrid || !textgrid.grids) return;
+  if (!row || !textgrid || !Array.isArray(textgrid.cells)) return;
 
   const slowTimeline = row.querySelector(
     `.js-slow-timeline_${factor}x`
   );
   if (!slowTimeline) return;
 
-  textgrid.grids.forEach(grid => {
-    if (!grid.tiers) return;
+  const audioEl = slowTimeline.querySelector("audio");
+  if (!audioEl) return;
 
-    Object.values(grid.tiers).forEach(tier => {
-      tier.cells?.forEach(cell => {
-        const cellEl = slowTimeline.querySelector(
-          `#${CSS.escape(cell.id)}`
-        );
-        if (!cellEl) return;
+  const audioId = audioEl.id;
 
-        // respect locks if you add them later
-        cellEl.innerText = cell.text || "";
-      });
-    });
+  textgrid.cells.forEach(cell => {
+    const cellEl = slowTimeline.querySelector(
+      `#${CSS.escape(`${audioId}_${cell.index}`)}`
+    );
+
+    if (!cellEl) return;
+
+    // 🔒 future-safe: respect locks if added later
+    if (
+      cellEl.classList.contains("locked") ||
+      cellEl.classList.contains("verified")
+    ) return;
+
+    cellEl.innerText = cell.value || "";
   });
 
-  console.log(`Slowed ${factor}x TextGrid applied`);
+  console.log(`✅ Slowed ${factor}x TextGrid applied`);
 }
+
 
 
 
