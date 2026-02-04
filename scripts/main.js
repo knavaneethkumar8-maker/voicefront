@@ -13,17 +13,7 @@ import "./loginPage.js";
 import "./loadAudioFiles.js";
 import "./controlMobileUI.js"
 
-
-const audio = document.querySelector('.js-audio-file');
-const width = getAksharWidth();
-//renderAllGrids(2, 'new-file-name');
-//renderAkshars(width, setAudioForAllCells);
-//setAudioForAllCells();
-//lockGrids();
 document.addEventListener("DOMContentLoaded", initPageNavigation);
-
-//enableDropForCells('.cell');
-
 
 export function setAudioForAllCells(audio, row) {
   const allCells = row.querySelectorAll('.cell');
@@ -59,6 +49,8 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
     cell.addEventListener("input", () => {
       const rawValue = cell.textContent.trim();
 
+      const segments = parseSlowedStages(slowedCells);
+
       // 🔑 1:1 cell mapping
       const globalPrithviIndex = index;
 
@@ -78,32 +70,33 @@ export function setAudioForSlowedCells(slowTimelineEl, factor) {
       const grids = row.querySelectorAll(".booth-grid");
       grids.forEach(gridEl => {
         const gNo = Number(gridEl.id.split("_").at(-1));
-        propagateGridFromPrithvi(row, fileName, gNo);
+        propagateGridFromPrithvi(row, fileName, gNo, segments);
       });
     });
   });
 }
 
+function buildPrithviFromSegments(segments, gridNo) {
+  const GRID_SIZE = 24;
+  const gridStart = gridNo * GRID_SIZE;
+  const gridEnd = gridStart + GRID_SIZE - 1;
 
+  const prithvi = new Array(GRID_SIZE).fill("");
 
-function getGridNoFromStartTime(startMs) {
-  return Math.floor(startMs / 216);
+  segments.forEach(({ letter, startIndex, endIndex }) => {
+    // find overlap with this grid
+    const overlapStart = Math.max(startIndex, gridStart);
+    const overlapEnd = Math.min(endIndex, gridEnd);
+
+    if (overlapStart > overlapEnd) return;
+
+    for (let i = overlapStart; i <= overlapEnd; i++) {
+      prithvi[i - gridStart] = letter;
+    }
+  });
+
+  return prithvi;
 }
-
-
-
-function getNormalTimeFromSlowedCell(index, factor) {
-  const slowedCellMs = 9 * factor;
-
-  const slowedStart = index * slowedCellMs;
-  const slowedEnd = slowedStart + slowedCellMs;
-
-  return {
-    start: slowedStart / factor,
-    end: slowedEnd / factor
-  };
-}
-
 
 
 export function lockGrids(row) {
@@ -158,7 +151,7 @@ function getStartEndTimes(id) {
   return times;
 }
 
-function propagateGridFromPrithvi(row, fileName, gridNo) {
+function propagateGridFromPrithvi(row, fileName, gridNo, letterSegments) {
   const getCell = (cellNo) =>
     row.querySelector(
       `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
@@ -167,11 +160,9 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
   const getTextEl = (cell) =>
     cell?.querySelector(".cell-text");
 
-  /* ---------------- PRITHVI (source of truth) ---------------- */
-  const prithvi = [];
-  for (let i = 16; i < 40; i++) {
-    prithvi.push(getCell(i)?.innerText || "");
-  }
+  /* ---------------- PRITHVI (from segments, not DOM) ---------------- */
+  const prithvi = buildPrithviFromSegments(letterSegments, gridNo);
+  // prithvi is now length 24, index 0–23
 
   /* ---------------- JAL (3 prithvi = 27ms) ---------------- */
   for (let i = 0; i < 8; i++) {
@@ -224,9 +215,6 @@ function propagateGridFromPrithvi(row, fileName, gridNo) {
     }
   }
 }
-
-
-
 
 function isCellProtected(cellEl) {
   if (!cellEl) return true;
@@ -295,50 +283,6 @@ function parseSlowedStages(slowedCells) {
   }
 
   return segments;
-}
-
-
-function applySlowedStagesToPrithvi({
-  row,
-  segments,
-  factor
-}) {
-  const fileName = row.querySelector(".js-file-name").textContent;
-  const grids = row.querySelectorAll(".booth-grid");
-
-  // clear all Prithvi first
-  grids.forEach(gridEl => {
-    const gridNo = Number(gridEl.id.split("_").at(-1));
-    for (let i = 16; i < 40; i++) {
-      const cell = row.querySelector(
-        `#${CSS.escape(`${fileName}_${gridNo}_${i}`)}`
-      );
-      if (cell && !isCellProtected(cell)) {
-        cell.innerText = "";
-      }
-    }
-  });
-
-  // apply segments
-  segments.forEach(seg => {
-    for (let slowedIndex = seg.startIndex; slowedIndex <= seg.endIndex; slowedIndex++) {
-      const { start } = getNormalTimeFromSlowedCell(slowedIndex, factor);
-      const gridNo = getGridNoFromStartTime(start);
-
-      const prithviIndex =
-        Math.floor((start % 216) / 9); // 0–23
-
-      const cellNo = 16 + prithviIndex;
-
-      const cell = row.querySelector(
-        `#${CSS.escape(`${fileName}_${gridNo}_${cellNo}`)}`
-      );
-
-      if (cell && !isCellProtected(cell)) {
-        cell.innerText = seg.letter;
-      }
-    }
-  });
 }
 
 
