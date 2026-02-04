@@ -204,8 +204,36 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
   const COLOR_CLASSES = ["ui-green", "ui-blue", "ui-yellow", "ui-red"];
 
   textgrid.grids.forEach(grid => {
+    if (!grid) return;
+
+    /* ===============================
+       GRID LOCK (ONLY HERE)
+       =============================== */
+    const gridEl = row.querySelector(
+      `#${CSS.escape(grid.id)}`
+    );
+
+    if (gridEl) {
+      gridEl.classList.toggle("locked", !!grid.is_locked);
+
+      // sync lock button UI if present
+      const lockBtn = gridEl.querySelector(".js-lock");
+      if (lockBtn) {
+        if (grid.is_locked) {
+          lockBtn.innerText = "🔒";
+          lockBtn.style.backgroundColor = "green";
+        } else {
+          lockBtn.innerText = "🔓";
+          lockBtn.style.backgroundColor = "rgb(37, 37, 37)";
+        }
+      }
+    }
+
     if (!grid.tiers) return;
 
+    /* ===============================
+       APPLY CELLS (ALWAYS)
+       =============================== */
     Object.values(grid.tiers).forEach(tier => {
       tier.cells?.forEach(cell => {
 
@@ -214,34 +242,27 @@ export function applyTextgridToRenderedGrids(row, textgrid) {
         );
         if (!cellEl) return;
 
-        // 🔒 Respect locks
-        if (isCellProtected(cellEl)) return;
-
-        // ---------- CONFIDENCE DOT ----------
+        /* ---------- CONFIDENCE ---------- */
         const dotEl = cellEl.querySelector(".cell-dot");
         if (dotEl) {
           dotEl.classList.remove(...COLOR_CLASSES);
           dotEl.classList.add(getConfidenceClass(cell.conf));
         }
 
-        // ---------- TEXT APPLY RULE ----------
+        /* ---------- TEXT ---------- */
         const textEl = cellEl.querySelector(".cell-text");
-
         if (textEl) {
-          // Normal cells
-          textEl.innerText = cell.text || "";
-        } else {
-          // Cells without .cell-text (e.g. prithvi)
-          if (cell.text !== undefined && cell.text !== null) {
-            cellEl.innerText = cell.text;
-          }
+          textEl.innerText = cell.text ?? "";
+        } else if (cell.text != null) {
+          cellEl.innerText = cell.text;
         }
       });
     });
   });
 
-  console.log("TextGrid applied → conditional cell-text handling");
+  console.log("TextGrid applied → grid lock only, cells always rendered");
 }
+
 
 
 
