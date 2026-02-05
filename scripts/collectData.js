@@ -68,6 +68,8 @@ export function collectLockedCellData() {
 
         if (!response.ok) {
           showSubmitDataFailedMessage();
+          const result = await response.json();
+          console.log(result);
           return;
         }
 
