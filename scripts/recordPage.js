@@ -415,6 +415,7 @@ exportBtn.onclick = async () => {
     const formData = new FormData();
     formData.append("audio", blob, meta.filename);
     formData.append("metadata", JSON.stringify(meta));
+    formData.append("username", user);
 
     try {
       const res = await fetch(
