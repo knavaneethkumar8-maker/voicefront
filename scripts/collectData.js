@@ -1,5 +1,7 @@
 import { getUrls } from "../config/urls.js";
 import { showSubmitDataFailedMessage, showSubmitDataSuccessMessage } from "./sendData.js";
+import { socket } from "./main.js";
+
 
 const urls = getUrls();
 const {backendOrigin} = urls;
@@ -78,11 +80,6 @@ export function collectLockedCellData() {
 
         const result = await response.json();
         console.log(result);
-        socket.emit("row:status", {
-          filename: fileName,
-          status: "FINISHED"
-        });
-
       } catch (err) {
         console.error("CELL UPLOAD ERROR:", err);
         showSubmitDataFailedMessage();
@@ -93,9 +90,7 @@ export function collectLockedCellData() {
 
 
 
-
 //collectLockedCellData();
-
 
 function getCellLetters(cell) {
   // Select all letter blocks inside the cell
@@ -110,8 +105,8 @@ export function collectCellData(cellEl) {
   const id = cellEl.id; // fileName_gridNo_cellNo
   const parts = id.split("_");
 
-const cellNo = Number(parts.pop());   // 7
-const gridNo = Number(parts.pop());
+  const cellNo = Number(parts.pop());   // 7
+  const gridNo = Number(parts.pop());
 
   //console.log(gridNo, cellNo);
 
@@ -123,7 +118,7 @@ const gridNo = Number(parts.pop());
     start_ms: start_ms ?? 0,
     end_ms: end_ms ?? 0,
     text: getCellLetters(cellEl) || cellEl.textContent?.trim() || "",
-    conf: 0,
+    conf: 1,
     status: "LOCKED",
     is_locked: true,
     metadata: {}

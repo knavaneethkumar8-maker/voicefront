@@ -356,15 +356,42 @@ socket.on("grid:update", ({ cellId, value }) => {
 });
 
 
+/* ======================================================
+   🔒 GLOBAL CELL LOCK EMITTER (CLICK BASED)
+   ====================================================== */
+
+document.addEventListener("click", e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const lockBtn = e.target.closest(".js-cell-lock");
+  if (!lockBtn) return;
+
+  const cellDiv = lockBtn.closest(".cell");
+  if (!cellDiv) return;
+
+  const isLocked = cellDiv.classList.contains("locked");
+  console.log(isLocked);
+
+  socket.emit("cell:lock", {
+    cellId: cellDiv.id,
+    locked: !isLocked
+  });
+});
+
+
 
 socket.on("cell:lock", ({ cellId, locked }) => {
   const cell = document.getElementById(cellId);
   if (!cell) return;
+  const cellTextEl = cell.querySelector('.cell-text');
 
   if (locked) {
     cell.classList.add("locked");
+    cellTextEl.setAttribute("contenteditable", "false");
   } else {
     cell.classList.remove("locked");
+    cellTextEl.setAttribute("contenteditable", "true");
   }
 });
 

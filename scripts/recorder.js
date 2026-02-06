@@ -563,9 +563,8 @@ export function makeVerifyButtonsActive() {
     if (!cell) return;
 
     const isLocked = cell.classList.toggle("locked");
-
+    
     const elementsToLock = [cell, ...cell.querySelectorAll("*")];
-
     elementsToLock.forEach(el => {
       if (el === lockBtn) return;
 
