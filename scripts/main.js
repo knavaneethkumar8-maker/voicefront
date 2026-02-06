@@ -332,4 +332,42 @@ socket.on("row:status", ({ filename, status }) => {
 
 
 
+document.addEventListener("input", e => {
+  const cell = e.target.closest(".cell-text");
+  if (!cell) return;
+
+  const cellDiv = cell.closest(".cell");
+  if (!cellDiv) return;
+
+  socket.emit("grid:update", {
+    cellId: cellDiv.id,
+    value: cell.innerText.trim()
+  });
+});
+
+
+socket.on("grid:update", ({ cellId, value }) => {
+  const el = document.querySelector(`#${CSS.escape(cellId)} .cell-text`);
+  if (!el) return;
+
+  if (el.innerText !== value) {
+    el.innerText = value;
+  }
+});
+
+
+
+socket.on("cell:lock", ({ cellId, locked }) => {
+  const cell = document.getElementById(cellId);
+  if (!cell) return;
+
+  if (locked) {
+    cell.classList.add("locked");
+  } else {
+    cell.classList.remove("locked");
+  }
+});
+
+
+
 

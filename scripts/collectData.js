@@ -78,6 +78,10 @@ export function collectLockedCellData() {
 
         const result = await response.json();
         console.log(result);
+        socket.emit("row:status", {
+          filename: fileName,
+          status: "FINISHED"
+        });
 
       } catch (err) {
         console.error("CELL UPLOAD ERROR:", err);
