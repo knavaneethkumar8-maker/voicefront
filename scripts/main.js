@@ -3,6 +3,7 @@ import { renderAkshars } from "./renderAkshars.js";
 import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
 import { initPageNavigation } from "./navigation.js";
+import { getUrls } from "../config/urls.js";
 import "./recorder.js";
 import "./collectData.js";
 import "./sendData.js";
@@ -11,7 +12,13 @@ import "./navigation.js";
 import "./recordPage.js";
 import "./loginPage.js";
 import "./loadAudioFiles.js";
-import "./controlMobileUI.js"
+import "./controlMobileUI.js";
+
+const urls = getUrls();
+const {backendOrigin} = urls;
+
+export const socket = io(backendOrigin);
+
 
 document.addEventListener("DOMContentLoaded", initPageNavigation);
 
@@ -302,6 +309,26 @@ function collapseConsecutive(values) {
 }
 
 
+//import { socket } from "./main.js";
+
+
+
+socket.on("row:status", ({ filename, status }) => {
+  const rows = document.querySelectorAll(".load-row");
+  console.log(rows);
+
+  rows.forEach(row => {
+    const name = row.querySelector(".js-file-name")?.innerText;
+    if (name === filename) {
+      const statusEl = row.querySelector(".status");
+      if (statusEl) {
+        statusEl.innerText = status;
+        statusEl.className = `status ${status.toLowerCase()}`;
+      }
+    }
+  });
+  
+});
 
 
 

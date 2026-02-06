@@ -2,6 +2,8 @@ import { collectAllGridsData } from "./collectData.js";
 import { getCurrentFileName, getCurrentAudioDuration } from "./recorder.js";
 import { getUrls } from "../config/urls.js";
 import { getCurrentUsername } from "./loginPage.js";
+import { socket } from "./main.js";
+
 
 const urls = getUrls();
 const {backendOrigin} = urls;
@@ -82,7 +84,7 @@ export function activateSubmitForRow(row) {
   //sendDataButton.dataset.bound = "true";
 
   sendDataButton.addEventListener("click", async () => {
-    console.log("clicked");
+    console.log("clicked submit annotation button");
 
     if (!areAllRowGridsLocked(row)) {
       showLockGridsMessage();
@@ -135,6 +137,10 @@ export function activateSubmitForRow(row) {
       const statusLabel = row?.querySelector('.status');
       statusLabel.innerText = "FINISHED";
       statusLabel.classList.add("finished");
+      socket.emit("row:status", {
+        filename: fileName,
+        status: "FINISHED"
+      });
     } catch (err) {
       console.error(err);
       showSubmitDataFailedMessage();

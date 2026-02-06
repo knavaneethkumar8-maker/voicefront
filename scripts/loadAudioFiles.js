@@ -7,6 +7,7 @@ import { activateSubmitForRow , activateSlowedSubmit} from "./sendData.js";
 import { getCurrentUsername } from "./loginPage.js";
 import { createAksharEditor } from "./createAksharTimeline.js";
 import { akshars } from "./renderBoothGrids.js";
+import { socket } from "./main.js";
 
 let predictListenerAttached = false;
 const urls = getUrls();
