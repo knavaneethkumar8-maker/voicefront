@@ -2,7 +2,7 @@ import "./getUsersInfo.js";
 import { renderAkshars } from "./renderAkshars.js";
 import { getAksharWidth, renderAllGrids } from "./renderBoothGrids.js";
 import { playAudioSegment } from "./playAudioSegment.js";
-import { initPageNavigation } from "./navigation.js";
+//import { initPageNavigation } from "./navigation.js";
 import { getUrls } from "../config/urls.js";
 import "./recorder.js";
 import "./collectData.js";
@@ -20,7 +20,7 @@ const {backendOrigin} = urls;
 export const socket = io(backendOrigin);
 
 
-document.addEventListener("DOMContentLoaded", initPageNavigation);
+//document.addEventListener("DOMContentLoaded", initPageNavigation);
 
 export function setAudioForAllCells(audio, row) {
   const allCells = row.querySelectorAll('.cell');

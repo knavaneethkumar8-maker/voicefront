@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="/styles/loadFiles.css">
   <link rel="stylesheet" href="/styles/createAksharEditor.css">
   <link rel="stylesheet" href="/styles/slowedContainers.css">
+  <link rel="stylesheet" href="/styles/filesPage.css">
 </head>
+
 <body>
   <section class="login-page">
     <div class="auth-overlay" id="authOverlay">
@@ -82,13 +84,11 @@
   </div>
 
   <div class="navigation-bar">
-    <div class="record-page-button">
-      Record
-    </div>
-    <div class="annotate-page-button">
-      Annotate
-    </div>
+    <div class="record-page-button">Record</div>
+    <div class="annotate-page-button">Annotate</div>
+    <div class="files-page-button">Files</div>
   </div>
+
 
 <section class="record-section">
   <div class="recorder-container">
@@ -271,6 +271,17 @@
     </div>
 
   </section>
+
+  <section class="files-page-section">
+    <div class="files-page-container">
+      <h2>Files</h2>
+
+      <div class="files-list-container">
+        <!-- Dynamically render file list here -->
+      </div>
+    </div>
+  </section>
+
   
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script src="/scripts/main.js" type="module"></script>
