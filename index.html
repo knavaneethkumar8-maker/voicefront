@@ -274,13 +274,23 @@
 
   <section class="files-page-section">
     <div class="files-page-container">
-      <h2>Files</h2>
+
+      <!-- ACTION BAR -->
+      <div class="files-action-bar">
+        <button class="files-btn download-btn">Download Files</button>
+
+        <label class="files-btn upload-btn">
+          Upload TextGrid
+          <input type="file" id="textgridUpload" accept=".TextGrid,.json" hidden>
+        </label>
+      </div>
 
       <div class="files-list-container">
         <!-- Dynamically render file list here -->
       </div>
     </div>
   </section>
+
 
   
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
