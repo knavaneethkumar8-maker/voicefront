@@ -146,7 +146,7 @@
 
 .file-details-container {
   display: grid;
-  grid-template-columns: 280px 1fr 120px 80px 80px 100px 80px;
+  grid-template-columns: 280px 1fr 80px 80px 100px 80px;
   align-items: center;
   gap: 16px;
 }

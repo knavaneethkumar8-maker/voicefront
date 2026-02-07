@@ -93,10 +93,6 @@ async function renderRecordings(records, user) {
         </audio>
 
         <div class="file-name js-file-name">${r.filename}</div>
-        <a href="${r.textgrid.normal.metadata.tgPath}" target="_blank" rel="noopener">
-          Download Tg
-        </a>
-        
         
         <!-- Predict toggle -->
         <label class="predict-checkbox">
