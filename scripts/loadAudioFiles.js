@@ -85,6 +85,7 @@ async function renderRecordings(records, user) {
 
     const row = document.createElement("div");
     row.className = "load-row";
+    console.log(r.textgrid);
 
     row.innerHTML = `
       <div class="file-details-container">
@@ -92,7 +93,11 @@ async function renderRecordings(records, user) {
         </audio>
 
         <div class="file-name js-file-name">${r.filename}</div>
-
+        <a href="${r.textgrid.normal.metadata.tgPath}" target="_blank" rel="noopener">
+          Download Tg
+        </a>
+        
+        
         <!-- Predict toggle -->
         <label class="predict-checkbox">
           <input type="checkbox"
@@ -174,6 +179,11 @@ async function renderRecordings(records, user) {
         console.log(r.textgrid.x16)
       }
     }
+
+    row.querySelector("a").addEventListener("click", e => {
+      e.stopPropagation();
+    });
+
 
 
     activateSubmitForRow(row);

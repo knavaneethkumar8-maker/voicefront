@@ -343,6 +343,13 @@ document.addEventListener("input", e => {
     cellId: cellDiv.id,
     value: cell.innerText.trim()
   });
+  
+  const cellId = cellDiv.id;
+  const fileName = cellId.split(".wav")[0] + ".wav";
+  socket.emit("row:status", {
+    filename: fileName,
+    status: "ACTIVE"
+  });
 });
 
 
@@ -372,10 +379,17 @@ document.addEventListener("click", e => {
 
   const isLocked = cellDiv.classList.contains("locked");
   console.log(isLocked);
+  const cellId = cellDiv.id;
+  const fileName = cellId.split(".wav")[0] + ".wav";
 
   socket.emit("cell:lock", {
     cellId: cellDiv.id,
     locked: !isLocked
+  });
+
+  socket.emit("row:status", {
+    filename: fileName,
+    status: "ACTIVE"
   });
 });
 
