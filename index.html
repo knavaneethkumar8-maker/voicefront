@@ -272,24 +272,47 @@
 
   </section>
 
-  <section class="files-page-section">
-    <div class="files-page-container">
+<section class="files-page-section">
+  <div class="files-page-container">
 
-      <!-- ACTION BAR -->
-      <div class="files-action-bar">
-        <button class="files-btn download-btn">Download Files</button>
+    <!-- ACTION BAR -->
+    <div class="files-action-bar">
+      <button class="files-btn download-btn">Download Files</button>
 
-        <label class="files-btn upload-btn">
-          Upload TextGrid
-          <input type="file" id="textgridUpload" accept=".TextGrid,.json" hidden>
-        </label>
-      </div>
-
-      <div class="files-list-container">
-        <!-- Dynamically render file list here -->
-      </div>
+      <label class="files-btn upload-btn">
+        Upload TextGrid
+        <input type="file" id="textgridUpload" accept=".TextGrid,.json" hidden>
+      </label>
     </div>
-  </section>
+
+    <!-- FILES LIST -->
+    <div class="files-list-container"></div>
+
+    <!-- TEMPLATE (MUST BE OUTSIDE) -->
+    <script type="text/template" id="fileRowTemplate">
+      <div class="download-file-row">
+
+        <div class="file-top-row">
+          <div class="file-name">{{filename}}</div>
+          <div class="file-recorder">Recorder: {{recorder}}</div>
+        </div>
+
+        <div class="file-bottom-row">
+          <a href="{{wav}}" download>WAV</a>
+          <a href="{{tg}}" download>TG</a>
+          <a href="{{wav8}}" download>8x WAV</a>
+          <a href="{{tg8}}" download>8x TG</a>
+          <a href="{{wav16}}" download>16x WAV</a>
+          <a href="{{tg16}}" download>16x TG</a>
+
+        </div>
+
+      </div>
+    </script>
+
+  </div>
+</section>
+
 
 
   

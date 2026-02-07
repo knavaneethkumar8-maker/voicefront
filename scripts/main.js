@@ -13,6 +13,7 @@ import "./recordPage.js";
 import "./loginPage.js";
 import "./loadAudioFiles.js";
 import "./controlMobileUI.js";
+import "./loadDownloadFiles.js"
 
 const urls = getUrls();
 const {backendOrigin} = urls;

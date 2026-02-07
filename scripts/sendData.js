@@ -262,6 +262,7 @@ function collectSlowedTimelineData(slowTimelineEl) {
     speedFactor: factor,
     cellDurationMs: 9,
     totalCells: cells.length,
+    skipTextGrid: true,
     cells: []
   };
 
