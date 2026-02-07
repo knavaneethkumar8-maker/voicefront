@@ -209,7 +209,7 @@
       (Note: After submitting please wait for the response. Do not refresh)
     </p>
 
-    <div class="speed-buttons-container">
+    <div class="speed-buttons-container hide">
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.25">4x slower</button>
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.125">8x slower</button>
       <button class="audio-speed-button js-audio-speed-button" data-speed="0.0625">16x slower</button>
@@ -293,8 +293,8 @@
       <div class="download-file-row">
 
         <div class="file-top-row">
-          <div class="file-name">{{filename}}</div>
-          <div class="file-recorder">Recorder: {{recorder}}</div>
+          <div class="file-name download-file-name">{{filename}}</div>
+          <div class="file-recorder">{{recorder}}</div>
         </div>
 
         <div class="file-bottom-row">

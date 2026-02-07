@@ -78,18 +78,19 @@
 
 .file-top-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
   font-size: 14px;
+  margin-bottom: 6px;
 }
 
-.file-name {
+.download-file-name {
   font-weight: 600;
   color: #111827;
 }
 
 .file-recorder {
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
 }
 
