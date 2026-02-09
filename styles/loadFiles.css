@@ -187,6 +187,11 @@
   color: #c8590f;
 }
 
+.status.pending {
+  background: #fa8ee0;
+  color: #c80fa3;
+}
+
 .generate-btn {
   background: #1565c0;
   color: #f3f3f3;
