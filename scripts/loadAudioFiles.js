@@ -176,11 +176,6 @@ async function renderRecordings(records, user) {
       }
     }
 
-    row.querySelector("a").addEventListener("click", e => {
-      e.stopPropagation();
-    });
-
-
 
     activateSubmitForRow(row);
     activateSlowedSubmit(row);
