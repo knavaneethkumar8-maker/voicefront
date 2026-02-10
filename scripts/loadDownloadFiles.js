@@ -3,21 +3,31 @@ import { getUrls } from "../config/urls.js";
 const urls = getUrls();
 const {backendOrigin} = urls;
 
+let currentPage = 1;
+const pageSize = 20;
 
 
-async function loadDownloadFiles() {
+
+
+async function loadDownloadFiles(page = 1) {
   try {
-    const res = await fetch(`${backendOrigin}/api/downloads`, {
-      credentials: "include"
-    });
+    currentPage = page;
+
+    const res = await fetch(
+      `${backendOrigin}/api/downloads?page=${page}&limit=${pageSize}`,
+      { credentials: "include" }
+    );
 
     const data = await res.json();
-    renderFilesList(data);
+
+    renderFilesList(data.records);
+    renderPagination(data.totalPages, data.page);
 
   } catch (err) {
     console.error("Failed to load downloads:", err);
   }
 }
+
 
 function publicUrl(p) {
   if (!p) return "#";
@@ -93,6 +103,48 @@ function renderFilesList(records) {
 }
 
 
+function renderPagination(totalPages, activePage) {
+  const bar = document.querySelector(".pagination-bar");
+  if (!bar || totalPages <= 1) {
+    bar.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
+  const maxVisible = 5;
+  let start = Math.max(activePage - 2, 1);
+  let end = Math.min(start + maxVisible - 1, totalPages);
+
+  if (end - start < maxVisible - 1) {
+    start = Math.max(end - maxVisible + 1, 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    html += `
+      <button 
+        class="page-btn ${i === activePage ? "active" : ""}" 
+        data-page="${i}">
+        ${i}
+      </button>
+    `;
+  }
+
+  if (activePage < totalPages) {
+    html += `<button class="page-btn next-btn" data-page="${activePage + 1}">Next ›</button>`;
+  }
+
+  bar.innerHTML = html;
+
+  bar.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      loadDownloadFiles(parseInt(btn.dataset.page));
+    });
+  });
+}
+
+
+
 
 
 
@@ -103,5 +155,6 @@ function renderFilesList(records) {
 const loadDownloadFilesBtn = document.querySelector(".download-btn");
 
 loadDownloadFilesBtn?.addEventListener("click", () => {
-  loadDownloadFiles();
-})
+  loadDownloadFiles(1);
+});
+
