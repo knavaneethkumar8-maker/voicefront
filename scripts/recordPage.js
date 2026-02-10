@@ -561,11 +561,17 @@ async function handleFileList(fileList) {
       // Convert ANY audio → WAV
       const wavBlob = await convertAudioToWav(file);
 
+      const base = file.name.replace(/\.[^/.]+$/, "");
+      const timestamp = generateTimestamp();
+
+      const newFileName = `${base}_${timestamp}.wav`;
+
       const wavFile = new File(
         [wavBlob],
-        file.name.replace(/\.[^/.]+$/, "") + ".wav",
+        newFileName,
         { type: "audio/wav" }
       );
+
 
       // Add ONLY WAV to filesBody
       addUploadedFileRow(wavFile);
@@ -695,6 +701,11 @@ function addUploadedFileRow(file) {
   filesBody.prepend(row);
   attachRowSelection(row);
   updateActionButtons();
+}
+
+
+function generateTimestamp() {
+  return dayjs().format("YYYY_MM_DD_HH_mm_ss_SSS");
 }
 
 
