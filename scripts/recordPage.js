@@ -3,7 +3,7 @@ import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { getUrls } from "../config/urls.js";
 
 
-const MAX_TIME = 60000;
+const MAX_TIME = 5 * 60 * 1000; // 5 minutes = 300000 ms
 const urls = getUrls();
 const {backendOrigin} = urls;
 
