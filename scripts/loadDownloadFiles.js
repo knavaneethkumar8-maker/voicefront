@@ -80,25 +80,27 @@ function renderFilesList(records) {
   let html = "";
 
   for (const r of records) {
-    html += template
-            .replace("{{filename}}", r.filename)
-            .replace("{{recorder}}", r.recorder || "Unknown")
-            .replace("{{wav}}", `${backendOrigin}/download/wav/${r.filename}`)
-            .replace("{{tg}}", r.tgPaths?.tg)
-            .replace("{{wav8}}", `${backendOrigin}/download/wav/${r.filename.replace(".wav", "_8x.wav")}`)
-            .replace("{{tg8}}", r.tgPaths?.tg_8x)
-            .replace("{{wav16}}", `${backendOrigin}/download/wav/${r.filename.replace(".wav", "_16x.wav")}`)
-            .replace("{{tg16}}", r.tgPaths?.tg_16x);
+    const base = r.filename.replace(".wav", "");
 
+    html += template
+      .replace("{{filename}}", r.filename)
+      .replace("{{recorder}}", r.recorder || "Unknown")
+
+      .replace("{{wav}}", `${backendOrigin}/download/wav/${r.filename}`)
+      .replace("{{tg}}", r.tgPaths?.tg || "#")
+
+      .replace("{{wav2}}", `${backendOrigin}/download/wav/${base}_2x.wav`)
+      .replace("{{wav4}}", `${backendOrigin}/download/wav/${base}_4x.wav`)
+
+      .replace("{{wav8}}", `${backendOrigin}/download/wav/${base}_8x.wav`)
+      .replace("{{wav16}}", `${backendOrigin}/download/wav/${base}_16x.wav`);
   }
 
   container.innerHTML = html;
 
-  // 🔥 CRITICAL FIX
+  // prevent row click conflicts
   container.querySelectorAll("a").forEach(a => {
-    a.addEventListener("click", e => {
-      e.stopPropagation();
-    });
+    a.addEventListener("click", e => e.stopPropagation());
   });
 }
 
